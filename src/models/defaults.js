@@ -9,10 +9,10 @@ class Defaults {
     layoutPath: string;
     customLayout: string;
     options: Object;
-    constructor(options: Object = {}) {
-        if (!options.settings.vue) {
+    constructor(options: Object = {settings: {vue: null}}) {
+        if (options.settings.vue === null) {
             options.settings.vue = {};
-            console.error('------------- Missing VUE OPTIONS! -------------');
+            throw new Error('------------- Missing VUE OPTIONS! -------------');
         }
         this.rootPath      = options.settings.vue.rootPath      === undefined ? options.settings.views + '/' : options.settings.vue.rootPath + '/';
         this.layoutsDir    = options.settings.vue.layoutsDir    === undefined ? '' : this.rootPath + options.settings.vue.layoutsDir + '/';

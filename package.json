@@ -36,7 +36,7 @@
     "pretest": "eslint . --fix",
     "test": "jest",
     "clean": "rm -rf lib",
-    "build": "npm run clean && flow-remove-types src/ --out-dir lib/"
+    "build": "npm run clean && flow-remove-types --pretty src/ --out-dir lib/"
   },
   "repository": "express-vue/express-vue-renderer",
   "jest": {
@@ -44,6 +44,15 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
-    "babel-eslint": "^7.2.3"
+    "babel-eslint": "^7.2.3",
+    "babel-preset-es2015": "^6.24.1",
+    "camel-case": "^3.0.0",
+    "clean-css": "^4.1.5",
+    "html-minifier": "^3.5.2",
+    "pug": "^2.0.0-rc.2",
+    "require-from-string": "^1.2.1",
+    "vue": "^2.3.4",
+    "vue-server-renderer": "^2.3.4",
+    "xss": "^0.3.3"
   }
 }

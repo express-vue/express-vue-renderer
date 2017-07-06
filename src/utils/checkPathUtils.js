@@ -1,6 +1,6 @@
 // @flow
-import fs from 'fs';
-import paramCase from 'param-case';
+const fs = require('fs');
+const paramCase = require('param-case');
 
 function getParamCasePath(path: string): string {
     // example /Users/foo/code/test/components/componentFile.vue
@@ -45,7 +45,5 @@ function getCorrectPathForFile(path: string, type: string) {
     });
 }
 
-export {
-    getParamCasePath,
-    getCorrectPathForFile,
-};
+module.exports.getParamCasePath = getParamCasePath;
+module.exports.getCorrectPathForFile = getCorrectPathForFile;

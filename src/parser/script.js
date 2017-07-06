@@ -1,6 +1,6 @@
 // @flow
-import {DataObject, Types} from '../models';
-import requireFromString from 'require-from-string';
+const {DataObject, Types} = require('../models');
+const requireFromString = require('require-from-string');
 
 const scriptRegex = /(<script.*?>)([\s\S]*?)(<\/script>)/gm;
 
@@ -19,7 +19,7 @@ function dataParser(script: Object, defaults: Object, type: Types) {
     return finalScript;
 }
 
-function scriptParser(script: string, defaults: Object, type: Types, regex: RegExp) {
+function scriptParser(script: string, defaults: Object, type: Types, regex: RegExp): Object {
     if (!regex) {
         regex = scriptRegex;
     }

@@ -1,12 +1,12 @@
 // @flow
-import fs      from 'fs';
+const fs      = require('fs');
 
-import {Types} from '../models';
+const {Types} = require('../models');
 
-import camelCase from 'camel-case';
-import styleParser from './style';
-import htmlParser from './html';
-import scriptParser from './script';
+const camelCase = require('camel-case');
+const styleParser = require('./style');
+const htmlParser = require('./html');
+const scriptParser = require('./script');
 
 const htmlRegex     = /(<template.*?>)([\s\S]*)(<\/template>)/gm;
 const scriptRegex   = /(<script.*?>)([\s\S]*?)(<\/script>)/gm;
@@ -78,10 +78,8 @@ function componentParser(templatePath: string, defaults: Object, type: Types) {
     });
 }
 
-export {
-    componentParser,
-    layoutParser,
-    scriptParser,
-    styleParser,
-    htmlParser
-};
+module.exports.componentParser = componentParser;
+module.exports.layoutParser = layoutParser;
+module.exports.scriptParser = scriptParser;
+module.exports.styleParser = styleParser;
+module.exports.htmlParser = htmlParser;

@@ -1,5 +1,5 @@
 // @flow
-import Types from './types';
+const Types = require('./types');
 
 const types = new Types();
 

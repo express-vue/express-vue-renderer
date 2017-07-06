@@ -1,5 +1,5 @@
 // @flow
-import CleanCSS from 'clean-css';
+const CleanCSS = require('clean-css');
 
 const styleRegex = /(<style.*?>)([\s\S]*?)(<\/style>)/gm;
 
