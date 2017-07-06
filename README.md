@@ -1,4 +1,5 @@
-# express-vue-renderer [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url] [![Coverage percentage][coveralls-image]][coveralls-url]
+# express-vue-renderer 
+[![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url] [![Coverage percentage][coveralls-image]][coveralls-url] [![Greenkeeper badge](https://badges.greenkeeper.io/express-vue/express-vue-renderer.svg)](https://greenkeeper.io/)
 > Rendering Engine for turning Vue files into Javascript Objects
 
 ## Installation
