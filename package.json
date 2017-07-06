@@ -30,7 +30,9 @@
   "scripts": {
     "prepublish": "nsp check",
     "pretest": "eslint . --fix",
-    "test": "jest"
+    "test": "jest",
+    "clean": "rm -rf lib",
+    "build": "npm run clean && flow-remove-types src/ --out-dir lib/"
   },
   "eslintConfig": {
     "extends": "xo-space",
@@ -43,5 +45,8 @@
   "jest": {
     "testEnvironment": "node"
   },
-  "license": "Apache-2.0"
+  "license": "Apache-2.0",
+  "dependencies": {
+    "flow-remove-types": "^1.2.1"
+  }
 }
