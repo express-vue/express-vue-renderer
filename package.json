@@ -20,12 +20,16 @@
     "nodejs"
   ],
   "devDependencies": {
+    "babel-plugin-transform-flow-strip-types": "^6.22.0",
+    "babel-preset-env": "^1.6.0",
     "coveralls": "^2.13.1",
-    "nsp": "^2.6.3",
     "eslint": "^4.1.0",
     "eslint-config-xo-space": "^0.16.0",
+    "flow-bin": "^0.49.1",
+    "flow-remove-types": "^1.2.1",
     "jest": "^19.0.2",
-    "jest-cli": "^20.0.0"
+    "jest-cli": "^20.0.0",
+    "nsp": "^2.6.3"
   },
   "scripts": {
     "prepublish": "nsp check",
@@ -34,19 +38,12 @@
     "clean": "rm -rf lib",
     "build": "npm run clean && flow-remove-types src/ --out-dir lib/"
   },
-  "eslintConfig": {
-    "extends": "xo-space",
-    "env": {
-      "jest": true,
-      "node": true
-    }
-  },
   "repository": "express-vue/express-vue-renderer",
   "jest": {
     "testEnvironment": "node"
   },
   "license": "Apache-2.0",
   "dependencies": {
-    "flow-remove-types": "^1.2.1"
+    "babel-eslint": "^7.2.3"
   }
 }
