@@ -41,12 +41,6 @@ function expressVueRenderer(componentPath: string, options: Object): Promise<Obj
                             if (!rendered) {
                                 reject(Renderer.renderError('Renderer Error'));
                             } else {
-                                let html = '';
-                                let head = '';
-                                html = rendered.layout.template.replace(regexes.appRegex, `<div id="app">${renderedHtml}</div>`);
-                                html = html.replace(regexes.scriptRegex, rendered.scriptString);
-                                head = Utils.headUtil(defaults.options.vue, rendered.layout.style);
-                                html = html.replace(regexes.headRegex, head);
                                 const app = {
                                     head: Utils.headUtil(defaults.options.vue, rendered.layout.style),
                                     app: rendered.app,

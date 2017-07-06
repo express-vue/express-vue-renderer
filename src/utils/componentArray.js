@@ -7,9 +7,7 @@ let types = new Models.Types();
 
 function setupComponentArray(componentPath: string, defaults: Models.Defaults) {
     return new Promise((resolve, reject) => {
-        let array = [
-            Parser.layoutParser(defaults.layoutPath, defaults, types.LAYOUT)
-        ];
+        let array = [];
         let pathPromiseArray = [];
 
         PathUtils.getCorrectPathForFile(componentPath, 'view').then(path => {
