@@ -1,0 +1,9 @@
+{
+  "generator-node": {
+    "promptValues": {
+      "authorName": "Daniel Cherubini",
+      "authorEmail": "daniel@cherubini.casa",
+      "authorUrl": "https://github.com/express-vue"
+    }
+  }
+}

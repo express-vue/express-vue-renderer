@@ -1,0 +1,47 @@
+{
+  "name": "express-vue-renderer",
+  "version": "0.0.0",
+  "description": "Rendering Engine for turning Vue files into Javascript Objects",
+  "homepage": "https://github.com/express-vue/express-vue-renderer",
+  "author": {
+    "name": "Daniel Cherubini",
+    "email": "daniel@cherubini.casa",
+    "url": "https://github.com/express-vue"
+  },
+  "files": [
+    "lib"
+  ],
+  "main": "lib/index.js",
+  "keywords": [
+    "vue",
+    "renderer",
+    "vuejs",
+    "node",
+    "nodejs"
+  ],
+  "devDependencies": {
+    "coveralls": "^2.13.1",
+    "nsp": "^2.6.3",
+    "eslint": "^4.1.0",
+    "eslint-config-xo-space": "^0.16.0",
+    "jest": "^19.0.2",
+    "jest-cli": "^20.0.0"
+  },
+  "scripts": {
+    "prepublish": "nsp check",
+    "pretest": "eslint . --fix",
+    "test": "jest"
+  },
+  "eslintConfig": {
+    "extends": "xo-space",
+    "env": {
+      "jest": true,
+      "node": true
+    }
+  },
+  "repository": "express-vue/express-vue-renderer",
+  "jest": {
+    "testEnvironment": "node"
+  },
+  "license": "Apache-2.0"
+}
