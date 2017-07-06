@@ -12,7 +12,7 @@ const regexes = {
     headRegex  : /<\/head>/igm
 };
 
-function renderToString(rendered: Object, defaults: Defaults): Promise<string> {
+function renderToString(rendered: Object): Promise<string> {
     return new Promise((resolve, reject) => {
         renderer.renderToString(rendered.app, function (error, renderedHtml) {
             if (error) {
@@ -42,9 +42,17 @@ function expressVueRenderer(componentPath: string, options: Object): Promise<Obj
                         if (!rendered) {
                             reject(Renderer.renderError('Renderer Error'));
                         } else {
+                            let html = '';
+                            let head = '';
+                            html = rendered.layout.template.replace(regexes.appRegex, `<div id="app">${renderedHtml}</div>`);
+                            html = html.replace(regexes.scriptRegex, rendered.scriptString);
+                            head = Utils.headUtil(defaults.options.vue, rendered.layout.style);
+                            html = html.replace(regexes.headRegex, head);
                             const app = {
-                                rendered: rendered,
-                                defaults: defaults
+                                head: Utils.headUtil(defaults.options.vue, rendered.layout.style),
+                                app: rendered.app,
+                                script: rendered.scriptString,
+
                             };
                             resolve(app);
                         }
