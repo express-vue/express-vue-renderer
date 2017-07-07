@@ -1,6 +1,6 @@
 // @flow
 const {Types}     = require('../models');
-const Utils       = require('../Utils');
+const Utils       = require('../utils');
 const paramCase   = require('param-case');
 const Vue         = require('vue');
 
