@@ -2,7 +2,7 @@
 const path = require('path');
 const express = require('express');
 
-const expressVueRenderer = require('./lib');
+const expressVueRenderer = require('../lib');
 
 const options = {
     settings: {
@@ -16,7 +16,7 @@ const options = {
 const data = {
     message: 'Hello world'
 };
-const component = __dirname + '/tests/component.vue';
+const component = path.join(__dirname,'/../tests/vueFiles/component.vue');
 
 const renderer = expressVueRenderer.init(options);
 const app = express();
