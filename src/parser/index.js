@@ -50,7 +50,7 @@ function componentParser(templatePath: string, defaults: Object, type: string): 
 }
 
 function parseContent(content: string, templatePath: string, defaults: Object, type: string): Object {
-    let body = ''
+    let body = '';
     let script = {};
     let style = '';
 
@@ -65,21 +65,7 @@ function parseContent(content: string, templatePath: string, defaults: Object, t
         body = htmlParser(content, htmlRegex, true);
         content = content.replace(htmlRegex, '');
 
-        defaults.cache.get('script' + content, (error, cacheScript) => {
-            if (error) {
-                return error;
-            } else if (cacheScript) {
-                script = cacheScript;
-            } else {
-                script = scriptParser(content, defaults, type, scriptRegex);
-                defaults.cache.set('script' + content, script, (error) => {
-                    if (error) {
-                        return error;
-                    }
-
-                });
-            }
-        });
+        script = scriptParser(content, defaults, type, scriptRegex);
 
         style = styleParser(content, styleRegex);
         content = content.replace(styleRegex, '');

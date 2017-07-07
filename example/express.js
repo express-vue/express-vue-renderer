@@ -1,6 +1,7 @@
 // @flow
 const path = require('path');
 const express = require('express');
+const uuidv4 = require('uuid/v4');
 
 const expressVueRenderer = require('../lib');
 
@@ -16,7 +17,7 @@ const options = {
 const data = {
     message: 'Hello world'
 };
-const component = path.join(__dirname,'/../tests/vueFiles/component.vue');
+const component = path.join(__dirname, '/../tests/vueFiles/component.vue');
 
 const renderer = expressVueRenderer.init(options);
 const app = express();
@@ -24,7 +25,10 @@ app.use(express.static('./dist'));
 
 app.use(renderer);
 
-app.get('/', (req, res) => res.renderVue(component, data));
+app.get('/', (req, res) => {
+    data.uuid = uuidv4();
+    res.renderVue(component, data)
+});
 
 app.listen(8081);
 

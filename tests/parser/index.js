@@ -50,7 +50,7 @@ test.cb('it should parse html', t => {
         }
         const htmlRegex = /(<template.*?>)([\s\S]*)(<\/template>)/gm;
         const html = Parser.htmlParser(content, htmlRegex, true);
-        t.is(html, '<div class=""><h1>{{message}}</h1></div>');
+        t.is(html, '<div class=""><h1>{{message}}</h1><h2>Uuid: {{uuid ? uuid : \'no uuid\'}}</h2></div>');
         t.end();
     })
 });
