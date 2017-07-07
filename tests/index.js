@@ -20,7 +20,7 @@ const options = {
 };
 
 test('renders App object', t => {
-    return ExpressVueRenderer.renderer(component, data, {}, options)
+    return ExpressVueRenderer.renderer(component, data, options)
         .then(app => {
             t.is(app.head, '<style>.test{color:#00f}</style></head>');
         })
