@@ -74,5 +74,4 @@ function init(options: Object) {
 }
 
 module.exports.renderer = expressVueRenderer;
-module.exports.GlobalOptions = GlobalOptions;
 module.exports.init = init;
