@@ -38,6 +38,9 @@
   "nyc": {
     "include": [
       "src/**/*.js"
+    ],
+    "reporter": [
+      "text-summary"
     ]
   },
   "devDependencies": {
