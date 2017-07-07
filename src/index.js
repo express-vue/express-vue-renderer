@@ -9,52 +9,52 @@ var NodeCache = require('node-cache');
 //TODO add cache options via ENV
 var myCache = new NodeCache({});
 
-const regexes = {
-    appRegex   : /{{{\s*app\s*}}}/igm,
-    scriptRegex: /{{{\s*script\s*}}}/igm,
-    headRegex  : /<\/head>/igm
-};
-
 let GlobalOptions = {};
 
-function expressVueRenderer(componentPath: string, data: Object): Promise<Object> {
+function expressVueRenderer(componentPath: string, data: Object, vueOptions: ?Object, options: ?Object): Promise<Object> {
     return new Promise((resolve, reject) => {
-        try {
-            GlobalOptions.options.data = data;
-            Utils.setupComponentArray(componentPath, GlobalOptions)
-                .then(promiseArray => {
-                    Promise.all(promiseArray)
-                        .then(function(components) {
-                            const rendered = Renderer.renderHtmlUtil(components, GlobalOptions);
-                            if (!rendered) {
-                                reject(Renderer.renderError('Renderer Error'));
-                            } else {
-                                const app = {
-                                    head: Utils.headUtil(GlobalOptions.options.vue, rendered.layout.style),
-                                    app: rendered.app,
-                                    script: rendered.scriptString,
-                                    template: GlobalOptions.backupLayout
-                                };
-                                resolve(app);
-                            }
-                        })
-                        .catch(function(error) {
-                            Renderer.renderError(error);
-                        });
-                })
-                .catch(error => {
-                    Renderer.renderError(error);
-                });
-        } catch (e) {
-            Renderer.renderError(e);
+        if (options) {
+            GlobalOptions = new Defaults(options);
         }
+        GlobalOptions.options.data = data;
+        if (vueOptions) {
+            GlobalOptions.options.vue = vueOptions;
+        }
+        Utils.setupComponentArray(componentPath, GlobalOptions)
+            .then(promiseArray => {
+                Promise.all(promiseArray)
+                    .then(function(components) {
+                        const rendered = Renderer.renderHtmlUtil(components, GlobalOptions);
+                        if (!rendered) {
+                            reject(Renderer.renderError('Renderer Error'));
+                        } else {
+                            const app = {
+                                head: Utils.headUtil(GlobalOptions.options.vue, rendered.layout.style),
+                                app: rendered.app,
+                                script: rendered.scriptString,
+                                template: GlobalOptions.backupLayout
+                            };
+                            resolve(app);
+                        }
+                    })
+                    .catch(function(error) {
+                        reject(Renderer.renderError(error));
+                    });
+            })
+            .catch(error => {
+                reject(Renderer.renderError(error));
+            });
     });
 }
 
 function init(options: Object) {
     GlobalOptions = new Defaults(options);
+
+    //Middleware init
     return (req: Object, res: Object, next: Function) => {
-        res.renderVue = (componentPath: string, data: Object) => {
+
+        //Res RenderVUE function
+        res.renderVue = (componentPath: string, data: Object, vueOptions: ?Object) => {
             res.set('Content-Type', 'text/html');
 
             //Caching
@@ -67,7 +67,8 @@ function init(options: Object) {
                 } else if (cachedString) {
                     res.send(cachedString);
                 } else {
-                    expressVueRenderer(componentPath, data)
+                    //
+                    expressVueRenderer(componentPath, data, vueOptions)
                         .then(app => {
                             const vueStream = renderer.renderToStream(app.app);
                             let htmlStream;
@@ -101,5 +102,6 @@ function init(options: Object) {
     };
 }
 
-module.exports.expressVueRenderer = expressVueRenderer;
+module.exports.renderer = expressVueRenderer;
+module.exports.GlobalOptions = GlobalOptions;
 module.exports.init = init;

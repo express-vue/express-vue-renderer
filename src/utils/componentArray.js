@@ -5,7 +5,7 @@ const PathUtils = require('./checkPathUtils');
 
 let types = new Models.Types();
 
-function setupComponentArray(componentPath: string, defaults: Models.Defaults) {
+function setupComponentArray(componentPath: string, defaults: Models.Defaults | Object) {
     return new Promise((resolve, reject) => {
         let array = [];
         let pathPromiseArray = [];
