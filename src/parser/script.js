@@ -4,7 +4,7 @@ const requireFromString = require('require-from-string');
 
 const scriptRegex = /(<script.*?>)([\s\S]*?)(<\/script>)/gm;
 
-function dataParser(script: Object, defaults: Object, type: string) {
+function dataParser(script: Object, defaults: Object, type: string): Object{
     let finalScript = {};
     for (var element in script) {
         if (script.hasOwnProperty(element)) {
