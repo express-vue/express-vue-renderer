@@ -12,35 +12,7 @@ const htmlRegex     = /(<template.*?>)([\s\S]*)(<\/template>)/gm;
 const scriptRegex   = /(<script.*?>)([\s\S]*?)(<\/script>)/gm;
 const styleRegex    = /(<style.*?>)([\s\S]*?)(<\/style>)/gm;
 
-
-
-function layoutParser(layoutPath: string, defaults: Object, type: Types) {
-    return new Promise(function(resolve) {
-        fs.readFile(layoutPath, 'utf-8', function (err, content) {
-            if (err) {
-                content = defaults.backupLayout;
-                // let error = `Could not find the layout, I was expecting it to live here
-                // ${layoutPath}
-                // But I couldn't find it there ¯\_(ツ)_/¯
-                // So I'm using the default layout`;
-                // console.warn(error)
-            }
-
-            const body = htmlParser(content, htmlRegex, false);
-            content = content.replace(htmlRegex, '');
-
-            const script = scriptParser(content, defaults, type, scriptRegex);
-
-            resolve({
-                type: type,
-                template: body,
-                script: script
-            });
-        });
-    });
-}
-
-function componentParser(templatePath: string, defaults: Object, type: Types) {
+function componentParser(templatePath: string, defaults: Object, type: Types): Promise<Object> {
     return new Promise(function(resolve, reject) {
         fs.readFile(templatePath, 'utf-8', function (err, content) {
             if (err) {
@@ -79,7 +51,6 @@ function componentParser(templatePath: string, defaults: Object, type: Types) {
 }
 
 module.exports.componentParser = componentParser;
-module.exports.layoutParser = layoutParser;
 module.exports.scriptParser = scriptParser;
 module.exports.styleParser = styleParser;
 module.exports.htmlParser = htmlParser;

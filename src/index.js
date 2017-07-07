@@ -62,7 +62,7 @@ function expressVueRenderer(componentPath: string, data: Object, vueOptions: ?Ob
             }
         });
     });
-};
+}
 
 function init(options: Object) {
     GlobalOptions = new Defaults(options);
