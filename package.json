@@ -61,7 +61,10 @@
     "test": "eslint src && nyc ava",
     "clean": "rm -rf lib",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
-    "build": "npm run clean && flow-remove-types --pretty src/ --out-dir lib/"
+    "build": "npm run clean && flow-remove-types --pretty src/ --out-dir lib/",
+    "preversion": "npm test",
+    "version": "npm run build && git add -A",
+    "postversion": "git push && git push --tags"
   },
   "repository": "express-vue/express-vue-renderer",
   "license": "Apache-2.0",
