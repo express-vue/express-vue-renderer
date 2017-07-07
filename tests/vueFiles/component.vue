@@ -6,7 +6,7 @@
 </template>
 
 <script>
-export default {
+exports.default = {
     data: function() {
         return {
         }
