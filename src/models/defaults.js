@@ -29,7 +29,7 @@ class Defaults {
         };
         this.layoutPath    = this.layoutsDir + (this.customLayout || this.defaultLayout) + '.vue';
         this.options       = options;
-        this.cache         = new NodeCache({});
+        this.cache         = new NodeCache({ stdTTL: 100, checkperiod: 120 });
     }
 }
 
