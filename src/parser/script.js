@@ -2,7 +2,8 @@
 const {
     DataObject
 } = require('../models');
-const requireFromString = require('require-from-string');
+
+const Utils = require('../utils');
 const babel = require('babel-core');
 const stringHash = require('string-hash');
 
@@ -57,7 +58,7 @@ function scriptParser(script: string, defaults: Object, type: string, regex: Reg
         }
     });
 
-    let evalScript = requireFromString(babelScript.code);
+    let evalScript = Utils.requireFromString(babelScript.code).exports;
     let finalScript = dataMerge(evalScript.default, defaults, type);
     return finalScript;
 }
