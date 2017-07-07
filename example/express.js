@@ -24,7 +24,7 @@ app.use(express.static('./dist'));
 
 app.use(renderer);
 
-app.use((req, res) => res.renderVue(component, data));
+app.get('/', (req, res) => res.renderVue(component, data));
 
 app.listen(8081);
 
