@@ -1,10 +1,11 @@
 // @flow
 const {DataObject} = require('../models');
 const requireFromString = require('require-from-string');
+const babel = require('babel-core');
 
 const scriptRegex = /(<script.*?>)([\s\S]*?)(<\/script>)/gm;
 
-function dataParser(script: Object, defaults: Object, type: string): Object{
+function dataMerge(script: Object, defaults: Object, type: string): Object{
     let finalScript = {};
     for (var element in script) {
         if (script.hasOwnProperty(element)) {
@@ -33,9 +34,9 @@ function scriptParser(script: string, defaults: Object, type: string, regex: Reg
         return null;
     }
     let scriptString  = scriptArray[0].replace(regex, '$2');
-    let babelScript   = require('babel-core').transform(scriptString, options);
+    let babelScript   = babel.transform(scriptString, options);
     let evalScript    = requireFromString(babelScript.code);
-    let finalScript   = dataParser(evalScript.default, defaults, type);
+    let finalScript   = dataMerge(evalScript.default, defaults, type);
     return finalScript;
 }
 
