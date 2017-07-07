@@ -60,6 +60,7 @@
     "pretest": "eslint . --fix",
     "test": "eslint src && nyc ava",
     "clean": "rm -rf lib",
+    "coverage": "nyc report --reporter=text-lcov | coveralls",
     "build": "npm run clean && flow-remove-types --pretty src/ --out-dir lib/"
   },
   "repository": "express-vue/express-vue-renderer",
