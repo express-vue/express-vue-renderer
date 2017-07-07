@@ -1,74 +1,56 @@
 // @flow
 'use strict';
-const {Defaults} = require('./models');
+const {
+    Defaults
+} = require('./models');
 const Utils = require('./utils');
 const Renderer = require('./renderer');
 const renderer = require('vue-server-renderer').createRenderer();
 
-var NodeCache = require('node-cache');
-//TODO add cache options via ENV
-var myCache = new NodeCache({});
-
-function expressVueRenderer(componentPath: string, data: Object, options: Object, vueOptions: ?Object): Promise<Object> {
+function expressVueRenderer(componentPath: string, data: Object, GlobalOptions: Object, vueOptions: ? Object): Promise < Object > {
     return new Promise((resolve, reject) => {
-        //Caching
-        let cacheObject = Object.assign({}, data);
 
-        const cacheKey = componentPath + JSON.stringify(cacheObject);
-        myCache.get(cacheKey, (error, cachedAppObject) => {
-            if (error) {
-                reject(new Error(error));
-            } else if (cachedAppObject) {
-                resolve(cachedAppObject);
-            } else {
-                //Make new object
-                const GlobalOptions = new Defaults(options);
-                GlobalOptions.options.data = data;
-                if (vueOptions) {
-                    GlobalOptions.options.vue = vueOptions;
-                }
-                Utils.setupComponentArray(componentPath, GlobalOptions)
-                    .then(promiseArray => {
-                        Promise.all(promiseArray)
-                            .then(function(components) {
-                                const rendered = Renderer.renderHtmlUtil(components, GlobalOptions);
-                                if (!rendered) {
-                                    reject(new Error('Renderer Error'));
-                                } else {
-                                    const app = {
-                                        head: Utils.headUtil(GlobalOptions.options.vue, rendered.layout.style),
-                                        app: rendered.app,
-                                        script: rendered.scriptString,
-                                        template: GlobalOptions.backupLayout
-                                    };
-                                    myCache.set(cacheKey, app, err => {
-                                        if (err) {
-                                            reject(new Error(error));
-                                        }
-                                    });
-                                    resolve(app);
-                                }
-                            })
-                            .catch(function(error) {
-                                reject(new Error(error));
-                            });
+        GlobalOptions.options.data = data;
+        if (vueOptions) {
+            GlobalOptions.options.vue = vueOptions;
+        }
+        Utils.setupComponentArray(componentPath, GlobalOptions)
+            .then(promiseArray => {
+                Promise.all(promiseArray)
+                    .then(function (components) {
+                        const rendered = Renderer.renderHtmlUtil(components, GlobalOptions);
+                        if (!rendered) {
+                            reject(new Error('Renderer Error'));
+                        } else {
+                            const app = {
+                                head: Utils.headUtil(GlobalOptions.options.vue, rendered.layout.style),
+                                app: rendered.app,
+                                script: rendered.scriptString,
+                                template: GlobalOptions.backupLayout
+                            };
+                            resolve(app);
+                        }
                     })
-                    .catch(error => {
+                    .catch(function (error) {
                         reject(new Error(error));
                     });
-            }
-        });
+            })
+            .catch(error => {
+                reject(new Error(error));
+            });
     });
 }
 
 function init(options: Object) {
+    //Make new object
+    const GlobalOptions = new Defaults(options);
     //Middleware init
     return (req: Object, res: Object, next: Function) => {
 
         //Res RenderVUE function
-        res.renderVue = (componentPath: string, data: Object, vueOptions: ?Object) => {
+        res.renderVue = (componentPath: string, data: Object, vueOptions: ? Object) => {
             res.set('Content-Type', 'text/html');
-            expressVueRenderer(componentPath, data, options, vueOptions)
+            expressVueRenderer(componentPath, data, GlobalOptions, vueOptions)
                 .then(app => {
                     const vueStream = renderer.renderToStream(app.app);
                     let htmlStream;
