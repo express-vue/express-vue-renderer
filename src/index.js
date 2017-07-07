@@ -9,9 +9,7 @@ var NodeCache = require('node-cache');
 //TODO add cache options via ENV
 var myCache = new NodeCache({});
 
-let GlobalOptions = {};
-
-function expressVueRenderer(componentPath: string, data: Object, vueOptions: ?Object, options: ?Object): Promise<Object> {
+function expressVueRenderer(componentPath: string, data: Object, options: Object, vueOptions: ?Object): Promise<Object> {
     return new Promise((resolve, reject) => {
         //Caching
         let cacheObject = Object.assign({}, data);
@@ -23,9 +21,8 @@ function expressVueRenderer(componentPath: string, data: Object, vueOptions: ?Ob
             } else if (cachedAppObject) {
                 resolve(cachedAppObject);
             } else {
-                if (options) {
-                    GlobalOptions = new Defaults(options);
-                }
+                //Make new object
+                const GlobalOptions = new Defaults(options);
                 GlobalOptions.options.data = data;
                 if (vueOptions) {
                     GlobalOptions.options.vue = vueOptions;
@@ -65,15 +62,13 @@ function expressVueRenderer(componentPath: string, data: Object, vueOptions: ?Ob
 }
 
 function init(options: Object) {
-    GlobalOptions = new Defaults(options);
-
     //Middleware init
     return (req: Object, res: Object, next: Function) => {
 
         //Res RenderVUE function
         res.renderVue = (componentPath: string, data: Object, vueOptions: ?Object) => {
             res.set('Content-Type', 'text/html');
-            expressVueRenderer(componentPath, data, vueOptions)
+            expressVueRenderer(componentPath, data, options, vueOptions)
                 .then(app => {
                     const vueStream = renderer.renderToStream(app.app);
                     let htmlStream;
@@ -97,5 +92,4 @@ function init(options: Object) {
 }
 
 module.exports.renderer = expressVueRenderer;
-module.exports.GlobalOptions = GlobalOptions;
 module.exports.init = init;
