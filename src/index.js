@@ -19,7 +19,7 @@ function expressVueRenderer(componentPath: string, data: Object, vueOptions: ?Ob
         const cacheKey = componentPath + JSON.stringify(cacheObject);
         myCache.get(cacheKey, (error, cachedAppObject) => {
             if (error) {
-                reject(Renderer.renderError(error));
+                reject(new Error(error));
             } else if (cachedAppObject) {
                 resolve(cachedAppObject);
             } else {
@@ -36,7 +36,7 @@ function expressVueRenderer(componentPath: string, data: Object, vueOptions: ?Ob
                             .then(function(components) {
                                 const rendered = Renderer.renderHtmlUtil(components, GlobalOptions);
                                 if (!rendered) {
-                                    reject(Renderer.renderError('Renderer Error'));
+                                    reject(new Error('Renderer Error'));
                                 } else {
                                     const app = {
                                         head: Utils.headUtil(GlobalOptions.options.vue, rendered.layout.style),
@@ -46,18 +46,18 @@ function expressVueRenderer(componentPath: string, data: Object, vueOptions: ?Ob
                                     };
                                     myCache.set(cacheKey, app, err => {
                                         if (err) {
-                                            Renderer.renderError(error);
+                                            reject(new Error(error));
                                         }
                                     });
                                     resolve(app);
                                 }
                             })
                             .catch(function(error) {
-                                reject(Renderer.renderError(error));
+                                reject(new Error(error));
                             });
                     })
                     .catch(error => {
-                        reject(Renderer.renderError(error));
+                        reject(new Error(error));
                     });
             }
         });
@@ -89,7 +89,7 @@ function init(options: Object) {
                     });
                 })
                 .catch(error => {
-                    Renderer.renderError(error);
+                    new Error(error);
                 });
         };
         return next();

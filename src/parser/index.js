@@ -1,8 +1,6 @@
 // @flow
 const fs      = require('fs');
 
-const {Types} = require('../models');
-
 const camelCase = require('camel-case');
 const styleParser = require('./style');
 const htmlParser = require('./html');
@@ -12,7 +10,7 @@ const htmlRegex     = /(<template.*?>)([\s\S]*)(<\/template>)/gm;
 const scriptRegex   = /(<script.*?>)([\s\S]*?)(<\/script>)/gm;
 const styleRegex    = /(<style.*?>)([\s\S]*?)(<\/style>)/gm;
 
-function componentParser(templatePath: string, defaults: Object, type: Types): Promise<Object> {
+function componentParser(templatePath: string, defaults: Object, type: string): Promise<Object> {
     return new Promise(function(resolve, reject) {
         fs.readFile(templatePath, 'utf-8', function (err, content) {
             if (err) {
