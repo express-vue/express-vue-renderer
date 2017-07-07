@@ -9,54 +9,38 @@ const renderer = require('vue-server-renderer').createRenderer();
 
 function expressVueRenderer(componentPath: string, data: Object, options: Object, vueOptions: ? Object): Promise < Object > {
     return new Promise((resolve, reject) => {
-        //Caching
-        let cacheObject = Object.assign({}, data);
 
-        const cacheKey = componentPath + JSON.stringify(cacheObject);
-        myCache.get(cacheKey, (error, cachedAppObject) => {
-            if (error) {
-                reject(Renderer.renderError(error));
-            } else if (cachedAppObject) {
-                resolve(cachedAppObject);
-            } else {
-                let GlobalOptions = new Defaults(options);
-                GlobalOptions.options.data = data;
-                if (vueOptions) {
-                    GlobalOptions.options.vue = vueOptions;
-                }
-                Utils.setupComponentArray(componentPath, GlobalOptions)
-                    .then(promiseArray => {
-                        Promise.all(promiseArray)
-                            .then(function(components) {
-                                const rendered = Renderer.renderHtmlUtil(components, GlobalOptions);
-                                if (!rendered) {
-                                    reject(Renderer.renderError('Renderer Error'));
-                                } else {
-                                    const app = {
-                                        head: Utils.headUtil(GlobalOptions.options.vue, rendered.layout.style),
-                                        app: rendered.app,
-                                        script: rendered.scriptString,
-                                        template: GlobalOptions.backupLayout
-                                    };
-                                    myCache.set(cacheKey, app, err => {
-                                        if (err) {
-                                            Renderer.renderError(error);
-                                        }
-                                    });
-                                    resolve(app);
-                                }
-                            })
-                            .catch(function(error) {
-                                reject(Renderer.renderError(error));
-                            });
+        let GlobalOptions = new Defaults(options);
+        GlobalOptions.options.data = data;
+        if (vueOptions) {
+            GlobalOptions.options.vue = vueOptions;
+        }
+        Utils.setupComponentArray(componentPath, GlobalOptions)
+            .then(promiseArray => {
+                Promise.all(promiseArray)
+                    .then(function (components) {
+                        const rendered = Renderer.renderHtmlUtil(components, GlobalOptions);
+                        if (!rendered) {
+                            reject(Renderer.renderError('Renderer Error'));
+                        } else {
+                            const app = {
+                                head: Utils.headUtil(GlobalOptions.options.vue, rendered.layout.style),
+                                app: rendered.app,
+                                script: rendered.scriptString,
+                                template: GlobalOptions.backupLayout
+                            };
+                            resolve(app);
+                        }
                     })
-                    .catch(error => {
+                    .catch(function (error) {
                         reject(Renderer.renderError(error));
                     });
-            }
-        });
+            })
+            .catch(error => {
+                reject(Renderer.renderError(error));
+            });
     });
-};
+}
 
 function init(options: Object) {
 
