@@ -1,3 +1,4 @@
 [ignore]
 .*/lib/*.
+.*/express/*.
 .*/node_modules/vue/src/*.

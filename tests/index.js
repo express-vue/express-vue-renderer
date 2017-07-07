@@ -20,11 +20,13 @@ const options = {
 };
 
 test('renders App object', t => {
-    return ExpressVueRenderer.renderer(component, data, {}, options)
+    const GlobalOptions = new Models.Defaults(options);
+    return ExpressVueRenderer.renderer(component, data, GlobalOptions)
         .then(app => {
-            t.is(app.head, '<style>.test{color:#00f}</style></head>');
+            t.is(app.head, '</head>');
         })
         .catch(error => {
+            console.error(JSON.stringify(error, null, 2));
             t.fail();
         });
 

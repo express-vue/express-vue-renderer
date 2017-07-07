@@ -49,16 +49,14 @@ function layoutUtil(components: Object[]) {
     return layout;
 }
 
-function renderVueComponents(script: Object, components: Object) {
+function renderVueComponents(script: Object, components: Object[]) {
     let componentsString = '';
-    for (var component in components) {
-        if (components.hasOwnProperty(component)) {
-            let currentComponent = components[component];
-            if (currentComponent.type === types.SUBCOMPONENT) {
-                componentsString = componentsString + `Vue.component('${paramCase(currentComponent.name)}', ${Utils.scriptToString(currentComponent.script)});\n`;
-            }
+    for (const component of components) {
+        if (component.type === types.SUBCOMPONENT) {
+            componentsString = componentsString + `Vue.component('${paramCase(component.name)}', ${Utils.scriptToString(component.script)});\n`;
         }
     }
+
 
     return componentsString;
 }

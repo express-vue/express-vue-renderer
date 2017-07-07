@@ -1,4 +1,6 @@
 // @flow
+const NodeCache = require('node-cache');
+
 class Defaults {
     rootPath: string;
     layoutsDir: string;
@@ -9,6 +11,7 @@ class Defaults {
     layoutPath: string;
     customLayout: string;
     options: Object;
+    cache: NodeCache;
     constructor(options: Object = {settings: {vue: null}}) {
         if (options.settings.vue === null) {
             options.settings.vue = {};
@@ -26,6 +29,7 @@ class Defaults {
         };
         this.layoutPath    = this.layoutsDir + (this.customLayout || this.defaultLayout) + '.vue';
         this.options       = options;
+        this.cache         = new NodeCache({});
     }
 }
 
