@@ -6,9 +6,12 @@
 </template>
 
 <script>
-exports.default = {
+export default {
     data: function() {
         return {
+            testData: {
+                hello: 'world'
+            }
         }
     }
 }
