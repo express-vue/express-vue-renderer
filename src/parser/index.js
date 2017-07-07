@@ -1,6 +1,5 @@
 // @flow
 const fs = require('fs');
-
 const camelCase = require('camel-case');
 const styleParser = require('./style');
 const htmlParser = require('./html');
@@ -51,32 +50,53 @@ function componentParser(templatePath: string, defaults: Object, type: string): 
 }
 
 function parseContent(content: string, templatePath: string, defaults: Object, type: string): Object {
-    const body = htmlParser(content, htmlRegex, true);
-    content = content.replace(htmlRegex, '');
+    let body = ''
+    let script = {};
+    let style = '';
 
-    const script = scriptParser(content, defaults, type, scriptRegex);
     const templateArray = templatePath.split('/');
-
-    const style = styleParser(content, styleRegex);
-    content = content.replace(styleRegex, '');
-
     if (templateArray.length === 0) {
         let error = `I had an error processing component templates. in this file \n${templatePath}`;
         console.error(new Error(error));
         return error;
+    } else {
+        let templateName = templateArray[templateArray.length - 1].replace('.vue', '');
+
+        body = htmlParser(content, htmlRegex, true);
+        content = content.replace(htmlRegex, '');
+
+        defaults.cache.get('script' + content, (error, cacheScript) => {
+            if (error) {
+                return error;
+            } else if (cacheScript) {
+                script = cacheScript;
+            } else {
+                script = scriptParser(content, defaults, type, scriptRegex);
+                defaults.cache.set('script' + content, script, (error) => {
+                    if (error) {
+                        return error;
+                    }
+
+                });
+            }
+        });
+
+        style = styleParser(content, styleRegex);
+        content = content.replace(styleRegex, '');
+
+
+        let componentScript = script || {};
+        componentScript.template = body;
+
+        const componentObject = {
+            type: type,
+            style: style,
+            name: camelCase(templateName),
+            script: componentScript
+        };
+        return componentObject;
     }
 
-    let templateName = templateArray[templateArray.length - 1].replace('.vue', '');
-    let componentScript = script || {};
-    componentScript.template = body;
-
-    const componentObject = {
-        type: type,
-        style: style,
-        name: camelCase(templateName),
-        script: componentScript
-    };
-    return componentObject;
 }
 
 module.exports.componentParser = componentParser;
