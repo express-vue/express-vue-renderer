@@ -103,7 +103,7 @@ function headUtil(vueObject: Object, styleString: string) {
         }
     }
 
-    return title + metaTags + structuredData + style + '</head>\n';
+    return title + metaTags + structuredData + style + '</head>';
 }
 
 module.exports = headUtil;

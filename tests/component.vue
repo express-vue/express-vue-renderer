@@ -6,7 +6,10 @@
 
 <script>
 export default {
-    props: ['message']
+    data: function() {
+        return {
+        }
+    }
 }
 </script>
 
