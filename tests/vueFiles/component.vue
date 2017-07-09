@@ -9,6 +9,9 @@
 export default {
     data: function() {
         return {
+            testData: {
+                hello: 'world'
+            }
         }
     }
 }
