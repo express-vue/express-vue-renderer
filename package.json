@@ -61,7 +61,7 @@
   },
   "scripts": {
     "start": "npm run build && node example/express.js",
-    "prepublish": "nsp check",
+    "prepublish": "npm run build && nsp check",
     "pretest": "eslint . --fix",
     "test": "eslint src && nyc ava",
     "clean": "rm -rf lib",
