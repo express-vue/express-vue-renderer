@@ -9,14 +9,11 @@ function setupComponentArray(componentPath: string, defaults: Models.Defaults | 
     return new Promise((resolve, reject) => {
         let array = [];
         let pathPromiseArray = [];
-
-        PathUtils.getCorrectPathForFile(componentPath, 'view').then(path => {
+        PathUtils.getCorrectPathForFile(componentPath, defaults.viewsPath, 'view').then(path => {
             array.push(Parser.componentParser(path.path, defaults, types.COMPONENT));
-
             if (defaults.options.vue && defaults.options.vue.components) {
                 for (let component of defaults.options.vue.components) {
-                    const componentFile = defaults.componentsDir + component + '.vue';
-                    pathPromiseArray.push(PathUtils.getCorrectPathForFile(componentFile, 'component'));
+                    pathPromiseArray.push(PathUtils.getCorrectPathForFile(component, defaults.componentsPath,'component'));
                 }
             }
             Promise.all(pathPromiseArray)

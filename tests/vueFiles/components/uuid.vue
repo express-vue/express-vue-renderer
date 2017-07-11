@@ -1,18 +1,14 @@
 <template lang="html">
   <div class="">
-      <h1>{{message}}</h1>
       <h2>Uuid: {{uuid ? uuid : 'no uuid'}}</h2>
   </div>
 </template>
 
 <script>
 export default {
+    props: ['uuid'],
     data: function() {
-        return {
-            testData: {
-                hello: 'world'
-            }
-        }
+        return {}
     }
 }
 </script>

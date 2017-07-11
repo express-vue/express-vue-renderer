@@ -11,23 +11,20 @@ const data = {
 };
 
 const options = {
-    settings: {
-        vue: {
-            componentsDir: path.join(__dirname, '/tests/vueFiles')
-        },
-        views: path.join(__dirname, '/tests/vueFiles')
-    }
+    rootPath: path.join(__dirname, '/'),
+    componentsPath: 'vueFiles/components',
+    viewsPath: 'vueFiles'
 };
 
 test('renders App object', t => {
     const GlobalOptions = new Models.Defaults(options);
-    return ExpressVueRenderer.renderer(component, data, GlobalOptions)
+    return ExpressVueRenderer.renderer('main', data, GlobalOptions)
         .then(app => {
             t.is(app.head, '</head>');
         })
         .catch(error => {
-            console.error(JSON.stringify(error, null, 2));
-            t.fail();
+            // console.error(JSON.stringify(error, null, 2));
+            t.fail(error);
         });
 
 });
