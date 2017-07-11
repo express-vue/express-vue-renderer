@@ -11,41 +11,34 @@ const styleRegex = /(<style.*?>)([\s\S]*?)(<\/style>)/gm;
 
 function componentParser(templatePath: string, defaults: Object, type: string): Promise < Object > {
     return new Promise(function (resolve, reject) {
-        defaults.cache.get(templatePath, (error, cachedComponentContent) => {
-            if (error) {
-                reject(new Error(error));
-            } else if (cachedComponentContent) {
-                const componentObject = parseContent(cachedComponentContent, templatePath, defaults, type);
-                if (typeof componentObject === Error) {
-                    reject(componentObject);
-                } else {
-                    resolve(componentObject);
-                }
+        // try to get the component content from the cache
+        const cachedComponentContent = defaults.cache.get(templatePath);
+        if (cachedComponentContent) {
+            const componentObject = parseContent(cachedComponentContent, templatePath, defaults, type);
+            if (typeof componentObject === Error) {
+                reject(componentObject);
             } else {
-                fs.readFile(templatePath, 'utf-8', function (err, content) {
-                    if (err) {
-                        let error = `Could Not Find Component, I was expecting it to live here \n${templatePath} \nBut I couldn't find it there, ¯\\_(ツ)_/¯\n\n`;
-                        console.error(new Error(error));
-                        reject(error);
-                    } else {
-                        // set the cache for the component
-                        defaults.cache.set(templatePath, content, error => {
-                            if (error) {
-                                reject(new Error(error));
-                            } else {
-                                const componentObject = parseContent(content, templatePath, defaults, type);
-                                if (typeof componentObject === Error) {
-                                    reject(componentObject);
-                                } else {
-                                    resolve(componentObject);
-                                }
-                            }
-                        });
-                    }
-                });
+                resolve(componentObject);
             }
-        });
+        } else {
+            fs.readFile(templatePath, 'utf-8', function (err, content) {
+                if (err) {
+                    let error = `Could Not Find Component, I was expecting it to live here \n${templatePath} \nBut I couldn't find it there, ¯\\_(ツ)_/¯\n\n`;
+                    console.error(new Error(error));
+                    reject(error);
+                } else {
+                    // set the cache for the component
+                    defaults.cache.set(templatePath, content);
 
+                    const componentObject = parseContent(content, templatePath, defaults, type);
+                    if (typeof componentObject === Error) {
+                        reject(componentObject);
+                    } else {
+                        resolve(componentObject);
+                    }
+                }
+            });
+        }
     });
 }
 
