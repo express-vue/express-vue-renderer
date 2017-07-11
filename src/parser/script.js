@@ -40,23 +40,14 @@ function scriptParser(script: string, defaults: Object, type: string, regex: Reg
     let scriptString = scriptArray[0].replace(regex, '$2');
     // caching for babel script string so time spent in babel is reduced
     let babelScript = '';
-    defaults.cache.get(stringHash(scriptString), (error, cachedBabelScript) => {
-        if (error) {
-            // if get from cache errors log it but go on with babel so it doesn't brake the flow
-            console.error(new Error(error));
-            babelScript = babel.transform(scriptString, options);
-        } else if (cachedBabelScript) {
-            babelScript = cachedBabelScript;
-        } else {
-            babelScript = babel.transform(scriptString, options);
-            // set the cache for the babel script string
-            defaults.cache.set(stringHash(scriptString), babelScript, error => {
-                if (error) {
-                    console.error(new Error(error));
-                }
-            });
-        }
-    });
+    const cachedBabelScript = defaults.cache.get(stringHash(scriptString));
+    if (cachedBabelScript) {
+        babelScript = cachedBabelScript;
+    } else {
+        babelScript = babel.transform(scriptString, options);
+        // set the cache for the babel script string
+        defaults.cache.set(stringHash(scriptString), babelScript);
+    }
 
     let evalScript = Utils.requireFromString(babelScript.code).exports;
     let finalScript = dataMerge(evalScript.default, defaults, type);

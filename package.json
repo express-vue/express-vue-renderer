@@ -79,7 +79,7 @@
     "camel-case": "^3.0.0",
     "clean-css": "^4.1.5",
     "html-minifier": "^3.5.2",
-    "node-cache": "^4.1.1",
+    "lru-cache": "^4.1.1",
     "pug": "^2.0.0-rc.2",
     "require-from-string": "^1.2.1",
     "string-hash": "^1.1.3",

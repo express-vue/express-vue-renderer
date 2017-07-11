@@ -1,5 +1,10 @@
 // @flow
-const NodeCache = require('node-cache');
+const LRU = require('lru-cache');
+const options = {
+    max: 500,
+    maxAge: 1000 * 60 * 60
+};
+const lruCache = LRU(options);
 
 class Defaults {
     rootPath: string;
@@ -29,7 +34,7 @@ class Defaults {
         };
         this.layoutPath    = this.layoutsDir + (this.customLayout || this.defaultLayout) + '.vue';
         this.options       = options;
-        this.cache         = new NodeCache({ stdTTL: 100, checkperiod: 120 });
+        this.cache         = lruCache;
     }
 }
 
