@@ -19,16 +19,16 @@ const dataObjectSub = new DataObject(options, defaultObject, types.SUBCOMPONENT)
 
 //Examples
 const exampleObject = {
-    rootPath: '/Users/danielcherubini/Coding/Express-Vue/express-vue-renderer/tests/models/tests',
-    componentsPath: '/Users/danielcherubini/Coding/Express-Vue/express-vue-renderer/tests/models/tests/vueFiles/components',
-    viewsPath: '/Users/danielcherubini/Coding/Express-Vue/express-vue-renderer/tests/models/tests/vueFiles',
+    rootPath: options.rootPath,
+    componentsPath: options.rootPath + '/' + options.componentsPath,
+    viewsPath:  options.rootPath + '/' + options.viewsPath,
     layout: {
         start: '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><script src="https://unpkg.com/vue/dist/vue.js"></script>',
         middle: '<body><div id="app">',
         end: '</div></body></html>',
     },
     options:{
-        rootPath: '/Users/danielcherubini/Coding/Express-Vue/express-vue-renderer/tests/models/tests',
+        rootPath: options.rootPath,
         componentsPath: 'vueFiles/components',
         viewsPath: 'vueFiles'
     },
