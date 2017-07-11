@@ -12,25 +12,21 @@ function htmlParser(body: string, regex: RegExp, minify: boolean): Promise<strin
         if (!body) {
             reject(new Error('No template section'));
         } else {
-            try {
-                const bodyArray = body.match(htmlRegex);
-                let bodyString  = bodyArray[0];
-                if (bodyString) {
-                    const templateLang = bodyString.replace(htmlRegex, '$1');
-                    bodyString = bodyString.replace(htmlRegex, '$2');
-                    if(templateLang.includes('lang="pug"') || templateLang.includes('lang="jade"')) {
-                        bodyString = pug.compile(bodyString,{})({});
-                    }
-                    if (minify) {
-                        bodyString = htmlMinify.minify(bodyString, {
-                            collapseWhitespace: true
-                        });
-                    }
+            const bodyArray = body.match(htmlRegex);
+            let bodyString  = bodyArray[0];
+            if (bodyString) {
+                const templateLang = bodyString.replace(htmlRegex, '$1');
+                bodyString = bodyString.replace(htmlRegex, '$2');
+                if(templateLang.includes('lang="pug"') || templateLang.includes('lang="jade"')) {
+                    bodyString = pug.compile(bodyString,{})({});
                 }
-                resolve(bodyString);
-            } catch (e) {
-                reject(e);
+                if (minify) {
+                    bodyString = htmlMinify.minify(bodyString, {
+                        collapseWhitespace: true
+                    });
+                }
             }
+            resolve(bodyString);
         }
     });
 }

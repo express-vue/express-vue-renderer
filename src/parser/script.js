@@ -35,30 +35,26 @@ function scriptParser(script: string, defaults: Object, type: string, regex: Reg
         const options = {
             'presets': ['es2015']
         };
-        try {
-            const scriptArray = script.match(regex) || [];
-            if (scriptArray.length === 0) {
-                let error = `I had an error processing this script.\n${script}`;
-                reject(new Error(error));
-            }
-            let scriptString = scriptArray[0].replace(regex, '$2');
-            // caching for babel script string so time spent in babel is reduced
-            let babelScript = '';
-            const cachedBabelScript = defaults.cache.get(stringHash(scriptString));
-            if (cachedBabelScript) {
-                babelScript = cachedBabelScript;
-            } else {
-                babelScript = babel.transform(scriptString, options);
-                // set the cache for the babel script string
-                defaults.cache.set(stringHash(scriptString), babelScript);
-            }
-
-            let evalScript = Utils.requireFromString(babelScript.code).exports;
-            let finalScript = dataMerge(evalScript.default, defaults, type);
-            resolve(finalScript);
-        } catch (e) {
-            reject(e);
+        const scriptArray = script.match(regex) || [];
+        if (scriptArray.length === 0) {
+            let error = `I had an error processing this script.\n${script}`;
+            reject(new Error(error));
         }
+        let scriptString = scriptArray[0].replace(regex, '$2');
+        // caching for babel script string so time spent in babel is reduced
+        let babelScript = '';
+        const cachedBabelScript = defaults.cache.get(stringHash(scriptString));
+        if (cachedBabelScript) {
+            babelScript = cachedBabelScript;
+        } else {
+            babelScript = babel.transform(scriptString, options);
+            // set the cache for the babel script string
+            defaults.cache.set(stringHash(scriptString), babelScript);
+        }
+
+        let evalScript = Utils.requireFromString(babelScript.code).exports;
+        let finalScript = dataMerge(evalScript.default, defaults, type);
+        resolve(finalScript);
     });
 }
 

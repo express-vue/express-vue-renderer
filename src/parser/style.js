@@ -11,24 +11,20 @@ function styleParser(template: string, regex: RegExp): Promise<string> {
         if (!template) {
             reject(new Error('missing style section'));
         }
-        try {
-            const styleArray = template.match(regex) || [];
-            let styleString  = styleArray[0];
-            let finalStyleString = '';
-            if (styleString) {
-                finalStyleString = styleString.replace(regex, '$2');
+        const styleArray = template.match(regex) || [];
+        let styleString  = styleArray[0];
+        let finalStyleString = '';
+        if (styleString) {
+            finalStyleString = styleString.replace(regex, '$2');
 
-                const templateLang = styleString.replace(regex, '$1');
-                if(templateLang.includes('lang="scss"') || templateLang.includes('lang="less"')) {
-                    console.error('Sorry please only use plain CSS in your files for now');
-                }
+            const templateLang = styleString.replace(regex, '$1');
+            if(templateLang.includes('lang="scss"') || templateLang.includes('lang="less"')) {
+                console.error('Sorry please only use plain CSS in your files for now');
             }
-            const options = {};
-            const output = new CleanCSS(options).minify(finalStyleString);
-            resolve(output.styles);
-        } catch (e) {
-            reject(e);
         }
+        const options = {};
+        const output = new CleanCSS(options).minify(finalStyleString);
+        resolve(output.styles);
     });
 }
 
