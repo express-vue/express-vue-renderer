@@ -16,7 +16,7 @@ class Defaults {
     layoutPath: string;
     customLayout: string;
     options: Object;
-    cache: NodeCache;
+    cache: LRU;
     constructor(options: Object = {settings: {vue: null}}) {
         if (options.settings.vue === null) {
             options.settings.vue = {};
