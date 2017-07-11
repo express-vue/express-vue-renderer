@@ -26,7 +26,7 @@ function expressVueRenderer(componentPath: string, data: Object, GlobalOptions: 
                                 head: Utils.headUtil(GlobalOptions.options.vue, rendered.layout.style),
                                 app: rendered.app,
                                 script: rendered.scriptString,
-                                template: GlobalOptions.backupLayout
+                                template: GlobalOptions.layout
                             };
                             resolve(app);
                         }
@@ -66,7 +66,7 @@ function init(options: Object) {
                     });
                 })
                 .catch(error => {
-                    new Error(error);
+                    next(new Error(error));
                 });
         };
         return next();
