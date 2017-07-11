@@ -56,8 +56,7 @@ function renderVueComponents(script: Object, components: Object[]) {
             componentsString = componentsString + `Vue.component('${paramCase(component.name)}', ${Utils.scriptToString(component.script)});\n`;
         }
     }
-
-
+    
     return componentsString;
 }
 

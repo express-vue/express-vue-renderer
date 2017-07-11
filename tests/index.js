@@ -11,12 +11,9 @@ const data = {
 };
 
 const options = {
-    settings: {
-        vue: {
-            componentsDir: path.join(__dirname, '/tests/vueFiles')
-        },
-        views: path.join(__dirname, '/tests/vueFiles')
-    }
+    rootPath: path.join(__dirname, 'tests'),
+    componentsPath: 'vueFiles/components',
+    viewsPath: 'vueFiles'
 };
 
 test('renders App object', t => {

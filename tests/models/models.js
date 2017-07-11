@@ -1,65 +1,56 @@
 import test   from 'ava';
+import path from 'path';
 import {Defaults, Types, DataObject} from '../../src/models';
 
-const defaults = {
-    layout: 'fooBar',
-    settings: {
-        vue: {
-            componentsDir: '/baz',
-            defaultLayout: 'qux'
-        },
-        views: '/foo/bar'
+const options = {
+    rootPath: path.join(__dirname, 'tests'),
+    componentsPath: 'vueFiles/components',
+    viewsPath: 'vueFiles',
+    layout: {
+        start: '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><script src="https://unpkg.com/vue/dist/vue.js"></script>',
+        middle: '<body><div id="app">',
+        end: '</div></body></html>'
     }
 };
 const types         = new Types();
-const defaultObject = new Defaults(defaults);
-const dataObject    = new DataObject(defaults, defaultObject, types.COMPONENT);
-const dataObjectSub = new DataObject(defaults, defaultObject, types.SUBCOMPONENT);
+const defaultObject = new Defaults(options);
+const dataObject    = new DataObject(options, defaultObject, types.COMPONENT);
+const dataObjectSub = new DataObject(options, defaultObject, types.SUBCOMPONENT);
 
 //Examples
 const exampleObject = {
-  rootPath: '/foo/bar/',
-  layoutsDir: '',
-  componentsDir: '/baz/',
-  customLayout: '/foo/bar/fooBar',
-  defaultLayout: '/foo/bar/qux',
-  options: {
-      settings: {
-          vue: {
-              componentsDir: '/baz',
-              defaultLayout: 'qux'
-          },
-          views: '/foo/bar'
-      }
-  },
-  backupLayout: {
-      start: '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><script src="https://unpkg.com/vue/dist/vue.js"></script>',
-      middle: '<body><div id="app">',
-      end: '</div></body></html>'
-  },
-  layoutPath: '/foo/bar/qux.vue'
+    rootPath: '/Users/danielcherubini/Coding/Express-Vue/express-vue-renderer/tests/models/tests',
+    componentsPath: '/Users/danielcherubini/Coding/Express-Vue/express-vue-renderer/tests/models/tests/vueFiles/components',
+    viewsPath: '/Users/danielcherubini/Coding/Express-Vue/express-vue-renderer/tests/models/tests/vueFiles',
+    layout: {
+        start: '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><script src="https://unpkg.com/vue/dist/vue.js"></script>',
+        middle: '<body><div id="app">',
+        end: '</div></body></html>',
+    },
+    options:{
+        rootPath: '/Users/danielcherubini/Coding/Express-Vue/express-vue-renderer/tests/models/tests',
+        componentsPath: 'vueFiles/components',
+        viewsPath: 'vueFiles'
+    },
+    cache: {
+        max: 500,
+        maxAge: 3600000
+    }
 };
-
-test('Components Directory', t => {
-    t.is(defaultObject.componentsDir, exampleObject.componentsDir);
-});
 
 test('Root Path', t => {
     t.is(defaultObject.rootPath, exampleObject.rootPath);
 });
 
-test('Backup Layout', t => {
-    t.deepEqual(defaultObject.backupLayout, exampleObject.backupLayout);
+test('Components Path', t => {
+    t.is(defaultObject.componentsPath, exampleObject.componentsPath);
 });
+
+test('Views Path', t => {
+    t.is(defaultObject.viewsPath, exampleObject.viewsPath);
+});
+
 
 test('Default Layout', t => {
-    t.is(defaultObject.defaultLayout, exampleObject.defaultLayout);
-});
-
-test('layoutsDir', t => {
-    t.is(defaultObject.layoutsDir, exampleObject.layoutsDir);
-});
-
-test('customLayout', t => {
-    t.is(defaultObject.customLayout, exampleObject.customLayout);
+    t.deepEqual(defaultObject.layout, exampleObject.layout);
 });

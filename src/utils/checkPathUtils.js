@@ -1,5 +1,6 @@
 // @flow
 const fs = require('fs');
+const path = require('path');
 const paramCase = require('param-case');
 
 function getParamCasePath(path: string): string {
@@ -23,23 +24,24 @@ function getParamCasePath(path: string): string {
 }
 
 
-function getCorrectPathForFile(path: string, type: string) {
+function getCorrectPathForFile(filePath: string, rootPath: string, type: string) {
     return new Promise((resolve, reject) => {
-        fs.access(path, fs.constants.F_OK | fs.constants.R_OK, (error) => {
+        const resolvedPath = path.join(rootPath, filePath);
+        fs.access(resolvedPath, fs.constants.F_OK | fs.constants.R_OK, (error) => {
             if (error) {
                 if (error.code === 'ENOENT') {
-                    fs.access(getParamCasePath(path), fs.constants.F_OK | fs.constants.R_OK, (err) => {
+                    fs.access(getParamCasePath(resolvedPath), fs.constants.F_OK | fs.constants.R_OK, (err) => {
                         let paramCasePath = '';
                         if (err) {
-                            reject(new Error(`Could not find ${type} file at ${paramCasePath.length > 0 ? paramCasePath : path}`));
+                            reject(new Error(`Could not find ${type} file at ${paramCasePath.length > 0 ? paramCasePath : resolvedPath}`));
                         } else {
-                            paramCasePath = getParamCasePath(path);
+                            paramCasePath = getParamCasePath(resolvedPath);
                             resolve({path: paramCasePath, type: type});
                         }
                     });
                 }
             } else {
-                resolve({path: path, type: type});
+                resolve({path: resolvedPath, type: type});
             }
         });
     });

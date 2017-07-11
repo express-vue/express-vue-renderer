@@ -1,22 +1,19 @@
 import test from 'ava';
 import fs from 'fs';
+import path from 'path';
 import {Defaults, Types} from '../../src/models';
 import * as Parser from '../../src/parser';
 import {renderHtmlUtil} from '../../src/utils';
 
 let types    = new Types();
-const component = __dirname + '/../vueFiles/component.vue';
-const defaults = {
-    settings: {
-        vue: {
-            componentsDir: '',
-            defaultLayout: 'qux'
-        },
-        views: '/foo/bar'
-    }
+const component = __dirname + '/../vueFiles/componets/uuid.vue';
+const options = {
+    rootPath: path.join(__dirname, 'tests'),
+    componentsPath: 'vueFiles/components',
+    viewsPath: 'vueFiles'
 };
 
-const defaultObject = new Defaults(defaults);
+const defaultObject = new Defaults(options);
 defaultObject.options = {
     vue: {}
 }
