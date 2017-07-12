@@ -57,7 +57,7 @@
     "uuid": "^3.1.0"
   },
   "scripts": {
-    "start": "npm run build && node example/express.js",
+    "start": "npm run build && node example/app.js",
     "prepublish": "npm run build && nsp check",
     "pretest": "eslint . --fix",
     "test": "eslint src && nyc ava",
