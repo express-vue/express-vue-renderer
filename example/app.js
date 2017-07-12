@@ -4,6 +4,7 @@ const express = require('express');
 const uuidv4 = require('uuid/v4');
 
 const expressVueRenderer = require('../lib');
+const expressVue = require('./expressVue');
 
 const options = {
     rootPath: path.join(__dirname, '/../tests'),
@@ -28,7 +29,8 @@ const options = {
     }
 };
 
-const renderer = expressVueRenderer.init(options);
+renderer = expressVue.init(options);
+
 const app = express();
 app.use(express.static('./dist'));
 
