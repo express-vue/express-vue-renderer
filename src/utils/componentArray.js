@@ -5,33 +5,34 @@ const PathUtils = require('./checkPathUtils');
 
 let types = new Models.Types();
 
-function setupComponentArray(componentPath: string, defaults: Models.Defaults | Object) {
+function setupComponentArray(componentPath: string, defaults: Models.Defaults) {
     return new Promise((resolve, reject) => {
         let array = [];
         let pathPromiseArray = [];
-
-        PathUtils.getCorrectPathForFile(componentPath, 'view').then(path => {
-            array.push(Parser.componentParser(path.path, defaults, types.COMPONENT));
-
-            if (defaults.options.vue && defaults.options.vue.components) {
-                for (let component of defaults.options.vue.components) {
-                    const componentFile = defaults.componentsDir + component + '.vue';
-                    pathPromiseArray.push(PathUtils.getCorrectPathForFile(componentFile, 'component'));
-                }
-            }
-            Promise.all(pathPromiseArray)
-                .then(pathObjArray => {
-                    for (var pathObj of pathObjArray) {
-                        array.push(Parser.componentParser(pathObj.path, defaults, types.SUBCOMPONENT));
+        const vueFile = componentPath.includes('.vue') ? componentPath : componentPath + '.vue';
+        PathUtils.getCorrectPathForFile(vueFile, defaults.viewsPath, 'view', defaults)
+            .then(path => {
+                array.push(Parser.componentParser(path.path, defaults, types.COMPONENT));
+                if (defaults.vue && defaults.vue.components) {
+                    for (let component of defaults.vue.components) {
+                        const componentFile = component.includes('.vue') ? component : component + '.vue';
+                        pathPromiseArray.push(PathUtils.getCorrectPathForFile(componentFile, defaults.componentsPath ,'component', defaults));
                     }
-                    resolve(array);
-                })
-                .catch(error => {
-                    reject(error);
-                });
-        }).catch(error => {
-            reject(error);
-        });
+                }
+                Promise.all(pathPromiseArray)
+                    .then(pathObjArray => {
+                        for (var pathObj of pathObjArray) {
+                            array.push(Parser.componentParser(pathObj.path, defaults, types.SUBCOMPONENT));
+                        }
+                        resolve(array);
+                    })
+                    .catch(error => {
+                        reject(error);
+                    });
+            })
+            .catch(error => {
+                reject(error);
+            });
     });
 
 }

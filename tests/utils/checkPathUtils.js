@@ -1,29 +1,29 @@
 import test   from 'ava';
+import path from 'path';
 import { PathUtils } from '../../src/utils';
+import Models from '../../src/models';
 
-test('Params Path', t => {
-    const originalPath = '/Users/foo/code/test/components/componentFile.vue';
-    const correctPath  = '/Users/foo/code/test/components/component-file.vue';
+const rootPath = path.join(__dirname, '../vueFiles/');
+const defaults = new Models.Defaults();
 
-    t.is(PathUtils.getParamCasePath(originalPath), correctPath);
-});
+test('correctPath Path', t => {
+    const filePath = 'components/uuid.vue';
+    const correctPath  = rootPath + 'components/uuid.vue';
 
-test('finds test Path ', t => {
-    const testPath = __dirname + '/../vueFiles/component.vue';
-    return PathUtils.getCorrectPathForFile(testPath, 'test')
-    .then(paramPath => {
-        t.pass(typeof paramPath, 'string');
-    }).catch(err => {
-        t.fail(err);
-    });
+    return PathUtils.getCorrectPathForFile(filePath, rootPath, 'view', defaults)
+        .then(returnedPath => {
+            t.is(returnedPath.path, correctPath);
+        })
 
 });
+
 
 test('shows error for fake test Path ', t => {
-    const testPath = __dirname + '/../componentDoesntExist.vue';
-    const errMessage = `Could not find test file at ${__dirname}/../componentDoesntExist.vue`
 
-    return PathUtils.getCorrectPathForFile(testPath, 'test')
+    const filePath = 'componentDoesntExist.vue';
+    const errMessage = `Could not find test file at ${rootPath}componentDoesntExist.vue`
+
+    return PathUtils.getCorrectPathForFile(filePath, rootPath, 'test', defaults)
     .catch(error => {
         t.is(error.message, errMessage);
     })

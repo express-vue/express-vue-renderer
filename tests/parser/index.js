@@ -1,22 +1,19 @@
 import test from 'ava';
 import fs from 'fs';
+import path from 'path';
 import {Defaults, Types} from '../../src/models';
 import * as Parser from '../../src/parser';
 import {renderHtmlUtil} from '../../src/utils';
 
 let types    = new Types();
-const component = __dirname + '/../vueFiles/component.vue';
-const defaults = {
-    settings: {
-        vue: {
-            componentsDir: '',
-            defaultLayout: 'qux'
-        },
-        views: '/foo/bar'
-    }
+const component = __dirname + '/../vueFiles/components/uuid.vue';
+const options = {
+    rootPath: path.join(__dirname, 'tests'),
+    componentsPath: 'vueFiles/components',
+    viewsPath: 'vueFiles'
 };
 
-const defaultObject = new Defaults(defaults);
+const defaultObject = new Defaults(options);
 defaultObject.options = {
     vue: {}
 }
@@ -49,9 +46,15 @@ test.cb('it should parse html', t => {
             content = defaultObject.backupLayout;
         }
         const htmlRegex = /(<template.*?>)([\s\S]*)(<\/template>)/gm;
-        const html = Parser.htmlParser(content, htmlRegex, true);
-        t.is(html, '<div class=""><h1>{{message}}</h1><h2>Uuid: {{uuid ? uuid : \'no uuid\'}}</h2></div>');
-        t.end();
+        return Parser.htmlParser(content, htmlRegex, true)
+            .then(html => {
+                t.is(html, '<div class=""><h2>Uuid: {{uuid ? uuid : \'no uuid\'}}</h2></div>');
+                t.end();
+            })
+            .catch(error => {
+                t.fail(error);
+                t.end();
+            });
     })
 });
 
@@ -61,9 +64,15 @@ test.cb('it should parse style', t => {
             content = defaultObject.backupLayout;
         }
 
-        const style = Parser.styleParser(content);
-        t.is(style, '.test{color:#00f}');
-        t.end();
+        return Parser.styleParser(content)
+            .then(style => {
+                t.is(style, '.test{color:#00f}');
+                t.end();
+            })
+            .catch(error => {
+                t.fail(error);
+                t.end();
+            });
     })
 });
 
@@ -72,8 +81,15 @@ test.cb('it should parse scripts', t => {
         if (err) {
             content = defaultObject.backupLayout;
         }
-        const script = Parser.scriptParser(content, defaultObject, types.SUBCOMPONENT)
-        t.is(typeof script, 'object');
-        t.end();
+        return Parser.scriptParser(content, defaultObject, types.SUBCOMPONENT)
+            .then(script => {
+                t.is(typeof script, 'object');
+                t.end();
+            })
+            .catch(error => {
+                t.fail(error);
+                t.end();
+            });
+
     })
 })

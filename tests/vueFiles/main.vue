@@ -3,9 +3,8 @@
         <h1>{{title}}</h1>
         <p>Welcome to the {{title}} demo. Click a link:</p>
         <input v-model="message" placeholder="edit me">
-        <message :message="message"></message>
-        <users :users="users"></users>
-
+        <p>{{message}}</p>
+        <uuid :uuid="uuid"></uuid>
     </div>
 </template>
 

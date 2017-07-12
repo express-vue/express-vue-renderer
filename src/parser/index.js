@@ -14,68 +14,72 @@ function componentParser(templatePath: string, defaults: Object, type: string): 
         // try to get the component content from the cache
         const cachedComponentContent = defaults.cache.get(templatePath);
         if (cachedComponentContent) {
-            const componentObject = parseContent(cachedComponentContent, templatePath, defaults, type);
-            if (typeof componentObject === Error) {
-                reject(componentObject);
-            } else {
-                resolve(componentObject);
-            }
+            parseContent(cachedComponentContent, templatePath, defaults, type)
+                .then(contentObject => {
+                    resolve(contentObject);
+                })
+                .catch(error => {
+                    reject(error);
+                });
         } else {
             fs.readFile(templatePath, 'utf-8', function (err, content) {
                 if (err) {
                     let error = `Could Not Find Component, I was expecting it to live here \n${templatePath} \nBut I couldn't find it there, ¯\\_(ツ)_/¯\n\n`;
-                    console.error(new Error(error));
                     reject(error);
                 } else {
                     // set the cache for the component
                     defaults.cache.set(templatePath, content);
 
-                    const componentObject = parseContent(content, templatePath, defaults, type);
-                    if (typeof componentObject === Error) {
-                        reject(componentObject);
-                    } else {
-                        resolve(componentObject);
-                    }
+                    parseContent(content, templatePath, defaults, type)
+                        .then(contentObject => {
+                            resolve(contentObject);
+                        })
+                        .catch(error => {
+                            reject(error);
+                        });
                 }
             });
         }
     });
 }
 
-function parseContent(content: string, templatePath: string, defaults: Object, type: string): Object {
-    let body = '';
-    let script = {};
-    let style = '';
+function parseContent(content: string, templatePath: string, defaults: Object, type: string): Promise<Object> {
+    return new Promise((resolve, reject) => {
+        const templateArray = templatePath.split('/');
+        if (templateArray.length === 0) {
+            let error = `I had an error processing component templates. in this file \n${templatePath}`;
+            console.error(new Error(error));
+            return error;
+        } else {
+            let templateName = templateArray[templateArray.length - 1].replace('.vue', '');
+            const promiseArray = [
+                htmlParser(content, htmlRegex, true),
+                scriptParser(content, defaults, type, scriptRegex),
+                styleParser(content, styleRegex)
+            ];
 
-    const templateArray = templatePath.split('/');
-    if (templateArray.length === 0) {
-        let error = `I had an error processing component templates. in this file \n${templatePath}`;
-        console.error(new Error(error));
-        return error;
-    } else {
-        let templateName = templateArray[templateArray.length - 1].replace('.vue', '');
+            Promise.all(promiseArray)
+                .then(resultsArray => {
+                    const body = resultsArray[0];
+                    const script = resultsArray[1];
+                    const style = resultsArray[2];
 
-        body = htmlParser(content, htmlRegex, true);
-        content = content.replace(htmlRegex, '');
+                    let componentScript = script || {};
+                    componentScript.template = body;
 
-        script = scriptParser(content, defaults, type, scriptRegex);
-
-        style = styleParser(content, styleRegex);
-        content = content.replace(styleRegex, '');
-
-
-        let componentScript = script || {};
-        componentScript.template = body;
-
-        const componentObject = {
-            type: type,
-            style: style,
-            name: camelCase(templateName),
-            script: componentScript
-        };
-        return componentObject;
-    }
-
+                    const componentObject = {
+                        type: type,
+                        style: style,
+                        name: camelCase(templateName),
+                        script: componentScript
+                    };
+                    resolve(componentObject);
+                })
+                .catch(error => {
+                    reject(error);
+                });
+        }
+    });
 }
 
 module.exports.componentParser = componentParser;
