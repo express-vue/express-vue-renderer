@@ -14,7 +14,7 @@ function dataMerge(script: Object, defaults: Object, type: string): Object {
     for (var element in script) {
         if (script.hasOwnProperty(element)) {
             if (element === 'data') {
-                let data = new DataObject(script.data(), defaults.options.data, type).data;
+                let data = new DataObject(script.data(), defaults.data, type).data;
                 finalScript[element] = () => data;
             } else {
                 finalScript[element] = script[element];

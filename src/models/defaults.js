@@ -1,6 +1,7 @@
 // @flow
 const LRU = require('lru-cache');
 const path = require('path');
+const deepmerge = require('deepmerge');
 const options = {
     max: 500,
     maxAge: 1000 * 60 * 60
@@ -14,7 +15,12 @@ class Defaults {
     layout: {start: string, middle: string, end: string};
     options: Object;
     cache: LRU;
+    vue: Object;
+    data: Object;
     constructor(options: Object = {}) {
+        this.cache = lruCache;
+        this.options = options;
+        
         if (options.rootPath) {
             this.rootPath = path.resolve(options.rootPath);
         }
@@ -33,8 +39,22 @@ class Defaults {
                 end: '</div></body></html>'
             };
         }
-        this.options       = options;
-        this.cache         = lruCache;
+        if (options.vue) {
+            this.vue = options.vue;
+        } else {
+            this.vue = {};
+        }
+        if (options.data) {
+            this.data = options.data;
+        } else {
+            this.data = {};
+        }
+    }
+    mergeVueObject(newVueObject: Object): void {
+        this.vue = deepmerge(this.vue, newVueObject);
+    }
+    mergeDataObject(newDataObject: Object): void {
+        this.data = deepmerge(this.data, newDataObject);
     }
 }
 
