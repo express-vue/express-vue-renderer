@@ -10,9 +10,21 @@ const options = {
     viewsPath: 'vueFiles',
     componentsPath: 'vueFiles/components',
     layout: {
-        start: '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><script src="https://unpkg.com/vue/dist/vue.js"></script>',
+        start: '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">',
         middle: '<body><div id="app">',
         end: '</div></body></html>'
+    },
+    vue: {
+        head: {
+            meta: [
+                { property:'og:title', content: 'Page Title' },
+                { name:'twitter:title', content: 'Page Title' },
+                { script: 'https://unpkg.com/vue@2.3.4/dist/vue.js' }
+            ]
+        }
+    },
+    data: {
+        thing: true
     }
 };
 
@@ -29,7 +41,11 @@ app.get('/', (req, res) => {
         uuid: uuidv4()
     };
     const vueOptions = {
-        components: ['uuid']
+        components: ['uuid'],
+        head: {
+            title: 'Page Title',
+
+        }
     }
     res.renderVue('main.vue', data, vueOptions)
 });

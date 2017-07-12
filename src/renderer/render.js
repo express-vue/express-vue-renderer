@@ -7,9 +7,9 @@ const Vue         = require('vue');
 const types       = new Types();
 
 function createApp(script, defaults) {
-    if (defaults.options.vue && defaults.options.vue.mixins) {
-        if (defaults.options.vue.mixins.length > 0) {
-            for (let mixin of defaults.options.vue.mixins) {
+    if (defaults.vue && defaults.vue.mixins) {
+        if (defaults.vue.mixins.length > 0) {
+            for (let mixin of defaults.vue.mixins) {
                 Vue.mixin(mixin);
             }
         }
@@ -23,10 +23,6 @@ function layoutUtil(components: Object[]) {
     layout.style = '';
     for (var component of components) {
         switch (component.type) {
-        case types.LAYOUT:
-            layout = component;
-            layout.style = '';
-            break;
         case types.COMPONENT:
             layout.script = component.script;
             if (component.style.length > 0) {
@@ -56,7 +52,7 @@ function renderVueComponents(script: Object, components: Object[]) {
             componentsString = componentsString + `Vue.component('${paramCase(component.name)}', ${Utils.scriptToString(component.script)});\n`;
         }
     }
-    
+
     return componentsString;
 }
 
@@ -84,9 +80,10 @@ function renderedScript(script, components, mixins: Array<Object>) {
 
 function renderHtmlUtil(components: Object[], defaults: Object): {app: Object, scriptString: string, layout: Object} {
     let mixins: Array<Object> = [];
-    if (defaults.options.vue && defaults.options.vue.mixins) {
-        mixins = defaults.options.vue.mixins;
+    if (defaults.vue && defaults.vue.mixins) {
+        mixins = defaults.vue.mixins;
     }
+
     const layout = layoutUtil(components);
     const renderedScriptString = renderedScript(layout.script, components, mixins);
     const app = createApp(layout.script, defaults);

@@ -38,9 +38,6 @@
   "nyc": {
     "include": [
       "src/**/*.js"
-    ],
-    "reporter": [
-      "text-summary"
     ]
   },
   "devDependencies": {
@@ -78,6 +75,7 @@
     "babel-preset-es2015": "^6.24.1",
     "camel-case": "^3.0.0",
     "clean-css": "^4.1.5",
+    "deepmerge": "^1.5.0",
     "html-minifier": "^3.5.2",
     "lru-cache": "^4.1.1",
     "pug": "^2.0.0-rc.2",

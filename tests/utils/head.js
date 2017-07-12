@@ -58,22 +58,3 @@ test('Head has style 🎷', t => {
 test('Head has Structured Data', t => {
     t.is(newHasStructured, true);
 });
-
-const oldHead = {
-    meta: {
-        title: 'It was a Pleasure',
-        head: [
-            { name: 'application-name', content: 'Name of my application' },
-            { name: 'description', content: 'A description of the page', id: 'desc' },
-            { name: 'twitter:title', content: 'Content Title' },
-            { property: 'fb:app_id', content: '123456789' },
-            { property: 'og:title', content: 'Content Title' },
-            { script: '/assets/scripts/hammer.min.js' },
-            { script: '/assets/scripts/vue-touch.min.js', charset: 'utf-8' },
-            { style: '/assets/rendered/style.css' },
-            { style: '/assets/rendered/style.css', type: 'text/css' },
-            { style: '/assets/rendered/style.css', type: 'text/css', rel: 'stylesheet' }
-        ],
-        structuredData: {foo: true}
-    }
-};

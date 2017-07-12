@@ -25,7 +25,6 @@ function componentParser(templatePath: string, defaults: Object, type: string): 
             fs.readFile(templatePath, 'utf-8', function (err, content) {
                 if (err) {
                     let error = `Could Not Find Component, I was expecting it to live here \n${templatePath} \nBut I couldn't find it there, ¯\\_(ツ)_/¯\n\n`;
-                    console.error(new Error(error));
                     reject(error);
                 } else {
                     // set the cache for the component

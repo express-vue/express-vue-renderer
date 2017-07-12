@@ -1,7 +1,9 @@
 // @flow
 const fs = require('fs');
 const path = require('path');
+const Defaults = require('../models').Defaults;
 const paramCase = require('param-case');
+const stringHash = require('string-hash');
 
 function getParamCasePath(path: string): string {
     // example /Users/foo/code/test/components/componentFile.vue
@@ -24,26 +26,35 @@ function getParamCasePath(path: string): string {
 }
 
 
-function getCorrectPathForFile(filePath: string, rootPath: string, type: string) {
+function getCorrectPathForFile(filePath: string, rootPath: string, type: string, defaults: Defaults) {
     return new Promise((resolve, reject) => {
         const resolvedPath = path.join(rootPath, filePath);
-        fs.access(resolvedPath, fs.constants.F_OK | fs.constants.R_OK, (error) => {
-            if (error) {
-                if (error.code === 'ENOENT') {
-                    fs.access(getParamCasePath(resolvedPath), fs.constants.F_OK | fs.constants.R_OK, (err) => {
-                        let paramCasePath = '';
-                        if (err) {
-                            reject(new Error(`Could not find ${type} file at ${paramCasePath.length > 0 ? paramCasePath : resolvedPath}`));
-                        } else {
-                            paramCasePath = getParamCasePath(resolvedPath);
-                            resolve({path: paramCasePath, type: type});
-                        }
-                    });
+        const cacheKey = stringHash('resolvedPath-' + resolvedPath);
+        const cachedResolvedPath = defaults.cache.get(cacheKey);
+        if (cachedResolvedPath) {
+            resolve(cachedResolvedPath);
+        } else {
+            fs.access(resolvedPath, fs.constants.F_OK | fs.constants.R_OK, (error) => {
+                if (error) {
+                    if (error.code === 'ENOENT') {
+                        fs.access(getParamCasePath(resolvedPath), fs.constants.F_OK | fs.constants.R_OK, (err) => {
+                            let paramCasePath = '';
+                            if (err) {
+                                reject(new Error(`Could not find ${type} file at ${paramCasePath.length > 0 ? paramCasePath : resolvedPath}`));
+                            } else {
+                                paramCasePath = getParamCasePath(resolvedPath);
+                                resolve({path: paramCasePath, type: type});
+                            }
+                        });
+                    }
+                } else {
+                    const pathObject = {path: resolvedPath, type: type};
+                    defaults.cache.set(cacheKey, pathObject);
+
+                    resolve(pathObject);
                 }
-            } else {
-                resolve({path: resolvedPath, type: type});
-            }
-        });
+            });
+        }
     });
 }
 
