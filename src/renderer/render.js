@@ -3,14 +3,19 @@ const {Types}     = require('../models');
 const Utils       = require('../utils');
 const paramCase   = require('param-case');
 const Vue         = require('vue');
+const stringHash  = require('string-hash');
 
 const types       = new Types();
 
 function createApp(script, defaults) {
+    // caching for mixin vue parsing
     if (defaults.vue && defaults.vue.mixins) {
         if (defaults.vue.mixins.length > 0) {
-            for (let mixin of defaults.vue.mixins) {
-                Vue.mixin(mixin);
+            if (!defaults.cache.get(stringHash(defaults.vue.mixins.toString()))){
+                for (let mixin of defaults.vue.mixins) {
+                    Vue.mixin(mixin);
+                }
+                defaults.cache.set(stringHash(defaults.vue.mixins.toString()), true);
             }
         }
     }
