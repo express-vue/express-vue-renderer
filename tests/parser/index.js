@@ -5,6 +5,8 @@ import {Defaults, Types} from '../../src/models';
 import * as Parser from '../../src/parser';
 import {renderHtmlUtil} from '../../src/utils';
 
+const compiler = require('vue-template-compiler');
+
 let types    = new Types();
 const component = __dirname + '/../vueFiles/components/uuid.vue';
 const options = {
@@ -17,6 +19,33 @@ const defaultObject = new Defaults(options);
 defaultObject.options = {
     vue: {}
 }
+
+const parsedContentObject = {
+    template: {
+        type: 'template',
+        content: '\n<div class="">\n    <h2>Uuid: {{uuid ? uuid : \'no uuid\'}}</h2>\n</div>\n',
+        start: 22,
+        attrs: { lang: 'html' },
+        lang: 'html',
+        end: 98
+    },
+    script: {
+        type: 'script',
+        content: '\nexport default {\n    props: [\'uuid\'],\n    data: function() {\n        return {}\n    }\n}\n',
+        start: 119,
+        attrs: {},
+        end: 207 
+    },
+    styles: [
+        { type: 'style',
+        content: '\n.test {\n    color: blue;\n}\n',
+        start: 236,
+        attrs: [Object],
+        lang: 'css',
+        end: 276 }
+    ],
+    customBlocks: []
+};
 
 test('it should parse components', t => {
     return Parser.componentParser(component, defaultObject, types.COMPONENT)
@@ -40,56 +69,33 @@ test('it should parse components', t => {
     })
 });
 
-test.cb('it should parse html', t => {
-    fs.readFile(component, 'utf-8', function(err, content) {
-        if (err) {
-            content = defaultObject.backupLayout;
-        }
-        const htmlRegex = /(<template.*?>)([\s\S]*)(<\/template>)/gm;
-        return Parser.htmlParser(content, htmlRegex, true)
-            .then(html => {
-                t.is(html, '<div class=""><h2>Uuid: {{uuid ? uuid : \'no uuid\'}}</h2></div>');
-                t.end();
-            })
-            .catch(error => {
-                t.fail(error);
-                t.end();
-            });
+test('it should parse html', t => {
+
+    return Parser.htmlParser(parsedContentObject.template, true)
+    .then(html => {
+        t.is(html, '<div class=""><h2>Uuid: {{uuid ? uuid : \'no uuid\'}}</h2></div>');
     })
+    .catch(error => {
+        t.fail(error);
+    });
 });
 
-test.cb('it should parse style', t => {
-    fs.readFile(component, 'utf-8', function(err, content) {
-        if (err) {
-            content = defaultObject.backupLayout;
-        }
-
-        return Parser.styleParser(content)
-            .then(style => {
-                t.is(style, '.test{color:#00f}');
-                t.end();
-            })
-            .catch(error => {
-                t.fail(error);
-                t.end();
-            });
+test('it should parse style', t => {
+    return Parser.styleParser(parsedContentObject.styles)
+    .then(style => {
+        t.is(style, '.test{color:#00f}');
     })
+    .catch(error => {
+        t.fail(error);
+    });
 });
 
-test.cb('it should parse scripts', t => {
-    fs.readFile(component, 'utf-8', function(err, content) {
-        if (err) {
-            content = defaultObject.backupLayout;
-        }
-        return Parser.scriptParser(content, defaultObject, types.SUBCOMPONENT)
-            .then(script => {
-                t.is(typeof script, 'object');
-                t.end();
-            })
-            .catch(error => {
-                t.fail(error);
-                t.end();
-            });
-
+test('it should parse scripts', t => {
+    return Parser.scriptParser(parsedContentObject.script, defaultObject, types.SUBCOMPONENT)
+    .then(script => {
+        t.is(typeof script, 'object');
     })
+    .catch(error => {
+        t.fail(error);
+    });
 })
