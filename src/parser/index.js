@@ -4,10 +4,7 @@ const camelCase = require('camel-case');
 const styleParser = require('./style');
 const htmlParser = require('./html');
 const scriptParser = require('./script');
-
-const htmlRegex = /(<template.*?>)([\s\S]*)(<\/template>)/gm;
-const scriptRegex = /(<script.*?>)([\s\S]*?)(<\/script>)/gm;
-const styleRegex = /(<style.*?>)([\s\S]*?)(<\/style>)/gm;
+const compiler = require('vue-template-compiler');
 
 function componentParser(templatePath: string, defaults: Object, type: string): Promise < Object > {
     return new Promise(function (resolve, reject) {
@@ -16,6 +13,7 @@ function componentParser(templatePath: string, defaults: Object, type: string): 
         if (cachedComponentContent) {
             parseContent(cachedComponentContent, templatePath, defaults, type)
                 .then(contentObject => {
+                    //TODO I think we should move the cache in here
                     resolve(contentObject);
                 })
                 .catch(error => {
@@ -43,41 +41,51 @@ function componentParser(templatePath: string, defaults: Object, type: string): 
     });
 }
 
-function parseContent(content: string, templatePath: string, defaults: Object, type: string): Promise<Object> {
+function parseContent(content: Object, templatePath: string, defaults: Object, type: string): Promise<Object> {
     return new Promise((resolve, reject) => {
         const templateArray = templatePath.split('/');
         if (templateArray.length === 0) {
             let error = `I had an error processing component templates. in this file \n${templatePath}`;
             console.error(new Error(error));
-            return error;
-        } else {
+            reject(error);
+        } else if (content) {
             let templateName = templateArray[templateArray.length - 1].replace('.vue', '');
-            const promiseArray = [
-                htmlParser(content, htmlRegex, true),
-                scriptParser(content, defaults, type, scriptRegex),
-                styleParser(content, styleRegex)
-            ];
 
-            Promise.all(promiseArray)
-                .then(resultsArray => {
-                    const body = resultsArray[0];
-                    const script = resultsArray[1];
-                    const style = resultsArray[2];
+            //Setup official component parser..
+            const parsedContent = compiler.parseComponent(content);
+            if (!parsedContent.template && !parsedContent.script && !parsedContent.styles) {
+                reject(new Error(`Could not parse the file at ${templatePath}`));
+            } else {
 
-                    let componentScript = script || {};
-                    componentScript.template = body;
+                const promiseArray = [
+                    htmlParser(parsedContent.template, true),
+                    scriptParser(parsedContent.script, defaults, type),
+                    styleParser(parsedContent.styles)
+                ];
 
-                    const componentObject = {
-                        type: type,
-                        style: style,
-                        name: camelCase(templateName),
-                        script: componentScript
-                    };
-                    resolve(componentObject);
-                })
-                .catch(error => {
-                    reject(error);
-                });
+                Promise.all(promiseArray)
+                    .then(resultsArray => {
+                        const body = resultsArray[0];
+                        const script = resultsArray[1];
+                        const style = resultsArray[2];
+
+                        let componentScript = script || {};
+                        componentScript.template = body;
+
+                        const componentObject = {
+                            type: type,
+                            style: style,
+                            name: camelCase(templateName),
+                            script: componentScript
+                        };
+                        resolve(componentObject);
+                    })
+                    .catch(error => {
+                        reject(error);
+                    });
+            }
+        } else {
+            reject(new Error(`missing content block from ${templatePath} something went wrong with loading the file`));
         }
     });
 }
