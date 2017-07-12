@@ -6,9 +6,6 @@ const path = require('path');
 
 const component = path.join(__dirname, '/vueFiles/component.vue');
 
-const data = {
-    message: 'Hello world'
-};
 
 const options = {
     rootPath: path.join(__dirname, '/'),
@@ -16,11 +13,29 @@ const options = {
     viewsPath: 'vueFiles'
 };
 
+
+const data = {
+    title: 'Express Vue',
+    message: 'Hello world',
+    uuid: 'farts'
+};
+
+const vueOptions = {
+    components: ['uuid'],
+    head: {
+        title: 'Page Title',
+
+    }
+}
+
+const exampleHead = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><script src="https://unpkg.com/vue/dist/vue.js"></script><title>Page Title</title>
+<style>.test{color:#00f}</style></head><body><div id="app">`
+
 test('renders App object', t => {
     const GlobalOptions = new Models.Defaults(options);
-    return ExpressVueRenderer.renderer('main', data, GlobalOptions)
+    return ExpressVueRenderer.renderToStream('main', data, vueOptions, GlobalOptions)
         .then(app => {
-            t.is(app.head, '</head>');
+            t.is(app.head, exampleHead);
         })
         .catch(error => {
             t.fail(error.stack);
