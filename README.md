@@ -1,6 +1,5 @@
 # express-vue-renderer
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/51e27f21101e492fabf93dc6d81b8f28)](https://www.codacy.com/app/intothemild/express-vue-renderer?utm_source=github.com&utm_medium=referral&utm_content=express-vue/express-vue-renderer&utm_campaign=badger)
-[![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url] [![Coverage percentage][cov-image]][cov-url] [![Greenkeeper badge](https://badges.greenkeeper.io/express-vue/express-vue-renderer.svg)](https://greenkeeper.io/)
+[![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url] [![Coverage percentage][cov-image]][cov-url] [![Greenkeeper badge](https://badges.greenkeeper.io/express-vue/express-vue-renderer.svg)](https://greenkeeper.io/) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/51e27f21101e492fabf93dc6d81b8f28)](https://www.codacy.com/app/intothemild/express-vue-renderer?utm_source=github.com&utm_medium=referral&utm_content=express-vue/express-vue-renderer&utm_campaign=badger)
 > Rendering Engine for turning Vue files into Javascript Objects
 
 ## Installation
