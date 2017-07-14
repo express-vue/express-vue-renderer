@@ -7,7 +7,7 @@ const Utils = require('./utils');
 const Renderer = require('./renderer');
 const vueServerRenderer = require('vue-server-renderer').createRenderer();
 
-function renderer(componentPath: string, data: Object, vueOptions: ? Object, GlobalOptions: Defaults): Promise<Object> {
+function renderer(componentPath: string, data: Object, vueOptions: ? Object, GlobalOptions : Defaults): Promise < Object > {
     return new Promise((resolve, reject) => {
 
         GlobalOptions.mergeDataObject(data);
@@ -17,7 +17,7 @@ function renderer(componentPath: string, data: Object, vueOptions: ? Object, Glo
         Utils.setupComponentArray(componentPath, GlobalOptions)
             .then(promiseArray => {
                 Promise.all(promiseArray)
-                    .then(function (components) {
+                    .then(function(components) {
                         const rendered = Renderer.renderHtmlUtil(components, GlobalOptions);
                         if (!rendered) {
                             reject(new Error('Renderer Error'));
@@ -31,7 +31,7 @@ function renderer(componentPath: string, data: Object, vueOptions: ? Object, Glo
                             resolve(app);
                         }
                     })
-                    .catch(function (error) {
+                    .catch(function(error) {
                         reject(new Error(error));
                     });
             })
@@ -41,7 +41,7 @@ function renderer(componentPath: string, data: Object, vueOptions: ? Object, Glo
     });
 }
 
-function renderToStream(componentPath, data, vueOptions, GlobalOptions): Promise<Object> {
+function renderToStream(componentPath, data, vueOptions, GlobalOptions): Promise < Object > {
     return new Promise((resolve, reject) => {
         renderer(componentPath, data, vueOptions, GlobalOptions)
             .then(app => {
