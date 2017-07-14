@@ -1,15 +1,20 @@
 language: node_js
 node_js:
-  - 8
-  - 7
-  - 6
-after_success: npm run coverage
+    - 8
+    - 7
+    - 6
+before_install:
+    - npm install -g npm
+    - npm install -g greenkeeper-lockfile@1
+before_script: greenkeeper-lockfile-update
+after_script: greenkeeper-lockfile-upload
+after_success:  npm run coverage
 deploy:
   skip_cleanup: true
   provider: npm
   email: daniel@cherubini.casa
   api_key:
-    secure: WVCmeRkUSpbAHo/e9ItKyJAV4XJbCwp2oCKoWvw1du6qNqsFosXK0b8ZD3h3n+IyXcJkHtP0qiz++3t6ZFrlLWuKTSryE1rPWOSWYgcEwYWoE17LJqFOZjjVKHKANce2OSWQiJumOeI3mmFn9qKjK/+wJOsNUBGjw80z9B8MHkCFbQ/XqZg1NqzBweQnPfAH70kSdfAmw9DNqGAj9fPHlsb0elEZBrAPGXZHss7M1iXNCqC3RD3Fui8hvzDXEnEAzv78MMY9t4HD3N3yNv9tcvF+OVPCRpgNkgz5LqNDGQRi7IAoIfzGkjeVa0CzEgiAzxfeUms4avZKR2Z+2RgGdDl2AXzq4cPXKQ5xCfIqG4Guw7PE1p2GtTxJd1Osuh8FwaG1iO1DXIqohNO9tEueOb0VGBC6jMrSC95SyLAs5P8l7ZosbEGBM0VpE9m//8V6Xa1Q9jM7rrX2JH6vRzYn2YxW8jzdgXd/VMCVjRg1D+OySQTp956GqHHTxze65CMcyPrRb5RxTb63pln9S1L2YAegbZgXrsRaQdWtg+UzyukHRKK3CD20AgR8zE4mUSAdqIksXIJNP94n8mmo405iQaFM/xNMcOWaDhdMxJsB2N3c9bgc5YFzxDzw6M045HHPDBj0+/VTINf+lYP9tU2XCz9+cjvLSoiogcyE6j0C8VA=
+    secure:     WVCmeRkUSpbAHo/e9ItKyJAV4XJbCwp2oCKoWvw1du6qNqsFosXK0b8ZD3h3n+IyXcJkHtP0qiz++3t6ZFrlLWuKTSryE1rPWOSWYgcEwYWoE17LJqFOZjjVKHKANce2OSWQiJumOeI3mmFn9qKjK/+wJOsNUBGjw80z9B8MHkCFbQ/XqZg1NqzBweQnPfAH70kSdfAmw9DNqGAj9fPHlsb0elEZBrAPGXZHss7M1iXNCqC3RD3Fui8hvzDXEnEAzv78MMY9t4HD3N3yNv9tcvF+OVPCRpgNkgz5LqNDGQRi7IAoIfzGkjeVa0CzEgiAzxfeUms4avZKR2Z+2RgGdDl2AXzq4cPXKQ5xCfIqG4Guw7PE1p2GtTxJd1Osuh8FwaG1iO1DXIqohNO9tEueOb0VGBC6jMrSC95SyLAs5P8l7ZosbEGBM0VpE9m//8V6Xa1Q9jM7rrX2JH6vRzYn2YxW8jzdgXd/VMCVjRg1D+OySQTp956GqHHTxze65CMcyPrRb5RxTb63pln9S1L2YAegbZgXrsRaQdWtg+UzyukHRKK3CD20AgR8zE4mUSAdqIksXIJNP94n8mmo405iQaFM/xNMcOWaDhdMxJsB2N3c9bgc5YFzxDzw6M045HHPDBj0+/VTINf+lYP9tU2XCz9+cjvLSoiogcyE6j0C8VA=
   on:
     branch: master
     tags: true
