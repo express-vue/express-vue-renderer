@@ -1,89 +1,91 @@
 {
-  "name": "express-vue-renderer",
-  "version": "0.3.0",
-  "description": "Rendering Engine for turning Vue files into Javascript Objects",
-  "homepage": "https://github.com/express-vue/express-vue-renderer",
-  "author": {
-    "name": "Daniel Cherubini",
-    "email": "daniel@cherubini.casa",
-    "url": "https://github.com/express-vue"
-  },
-  "files": [
-    "lib"
-  ],
-  "main": "lib/index.js",
-  "keywords": [
-    "vue",
-    "renderer",
-    "vuejs",
-    "node",
-    "nodejs"
-  ],
-  "ava": {
+    "name": "express-vue-renderer",
+    "version": "0.3.0",
+    "description": "Rendering Engine for turning Vue files into Javascript Objects",
+    "homepage": "https://github.com/express-vue/express-vue-renderer",
+    "author": {
+        "name": "Daniel Cherubini",
+        "email": "daniel@cherubini.casa",
+        "url": "https://github.com/express-vue"
+    },
     "files": [
-      "tests/**/*.js"
+        "lib"
     ],
-    "source": [
-      "src/**/*.js",
-      "!lib/**/*"
+    "main": "lib/index.js",
+    "keywords": [
+        "vue",
+        "renderer",
+        "vuejs",
+        "node",
+        "nodejs"
     ],
-    "concurrency": 5,
-    "failFast": false,
-    "powerAssert": false,
-    "require": [
-      "babel-register"
-    ],
-    "babel": "inherit"
-  },
-  "nyc": {
-    "include": [
-      "src/**/*.js"
-    ]
-  },
-  "devDependencies": {
-    "ava": "^0.20.0",
-    "babel-plugin-transform-flow-strip-types": "^6.22.0",
-    "babel-preset-env": "^1.6.0",
-    "coveralls": "^2.13.1",
-    "eslint": "^4.1.0",
-    "eslint-config-xo-space": "^0.16.0",
-    "express": "^4.15.3",
-    "flow-bin": "^0.49.1",
-    "flow-remove-types": "^1.2.1",
-    "jest": "^20.0.4",
-    "jest-cli": "^20.0.0",
-    "nsp": "^2.6.3",
-    "nyc": "^11.0.3",
-    "uuid": "^3.1.0"
-  },
-  "scripts": {
-    "start": "npm run build && node example/app.js",
-    "prepublish": "npm run build && nsp check",
-    "pretest": "eslint . --fix",
-    "test": "eslint src && nyc ava",
-    "clean": "rm -rf lib",
-    "coverage": "nyc report --reporter=text-lcov | coveralls",
-    "build": "npm run clean && flow-remove-types --pretty src/ --out-dir lib/",
-    "preversion": "npm test",
-    "version": "npm run build && git add -A",
-    "postversion": "git push && git push --tags"
-  },
-  "repository": "express-vue/express-vue-renderer",
-  "license": "Apache-2.0",
-  "dependencies": {
-    "babel-eslint": "^7.2.3",
-    "babel-preset-es2015": "^6.24.1",
-    "camel-case": "^3.0.0",
-    "clean-css": "^4.1.5",
-    "deepmerge": "^1.5.0",
-    "html-minifier": "^3.5.2",
-    "lru-cache": "^4.1.1",
-    "pug": "^2.0.0-rc.2",
-    "require-from-string": "^1.2.1",
-    "string-hash": "^1.1.3",
-    "vue": "^2.3.4",
-    "vue-server-renderer": "^2.3.4",
-    "vue-template-compiler": "^2.3.4",
-    "xss": "^0.3.3"
-  }
+    "ava": {
+        "files": [
+            "tests/**/*.js"
+        ],
+        "source": [
+            "src/**/*.js",
+            "!lib/**/*"
+        ],
+        "concurrency": 5,
+        "failFast": false,
+        "powerAssert": false,
+        "require": [
+            "babel-register"
+        ],
+        "babel": "inherit"
+    },
+    "nyc": {
+        "include": [
+            "src/**/*.js"
+        ]
+    },
+    "scripts": {
+        "flow": "flow",
+        "start": "npm run build && node example/app.js",
+        "prepublish": "npm run build && nsp check",
+        "pretest": "eslint . --fix",
+        "test": "eslint src && nyc ava",
+        "clean": "rm -rf lib",
+        "coverage": "nyc report --reporter=text-lcov | coveralls",
+        "build": "npm run clean && flow-remove-types --pretty src/ --out-dir lib/",
+        "preversion": "npm test",
+        "version": "npm run build && git add -A",
+        "postversion": "git push && git push --tags"
+    },
+    "repository": "express-vue/express-vue-renderer",
+    "license": "Apache-2.0",
+    "dependencies": {
+        "babel-eslint": "^7.2.3",
+        "babel-preset-es2015": "^6.24.1",
+        "camel-case": "^3.0.0",
+        "clean-css": "^4.1.7",
+        "deepmerge": "^1.5.0",
+        "html-minifier": "^3.5.2",
+        "lru-cache": "^4.1.1",
+        "pug": "^2.0.0-rc.2",
+        "require-from-string": "^1.2.1",
+        "string-hash": "^1.1.3",
+        "vue": "^2.4.1",
+        "vue-server-renderer": "^2.4.1",
+        "vue-template-compiler": "^2.4.1",
+        "xss": "^0.3.3"
+    },
+    "devDependencies": {
+        "ava": "^0.20.0",
+        "babel-plugin-transform-flow-strip-types": "^6.22.0",
+        "babel-preset-env": "^1.6.0",
+        "coveralls": "^2.13.1",
+        "eslint": "^4.2.0",
+        "eslint-config-xo-space": "^0.16.0",
+        "eslint-plugin-flowtype": "^2.35.0",
+        "express": "^4.15.3",
+        "flow-bin": "^0.50.0",
+        "flow-remove-types": "^1.2.1",
+        "jest": "^20.0.4",
+        "jest-cli": "^20.0.0",
+        "nsp": "^2.6.3",
+        "nyc": "^11.0.3",
+        "uuid": "^3.1.0"
+    }
 }

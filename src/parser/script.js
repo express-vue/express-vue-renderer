@@ -13,7 +13,7 @@ type ScriptObjectType = {
     start: number,
     attrs: Object,
     end: number
- }
+}
 
 function dataMerge(script: Object, defaults: Object, type: string): Object {
     let finalScript = {};
@@ -30,7 +30,7 @@ function dataMerge(script: Object, defaults: Object, type: string): Object {
     return finalScript;
 }
 
-function scriptParser(scriptObject: ScriptObjectType, defaults: Object, type: string): Promise<string> {
+function scriptParser(scriptObject: ScriptObjectType, defaults: Object, type: string): Promise < Object > {
     return new Promise((resolve, reject) => {
         if (!scriptObject && !scriptObject.content) {
             reject(new Error('Missing Script block'));

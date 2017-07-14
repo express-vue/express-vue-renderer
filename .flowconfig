@@ -1,4 +1,11 @@
 [ignore]
-.*/lib/*.
-.*/express/*.
+.*/example/*.
 .*/node_modules/vue/src/*.
+
+[include]
+
+[libs]
+
+[options]
+
+[lints]

@@ -1,17 +1,15 @@
-
-const Defaults = require('../lib/models').Defaults;
-const expressVueRenderer = require('../lib');
+const ExpressVueRenderer = require('../lib');
 
 //This is the Middlewarein express-vue this wont be in the file
 function init(options) {
     //Make new object
-    const GlobalOptions = new Defaults(options);
+    const Renderer = new ExpressVueRenderer(options);
     //Middleware init
     return (req, res, next) => {
         //Res RenderVUE function
-        res.renderVue = (componentPath, data, vueOptions) => {
+        res.renderVue = (componentPath, data = {}, vueOptions = {}) => {
             res.set('Content-Type', 'text/html');
-            expressVueRenderer.renderToStream(componentPath, data, vueOptions, GlobalOptions)
+            Renderer.renderToStream(componentPath, data, vueOptions)
                 .then(stream => {
                     stream.on('data', chunk => res.write(chunk));
                     stream.on('end', () => res.end());
