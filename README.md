@@ -1,5 +1,5 @@
 # express-vue-renderer
-[![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url] [![Coverage percentage][coveralls-image]][coveralls-url] [![Greenkeeper badge](https://badges.greenkeeper.io/express-vue/express-vue-renderer.svg)](https://greenkeeper.io/)
+[![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url] [![Coverage percentage][cov-image]][cov-url] [![Greenkeeper badge](https://badges.greenkeeper.io/express-vue/express-vue-renderer.svg)](https://greenkeeper.io/)
 > Rendering Engine for turning Vue files into Javascript Objects
 
 ## Installation
@@ -55,5 +55,5 @@ Apache-2.0 © [Daniel Cherubini](https://github.com/express-vue)
 [travis-url]: https://travis-ci.org/express-vue/express-vue-renderer
 [daviddm-image]: https://david-dm.org/express-vue/express-vue-renderer.svg?theme=shields.io
 [daviddm-url]: https://david-dm.org/express-vue/express-vue-renderer
-[coveralls-image]: https://coveralls.io/repos/express-vue/express-vue-renderer/badge.svg
-[coveralls-url]: https://coveralls.io/r/express-vue/express-vue-renderer
+[cov-image]: https://codecov.io/gh/express-vue/express-vue-renderer/branch/master/graph/badge.svg
+[cov-url]: https://codecov.io/gh/express-vue/express-vue-renderer
