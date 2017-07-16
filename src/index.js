@@ -47,16 +47,12 @@ function renderToStream(componentPath, data, vueOptions, GlobalOptions): Promise
             .then(app => {
                 const vueStream = vueServerRenderer.renderToStream(app.app);
                 let htmlStream;
+                const htmlStringStart = app.template.start + app.head + app.template.middle;
+                const htmlStringEnd = app.script + app.template.end;
 
-                if (!GlobalOptions.pure) {
-                    const htmlStringStart = app.template.start + app.head + app.template.middle;
-                    const htmlStringEnd = app.script + app.template.end;
-                    htmlStream = new Utils.StreamUtils(htmlStringStart, htmlStringEnd);
-                    htmlStream = vueStream.pipe(htmlStream);
-                    GlobalOptions.pure = true;
-                } else {
-                    htmlStream = vueStream;
-                }
+                htmlStream = new Utils.StreamUtils(htmlStringStart, htmlStringEnd);
+                htmlStream = vueStream.pipe(htmlStream);
+                GlobalOptions.pure = true;
                 resolve(htmlStream);
             })
             .catch(error => {
