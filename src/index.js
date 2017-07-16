@@ -52,7 +52,7 @@ function renderToStream(componentPath, data, vueOptions, GlobalOptions): Promise
 
                 htmlStream = new Utils.StreamUtils(htmlStringStart, htmlStringEnd);
                 htmlStream = vueStream.pipe(htmlStream);
-                GlobalOptions.pure = true;
+
                 resolve(htmlStream);
             })
             .catch(error => {
