@@ -6,13 +6,11 @@ const path = require('path');
 
 const component = path.join(__dirname, '/vueFiles/component.vue');
 
-
 const options = {
     rootPath: path.join(__dirname, '/'),
     componentsPath: 'vueFiles/components',
     viewsPath: 'vueFiles'
 };
-
 
 const data = {
     title: 'Express Vue',
@@ -23,8 +21,7 @@ const data = {
 const vueOptions = {
     components: ['uuid'],
     head: {
-        title: 'Page Title',
-
+        title: 'Page Title'
     }
 }
 
@@ -32,8 +29,8 @@ const exampleHead = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
 <style>.test{color:#00f}</style></head><body><div id="app">`
 
 test('renders App object', t => {
-    const GlobalOptions = new Models.Defaults(options);
-    return ExpressVueRenderer.renderToStream('main', data, vueOptions, GlobalOptions)
+    const renderer = new ExpressVueRenderer(options);
+    return renderer.renderToStream('main', data, vueOptions)
         .then(app => {
             t.is(app.head, exampleHead);
         })
