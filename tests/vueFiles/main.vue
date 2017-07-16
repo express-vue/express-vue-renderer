@@ -5,6 +5,8 @@
         <input v-model="message" placeholder="edit me">
         <p>{{message}}</p>
         <uuid :uuid="uuid"></uuid>
+        <button type="button" name="button" v-on:click="this.hello">Test mixin</button>
+        <button type="button" name="button" v-on:click="this.test">Test method</button>
     </div>
 </template>
 
@@ -12,6 +14,11 @@
 export default {
     data: function() {
         return {
+        }
+    },
+    methods: {
+        test: function (){
+            console.error('test');
         }
     }
 }

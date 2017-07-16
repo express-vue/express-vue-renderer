@@ -6,6 +6,14 @@ const uuidv4 = require('uuid/v4');
 const expressVueRenderer = require('../lib');
 const expressVue = require('./expressVue');
 
+var exampleMixin = {
+    methods: {
+        hello: function () {
+            console.log('Hello');
+        }
+    }
+};
+
 const options = {
     rootPath: path.join(__dirname, '/../tests'),
     viewsPath: 'vueFiles',
@@ -22,7 +30,8 @@ const options = {
                 { name:'twitter:title', content: 'Page Title' },
                 { script: 'https://unpkg.com/vue@2.3.4/dist/vue.js' }
             ]
-        }
+        },
+        mixins: [exampleMixin]
     },
     data: {
         thing: true
