@@ -6,3 +6,4 @@ const DataObject = require('./dataObject');
 module.exports.Types = Types;
 module.exports.Defaults = Defaults;
 module.exports.DataObject = DataObject;
+module.exports.AppClass = require('./appClass');

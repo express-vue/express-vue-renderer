@@ -6,6 +6,9 @@
     "parserOptions": {
         "sourceType": "module"
     },
+    "plugins": [
+        "flowtype"
+    ],
     "extends": "eslint:recommended",
     "parser": "babel-eslint",
     "rules": {
