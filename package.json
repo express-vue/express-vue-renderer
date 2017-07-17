@@ -38,11 +38,17 @@
     "nyc": {
         "include": [
             "src/**/*.js"
+        ],
+        "exclude": [
+            "src/models/index.js",
+            "src/parser/index.js",
+            "src/renderer/index.js",
+            "src/utils/index.js"
         ]
     },
     "scripts": {
         "flow": "flow",
-        "start": "npm run build && node example/app.js",
+        "start": "npm run build && node --inspect example/app.js",
         "prepublish": "npm run build && nsp check",
         "pretest": "eslint . --fix",
         "test": "eslint src && nyc ava",

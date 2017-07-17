@@ -17,26 +17,20 @@ type VueObjectType = {
 //     }
 // }
 class HeadUtil {
-    metaTags: string = '';
-    title: string = '';
-    structuredData: string = '';
-    style: string = '';
+    metaTags: string;
+    title: string;
+    structuredData: string;
+    style: string;
     constructor(vueObject: VueObjectType, styleString: string) {
         this.setupStyleString(styleString);
-        if (vueObject) {
-            this.setupMetaTags(vueObject);
-
-            if (vueObject.head) {
-                if (vueObject.head.title) {
-                    this.setupTitle(vueObject.head.title);
-                }
-                if (vueObject.head.structuredData) {
-                    this.setupStructuredData(vueObject.head.structuredData);
-                }
-            }
-        }
+        this.setupMetaTags(vueObject);
+        this.setupTitle(vueObject);
+        this.setupStructuredData(vueObject);
     }
     setupMetaTags(vueObject: Object) {
+        if (this.metaTags === undefined) {
+            this.metaTags = '';
+        }
         if (vueObject.head && vueObject.head.meta) {
             for (let metaItem of vueObject.head.meta) {
                 if (metaItem.name) {
@@ -55,16 +49,16 @@ class HeadUtil {
             }
         }
     }
-    setupTitle(title: string) {
-        if (title) {
-            this.title = `<title>${title}</title>\n`;
+    setupTitle(vueObject: Object) {
+        if (vueObject && vueObject.head && vueObject.head.title) {
+            this.title = `<title>${vueObject.head.title}</title>\n`;
         } else {
             this.title = '';
         }
     }
-    setupStructuredData(structuredData: Object) {
-        if (structuredData) {
-            this.structuredData = `<script type="application/ld+json">\n${JSON.stringify(structuredData)}\n</script>\n`;
+    setupStructuredData(vueObject: Object) {
+        if (vueObject && vueObject.head && vueObject.head.structuredData) {
+            this.structuredData = `<script type="application/ld+json">\n${JSON.stringify(vueObject.head.structuredData)}\n</script>\n`;
         } else {
             this.structuredData = '';
         }
