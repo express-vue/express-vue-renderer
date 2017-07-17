@@ -10,7 +10,7 @@ class ExpressVueRenderer {
     constructor(options: Object) {
         this.GlobalOptions = new Models.Defaults(options);
     }
-    createAppObject(componentPath: string, data: Object, vueOptions:? Object): Promise < Object > {
+    createAppObject(componentPath: string, data: Object, vueOptions: ? Object): Promise < Object > {
         return new Promise((resolve, reject) => {
             this.GlobalOptions.mergeDataObject(data);
             if (vueOptions) {
@@ -27,9 +27,9 @@ class ExpressVueRenderer {
                                 const VueClass = rendered.app;
                                 const template = this.GlobalOptions.layout;
                                 const script = rendered.scriptString;
-                                const head = Utils.headUtil(this.GlobalOptions.vue, rendered.layout.style);
+                                const head = new Utils.HeadUtils(this.GlobalOptions.vue, rendered.layout.style);
 
-                                const app = new Models.AppClass(VueClass, template, script, head);
+                                const app = new Models.AppClass(VueClass, template, script, head.toString());
                                 resolve(app);
                             }
                         }).catch((error) => {

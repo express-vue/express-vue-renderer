@@ -49,8 +49,8 @@ function scriptParser(scriptObject: ScriptObjectType, defaults: Object, type: st
                 defaults.cache.set(stringHash(scriptObject.content), babelScript);
             }
 
-            let evalScript = Utils.requireFromString(babelScript.code).exports;
-            let finalScript = dataMerge(evalScript.default, defaults, type);
+            let scriptFromString = Utils.requireFromString(babelScript.code).exports.default;
+            let finalScript = dataMerge(scriptFromString, defaults, type);
             resolve(finalScript);
         }
     });

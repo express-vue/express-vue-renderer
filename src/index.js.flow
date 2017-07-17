@@ -1,0 +1,32 @@
+// @flow
+
+declare class Defaults {
+    rootPath: string;
+    componentsPath: string;
+    viewsPath: string;
+    layout: {
+        start: string,
+        middle: string,
+        end: string
+    };
+    options: Object;
+    cache: {
+        get: Function,
+        set: Function
+    };
+    vue: Object;
+    data: Object;
+    constructor(options: Object): Defaults;
+    mergeVueObject(newVueObject: Object): void;
+    mergeDataObject(newDataObject: Object): void;
+}
+
+declare class ExpressVueRenderer {
+    GlobalOptions: Defaults;
+    constructor(options: Object): ExpressVueRenderer;
+    createAppObject(componentPath: string, data: Object, vueOptions: ? Object): Promise < Object > ;
+    renderToStream(componentPath: string, data: Object, vueOptions: Object): Promise < Object > ;
+}
+
+
+declare module.exports: ExpressVueRenderer;

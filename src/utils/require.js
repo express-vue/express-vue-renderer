@@ -1,19 +1,17 @@
 // @flow
-'use strict';
-
 var Module = require('module');
 var path = require('path');
 
 class Options {
     appendPaths: string[];
     prependPaths: string[];
-    constructor(optsObj: Object = {}) {
+    constructor(optsObj: Object) {
         this.appendPaths = optsObj.appendPaths || [];
         this.prependPaths = optsObj.prependPaths || [];
     }
 }
 
-function requireFromString(code: string, filename: string = '', optsObj: Options) {
+function requireFromString(code: string, filename: string = '', optsObj: Object = {}) {
     const options = new Options(optsObj);
 
     if (typeof code !== 'string') {

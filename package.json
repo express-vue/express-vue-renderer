@@ -48,7 +48,8 @@
         "test": "eslint src && nyc ava",
         "clean": "rm -rf lib",
         "coverage": "nyc report --reporter=lcov > coverage.lcov && codecov",
-        "build": "npm run clean && flow-remove-types --pretty src/ --out-dir lib/",
+        "flow-strip": "flow-remove-types -x .js --pretty src/ --out-dir lib/",
+        "build": "npm run clean && npm run flow-strip && cp src/index.d.ts lib/index.d.ts && cp src/index.js.flow lib/index.js.flow",
         "preversion": "npm test",
         "version": "npm run build && git add -A",
         "postversion": "git push && git push --tags"
