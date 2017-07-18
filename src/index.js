@@ -1,69 +1,88 @@
 // @flow
 'use strict';
-const {
-    Defaults
-} = require('./models');
+const Models = require('./models');
 const Utils = require('./utils');
 const Renderer = require('./renderer');
 const vueServerRenderer = require('vue-server-renderer').createRenderer();
 
-function renderer(componentPath: string, data: Object, vueOptions: ? Object, GlobalOptions : Defaults): Promise < Object > {
-    return new Promise((resolve, reject) => {
+/**
+ * ExpressVueRenderer Class is the main init Class
+ * init with `new ExpressVueRenderer(options)`
+ * returns the ExpressVueRenderer class
+ * @class
+ */
+class ExpressVueRenderer {
+    GlobalOptions: Models.Defaults;
+    /**
+     * ExpressVueRenderer constructor
+     * @constructor
+     * @param {Object} options - The options passed to init the class
+     */
+    constructor(options: Object) {
+        this.GlobalOptions = new Models.Defaults(options);
+    }
+    /**
+     * createAppObject is an internal function used by renderToStream
+     * @param  {string} componentPath - full path to .vue file
+     * @param  {Object} data          - data to be inserted when generating vue class
+     * @param  {Object} vueOptions    - vue options to be used when generating head
+     * @return {Promise}              - Promise consists of an AppClass Object
+     */
+    createAppObject(componentPath: string, data: Object, vueOptions: ? Object): Promise < Models.AppClass > {
+        return new Promise((resolve, reject) => {
+            this.GlobalOptions.mergeDataObject(data);
+            if (vueOptions) {
+                this.GlobalOptions.mergeVueObject(vueOptions);
+            }
+            Utils.setupComponentArray(componentPath, this.GlobalOptions)
+                .then(promiseArray => {
+                    Promise.all(promiseArray)
+                        .then((components) => {
+                            const rendered = Renderer.renderHtmlUtil(components, this.GlobalOptions);
+                            if (!rendered) {
+                                reject(new Error('Renderer Error'));
+                            } else {
+                                const VueClass = rendered.app;
+                                const template = this.GlobalOptions.layout;
+                                const script = rendered.scriptString;
+                                const head = new Utils.HeadUtils(this.GlobalOptions.vue, rendered.layout.style);
 
-        GlobalOptions.mergeDataObject(data);
-        if (vueOptions) {
-            GlobalOptions.mergeVueObject(vueOptions);
-        }
-        Utils.setupComponentArray(componentPath, GlobalOptions)
-            .then(promiseArray => {
-                Promise.all(promiseArray)
-                    .then(function(components) {
-                        const rendered = Renderer.renderHtmlUtil(components, GlobalOptions);
-                        if (!rendered) {
-                            reject(new Error('Renderer Error'));
-                        } else {
-                            const app = {
-                                head: Utils.headUtil(GlobalOptions.vue, rendered.layout.style),
-                                app: rendered.app,
-                                script: rendered.scriptString,
-                                template: GlobalOptions.layout
-                            };
-                            resolve(app);
-                        }
-                    })
-                    .catch(function(error) {
-                        reject(new Error(error));
-                    });
-            })
-            .catch(error => {
-                reject(new Error(error));
-            });
-    });
-}
-
-function renderToStream(componentPath, data, vueOptions, GlobalOptions): Promise < Object > {
-    return new Promise((resolve, reject) => {
-        renderer(componentPath, data, vueOptions, GlobalOptions)
-            .then(app => {
-                const vueStream = vueServerRenderer.renderToStream(app.app);
-                let htmlStream;
-
-                if (!GlobalOptions.pure) {
+                                const app = new Models.AppClass(VueClass, template, script, head.toString());
+                                resolve(app);
+                            }
+                        }).catch((error) => {
+                            reject(error);
+                        });
+                }).catch(error => {
+                    reject(error);
+                });
+        });
+    }
+    /**
+     * renderToStream is the main function used by res.renderVue
+     * @param {string} componentPath - full path to .vue component
+     * @param  {Object} data          - data to be inserted when generating vue class
+     * @param  {Object} vueOptions    - vue options to be used when generating head
+     * @return {Promise}              - Promise returns a Stream
+     */
+    renderToStream(componentPath: string, data: Object, vueOptions: Object): Promise < Object > {
+        return new Promise((resolve, reject) => {
+            this.createAppObject(componentPath, data, vueOptions)
+                .then(app => {
+                    const vueStream = vueServerRenderer.renderToStream(app.VueClass);
+                    let htmlStream;
                     const htmlStringStart = app.template.start + app.head + app.template.middle;
                     const htmlStringEnd = app.script + app.template.end;
+
                     htmlStream = new Utils.StreamUtils(htmlStringStart, htmlStringEnd);
                     htmlStream = vueStream.pipe(htmlStream);
-                    GlobalOptions.pure = true;
-                } else {
-                    htmlStream = vueStream;
-                }
-                resolve(htmlStream);
-            })
-            .catch(error => {
-                reject(error);
-            });
-    });
+
+                    resolve(htmlStream);
+                }).catch(error => {
+                    reject(error);
+                });
+        });
+    }
 }
 
-module.exports.renderer = renderer;
-module.exports.renderToStream = renderToStream;
+module.exports = ExpressVueRenderer;
