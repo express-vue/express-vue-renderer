@@ -16,7 +16,6 @@ function componentParser(templatePath: string, defaults: Object, type: string): 
             scriptParser(cachedComponentContentObject.parsedContent.script, defaults, type).then(parsedScriptObject => {
                 cachedComponentContentObject.script = parsedScriptObject;
                 cachedComponentContentObject.script.template = cachedComponentContentObject.template;
-                //TODO I think we should move the cache in here
                 resolve(cachedComponentContentObject);
             }).catch(error => {
                 reject(error);
