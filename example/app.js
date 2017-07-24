@@ -8,7 +8,7 @@ const expressVue = require('./expressVue');
 
 var exampleMixin = {
     methods: {
-        hello: function () {
+        hello: function() {
             console.log('Hello');
         }
     }
@@ -26,8 +26,8 @@ const options = {
     vue: {
         head: {
             meta: [
-                { property:'og:title', content: 'Page Title' },
-                { name:'twitter:title', content: 'Page Title' },
+                { property: 'og:title', content: 'Page Title' },
+                { name: 'twitter:title', content: 'Page Title' },
                 { script: 'https://unpkg.com/vue@2.3.4/dist/vue.js' }
             ]
         },
