@@ -4,7 +4,8 @@ const {
 } = require('../models');
 
 const Utils = require('../utils');
-const babel = require('babel-core');
+// const babel = require('babel-core');
+const buble = require('buble');
 const stringHash = require('string-hash');
 
 type ScriptObjectType = {
@@ -44,7 +45,8 @@ function scriptParser(scriptObject: ScriptObjectType, defaults: Object, type: st
             if (cachedBabelScript) {
                 babelScript = cachedBabelScript;
             } else {
-                babelScript = babel.transform(scriptObject.content, options);
+                // babelScript = babel.transform(scriptObject.content, options);
+                babelScript = buble.transform(scriptObject.content);
                 // set the cache for the babel script string
                 defaults.cache.set(stringHash(scriptObject.content), babelScript);
             }
