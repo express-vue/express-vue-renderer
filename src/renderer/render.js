@@ -54,7 +54,7 @@ function renderVueComponents(script: Object, components: Object[]) {
     let componentsString = '';
     for (const component of components) {
         if (component.type === types.SUBCOMPONENT) {
-            componentsString = componentsString + `Vue.component('${paramCase(component.name)}', ${Utils.scriptToString(component.script)});\n`;
+            componentsString = componentsString + `const __${component.name} = Vue.component('${paramCase(component.name)}', ${Utils.scriptToString(component.script)});\n`;
         }
     }
 
@@ -70,17 +70,20 @@ function renderVueMixins(mixins: Array<Object>) {
     return mixinString;
 }
 
-function renderedScript(script, components, mixins: Array<Object>) {
-
+function renderedScript(script, components, mixins: Array<Object>, router) {
     const componentsString = renderVueComponents(script, components);
     const mixinString      = mixins !== undefined ? renderVueMixins(mixins) : '';
-    const scriptString     = Utils.scriptToString(script);
+    const routerString     = router !== undefined ?  `const __router = new VueRouter(${Utils.scriptToString(router)});` : '';
+    let scriptString       = Utils.scriptToString(script);
     let debugToolsString   = '';
 
+    if (router !== undefined) {
+        scriptString = scriptString.substr(0, 1) + 'router: __router,' + scriptString.substr(1);
+    }
     if (process.env.VUE_DEV) {
         debugToolsString = 'Vue.config.devtools = true;';
     }
-    return `<script>\n(function () {'use strict';${mixinString}${componentsString}var createApp = function () {return new Vue(${scriptString})};if (typeof module !== 'undefined' && module.exports) {module.exports = createApp} else {this.app = createApp()}}).call(this);${debugToolsString}app.$mount('#app');\n</script>`;
+    return `<script>\n(function () {'use strict';${mixinString}${componentsString}${routerString}var createApp = function () {return new Vue(${scriptString})};if (typeof module !== 'undefined' && module.exports) {module.exports = createApp} else {this.app = createApp()}}).call(this);${debugToolsString}app.$mount('#app');\n</script>`;
 }
 
 function renderHtmlUtil(components: Object[], defaults: Object): {app: Object, scriptString: string, layout: Object} {
@@ -89,8 +92,13 @@ function renderHtmlUtil(components: Object[], defaults: Object): {app: Object, s
         mixins = defaults.vue.mixins;
     }
 
+    let router: Object = null;
+    if (defaults.vue && defaults.vue.router) {
+        router = defaults.vue.router;
+    }
+
     const layout = layoutUtil(components);
-    const renderedScriptString = renderedScript(layout.script, components, mixins);
+    const renderedScriptString = renderedScript(layout.script, components, mixins, router);
     const app = createApp(layout.script, defaults);
 
     return {
