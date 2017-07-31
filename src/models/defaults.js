@@ -12,7 +12,11 @@ class Defaults {
     rootPath: string;
     componentsPath: string;
     viewsPath: string;
-    layout: {start: string, middle: string, end: string};
+    layout: {
+        start: string,
+        middle: string,
+        end: string
+    };
     options: Object;
     cache: LRU;
     vue: Object;
@@ -20,7 +24,7 @@ class Defaults {
     constructor(options: Object = {}) {
         this.cache = lruCache;
         this.options = options;
-        
+
         if (options.rootPath) {
             this.rootPath = path.resolve(options.rootPath);
         }
