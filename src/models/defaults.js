@@ -35,7 +35,7 @@ class Defaults {
             this.viewsPath = path.resolve(this.rootPath, options.viewsPath);
         }
         if (options.layout) {
-            this.layout = {}
+            this.layout = {};
             this.layout.head = options.layout.head ? options.layout.head : '<!DOCTYPE html><html><head>';
             this.layout.start = options.layout.start ? options.layout.start : '<body><div id="app">';
             this.layout.end = options.layout.end ? options.layout.end : '</div></body>';
