@@ -1,14 +1,16 @@
-import test   from 'ava';
+import test from 'ava';
 import path from 'path';
-import { PathUtils } from '../../src/utils';
+import {
+    PathUtils
+} from '../../src/utils';
 import Models from '../../src/models';
 
-const rootPath = path.join(__dirname, '../vueFiles/');
+const rootPath = path.join(__dirname, '../../example/vueFiles/');
 const defaults = new Models.Defaults();
 
 test('correctPath Path', t => {
-    const filePath = 'components/uuid.vue';
-    const correctPath  = rootPath + 'components/uuid.vue';
+    const filePath = '../../example/vueFiles/components/uuid.vue';
+    const correctPath = rootPath + 'components/uuid.vue';
 
     return PathUtils.getCorrectPathForFile(filePath, rootPath, 'view', defaults)
         .then(returnedPath => {
@@ -24,7 +26,7 @@ test('shows error for fake test Path ', t => {
     const errMessage = `Could not find test file at ${rootPath}componentDoesntExist.vue`
 
     return PathUtils.getCorrectPathForFile(filePath, rootPath, 'test', defaults)
-    .catch(error => {
-        t.is(error.message, errMessage);
-    })
+        .catch(error => {
+            t.is(error.message, errMessage);
+        })
 });
