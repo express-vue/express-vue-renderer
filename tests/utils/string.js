@@ -1,6 +1,7 @@
 import test from 'ava';
 import {
-    scriptToString
+    scriptToString,
+    mixinsToString
 } from '../../src/utils';
 
 const object = {
@@ -28,7 +29,16 @@ const object2 = {
     }
 }
 
+const exampleMixin = {
+    methods: {
+        hello: function () {
+            console.log('Hello');
+        }
+    }
+};
+
 const string = scriptToString(object);
+const mixins = mixinsToString([exampleMixin]);
 
 //Tests
 const hasString = string.includes(`string: "foo"`);
@@ -79,4 +89,10 @@ test('Has Data Object', t => {
 
 test('Has a Fully formed String', t => {
     t.is(hasFinal, true);
+});
+
+test('Mixins', t => {
+    t.is(mixins, `{methods: {hello: function hello() {
+            console.log('Hello');
+        },},},`);
 });
