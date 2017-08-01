@@ -28,6 +28,9 @@ function scriptToString(script: Object): string {
                     string += member + ': [' + mixinsToString(script[member]) + '],';
                 } else if (script[member].constructor === Array) {
                     string += member + ': ' + xss(JSON.stringify(script[member])) + ',';
+                } else if (member === 'props') {
+                    const propsArray = Object.keys(script[member]);
+                    string += member + ': ' + xss(JSON.stringify(propsArray)) + ',';
                 } else {
                     string += member + ': ' + scriptToString(script[member]) + ',';
                 }

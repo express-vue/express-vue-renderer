@@ -49,9 +49,13 @@ function scriptParser(scriptObject: ScriptObjectType, defaults: Object, type: st
                 defaults.cache.set(stringHash(scriptObject.content), babelScript);
             }
 
-            let scriptFromString = Utils.requireFromString(babelScript.code).exports.default;
-            let finalScript = dataMerge(scriptFromString, defaults, type);
-            resolve(finalScript);
+            Utils.requireFromString(babelScript.code)
+                .then(scriptFromString => {
+                    let finalScript = dataMerge(scriptFromString, defaults, type);
+                    resolve(finalScript);
+                })
+                .catch(error => reject(error));
+
         }
     });
 }

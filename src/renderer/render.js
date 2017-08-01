@@ -65,7 +65,8 @@ function renderedScript(script, components) {
 type htmlUtilType = {
     app: Object,
     scriptString: string,
-    layout: Object
+    layout: Object,
+    scriptStringRaw: string
 };
 
 function renderHtmlUtil(components: Object[]): htmlUtilType {
@@ -76,7 +77,8 @@ function renderHtmlUtil(components: Object[]): htmlUtilType {
     return {
         app: app,
         scriptString: renderedScriptString,
-        layout: layout
+        layout: layout,
+        scriptStringRaw: Utils.scriptToString(layout.script)
     };
 }
 

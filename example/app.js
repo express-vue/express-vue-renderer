@@ -60,7 +60,6 @@ app.get('/', (req, res) => {
         uuid: uuidv4()
     };
     const vueOptions = {
-        components: ['uuid'],
         head: {
             title: 'Page Title',
 

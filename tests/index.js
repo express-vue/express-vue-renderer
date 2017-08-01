@@ -4,8 +4,6 @@ const ExpressVueRenderer = require('../src');
 const Models = require('../src/models');
 const path = require('path');
 
-const component = path.join(__dirname, '../example/vueFiles/component.vue');
-
 const options = {
     rootPath: path.join(__dirname, '../example'),
     componentsPath: 'vueFiles/components',
@@ -19,7 +17,6 @@ const data = {
 };
 
 const vueOptions = {
-    components: ['uuid'],
     head: {
         title: 'Page Title'
     }
