@@ -38,7 +38,7 @@ class ExpressVueRenderer {
                 .then(promiseArray => {
                     Promise.all(promiseArray)
                         .then((components) => {
-                            const rendered = Renderer.renderHtmlUtil(components, this.GlobalOptions);
+                            const rendered = Renderer.renderHtmlUtil(components);
                             if (!rendered) {
                                 reject(new Error('Renderer Error'));
                             } else {

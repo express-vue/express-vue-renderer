@@ -15,7 +15,7 @@ var exampleMixin = {
 };
 
 const options = {
-    rootPath: path.join(__dirname, '/../tests'),
+    rootPath: path.resolve(__dirname),
     viewsPath: 'vueFiles',
     componentsPath: 'vueFiles/components',
     layout: {
@@ -39,8 +39,7 @@ const options = {
                     content: 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no'
                 }
             ]
-        },
-        mixins: [exampleMixin]
+        }
     },
     data: {
         thing: true

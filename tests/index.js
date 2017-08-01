@@ -4,10 +4,10 @@ const ExpressVueRenderer = require('../src');
 const Models = require('../src/models');
 const path = require('path');
 
-const component = path.join(__dirname, '/vueFiles/component.vue');
+const component = path.join(__dirname, '../example/vueFiles/component.vue');
 
 const options = {
-    rootPath: path.join(__dirname, '/'),
+    rootPath: path.join(__dirname, '../example'),
     componentsPath: 'vueFiles/components',
     viewsPath: 'vueFiles'
 };
