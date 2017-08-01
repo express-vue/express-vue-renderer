@@ -28,23 +28,23 @@ function layoutUtil(components: Object[]) {
     layout.style = '';
     for (var component of components) {
         switch (component.type) {
-        case types.COMPONENT:
-            layout.script = component.script;
-            if (component.style.length > 0) {
-                layout.style += component.style;
-            }
-            break;
-        case types.SUBCOMPONENT:
-            if (component.style.length > 0) {
-                layout.style += component.style;
-            }
-            if (layout.script.components) {
-                layout.script.components[component.name] = component.script;
-            } else {
-                layout.script.components = {};
-                layout.script.components[component.name] = component.script;
-            }
-            break;
+            case types.COMPONENT:
+                layout.script = component.script;
+                if (component.style.length > 0) {
+                    layout.style += component.style;
+                }
+                break;
+            case types.SUBCOMPONENT:
+                if (component.style.length > 0) {
+                    layout.style += component.style;
+                }
+                if (layout.script.components) {
+                    layout.script.components[component.name] = component.script;
+                } else {
+                    layout.script.components = {};
+                    layout.script.components[component.name] = component.script;
+                }
+                break;
         }
     }
     return layout;

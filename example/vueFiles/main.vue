@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import exampleMixin from '../tests/vueFiles/mixins/exampleMixin';
+import exampleMixin from '../example/vueFiles/mixins/exampleMixin';
 export default {
     mixins: [exampleMixin],
     data: function () {

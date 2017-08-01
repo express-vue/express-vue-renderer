@@ -15,7 +15,7 @@ var exampleMixin = {
 };
 
 const options = {
-    rootPath: path.join(__dirname, '/../tests'),
+    rootPath: path.resolve(__dirname),
     viewsPath: 'vueFiles',
     componentsPath: 'vueFiles/components',
     layout: {

@@ -40,4 +40,5 @@ function scriptToString(script: Object): string {
     return `{${string}}`;
 }
 
-module.exports = scriptToString;
+module.exports.scriptToString = scriptToString;
+module.exports.mixinsToString = mixinsToString;
