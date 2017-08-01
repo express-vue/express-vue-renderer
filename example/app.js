@@ -40,7 +40,7 @@ const options = {
                 }
             ]
         },
-        mixins: [exampleMixin]
+        // mixins: [exampleMixin]
     },
     data: {
         thing: true
