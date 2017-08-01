@@ -41,7 +41,7 @@ class Defaults {
             this.layout.end = options.layout.end ? options.layout.end : '</div></body>';
         } else {
             this.layout = {
-                head: '<!DOCTYPE html><html"><head>',
+                head: '<!DOCTYPE html><html><head>',
                 start: '<body><div id="app">',
                 end: '</div></body>'
             };

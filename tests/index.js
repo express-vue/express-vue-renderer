@@ -25,7 +25,7 @@ const vueOptions = {
     }
 }
 
-const exampleHead = `<!DOCTYPE html><html"><head><title>Page Title</title>
+const exampleHead = `<!DOCTYPE html><html><head><title>Page Title</title>
 <style>.test{color:#00f}</style></head><body><div id="app">`
 
 test('renders App object', t => {
