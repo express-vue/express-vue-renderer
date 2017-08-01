@@ -1,25 +1,14 @@
 // @flow
-const {Types}     = require('../models');
-const Utils       = require('../utils');
-const paramCase   = require('param-case');
-const Vue         = require('vue');
-const stringHash  = require('string-hash');
+const {
+    Types
+} = require('../models');
+const Utils = require('../utils');
+const paramCase = require('param-case');
+const Vue = require('vue');
 
-const types       = new Types();
+const types = new Types();
 
-function createApp(script, defaults) {
-    // caching for mixin vue parsing
-    if (defaults.vue && defaults.vue.mixins) {
-        if (defaults.vue.mixins.length > 0) {
-            if (!defaults.cache.get(stringHash(defaults.vue.mixins.toString()))){
-                for (let mixin of defaults.vue.mixins) {
-                    Vue.mixin(mixin);
-                }
-                defaults.cache.set(stringHash(defaults.vue.mixins.toString()), true);
-            }
-        }
-    }
-
+function createApp(script) {
     return new Vue(script);
 }
 
@@ -61,37 +50,28 @@ function renderVueComponents(script: Object, components: Object[]) {
     return componentsString;
 }
 
-function renderVueMixins(mixins: Array<Object>) {
-    let mixinString = '';
-    for (var mixin of mixins) {
-        mixinString = mixinString + `Vue.mixin(${Utils.scriptToString(mixin)});`;
-    }
-
-    return mixinString;
-}
-
-function renderedScript(script, components, mixins: Array<Object>) {
+function renderedScript(script, components) {
 
     const componentsString = renderVueComponents(script, components);
-    const mixinString      = mixins !== undefined ? renderVueMixins(mixins) : '';
-    const scriptString     = Utils.scriptToString(script);
-    let debugToolsString   = '';
+    const scriptString = Utils.scriptToString(script);
+    let debugToolsString = '';
 
     if (process.env.VUE_DEV) {
         debugToolsString = 'Vue.config.devtools = true;';
     }
-    return `<script>\n(function () {'use strict';${mixinString}${componentsString}var createApp = function () {return new Vue(${scriptString})};if (typeof module !== 'undefined' && module.exports) {module.exports = createApp} else {this.app = createApp()}}).call(this);${debugToolsString}app.$mount('#app');\n</script>`;
+    return `<script>\n(function () {'use strict';${componentsString}var createApp = function () {return new Vue(${scriptString})};if (typeof module !== 'undefined' && module.exports) {module.exports = createApp} else {this.app = createApp()}}).call(this);${debugToolsString}app.$mount('#app');\n</script>`;
 }
 
-function renderHtmlUtil(components: Object[], defaults: Object): {app: Object, scriptString: string, layout: Object} {
-    let mixins: Array<Object> = [];
-    if (defaults.vue && defaults.vue.mixins) {
-        mixins = defaults.vue.mixins;
-    }
+type htmlUtilType = {
+    app: Object,
+    scriptString: string,
+    layout: Object
+};
 
+function renderHtmlUtil(components: Object[]): htmlUtilType {
     const layout = layoutUtil(components);
-    const renderedScriptString = renderedScript(layout.script, components, mixins);
-    const app = createApp(layout.script, defaults);
+    const renderedScriptString = renderedScript(layout.script, components);
+    const app = createApp(layout.script);
 
     return {
         app: app,
@@ -104,4 +84,3 @@ function renderHtmlUtil(components: Object[], defaults: Object): {app: Object, s
 module.exports.layoutUtil = layoutUtil;
 module.exports.renderHtmlUtil = renderHtmlUtil;
 module.exports.renderVueComponents = renderVueComponents;
-module.exports.renderVueMixins = renderVueMixins;
