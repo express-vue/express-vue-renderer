@@ -11,13 +11,15 @@
 </template>
 
 <script>
+import exampleMixin from '../example/vueFiles/mixins/exampleMixin';
 export default {
-    data: function() {
+    mixins: [exampleMixin],
+    data: function () {
         return {
         }
     },
     methods: {
-        test: function (){
+        test: function () {
             console.error('test');
         }
     }
@@ -25,4 +27,5 @@ export default {
 </script>
 
 <style lang="css">
+
 </style>

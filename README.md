@@ -71,8 +71,7 @@ ExpressVueRenderer.renderer(componentPath, data, [vueOptions])
                     content: 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no'
                 }
             ]
-        },
-        mixins: [exampleMixin]
+        }
     },
     data: {
         thing: true

@@ -1,11 +1,12 @@
 // @flow
-const scriptToString = require('./string');
+const string = require('./string');
 const HeadUtils = require('./head');
 const setupComponentArray = require('./componentArray');
 const PathUtils = require('./checkPathUtils');
 const StreamUtils = require('./stream');
 
-module.exports.scriptToString = scriptToString;
+module.exports.scriptToString = string.scriptToString;
+module.exports.mixinsToString = string.mixinsToString;
 module.exports.HeadUtils = HeadUtils;
 module.exports.setupComponentArray = setupComponentArray;
 module.exports.PathUtils = PathUtils;
