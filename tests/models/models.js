@@ -1,33 +1,37 @@
-import test   from 'ava';
+import test from 'ava';
 import path from 'path';
-import {Defaults, Types, DataObject} from '../../src/models';
+import {
+    Defaults,
+    Types,
+    DataObject
+} from '../../src/models';
 
 const options = {
     rootPath: path.join(__dirname, 'tests'),
     componentsPath: 'vueFiles/components',
     viewsPath: 'vueFiles',
     layout: {
-        start: '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><script src="https://unpkg.com/vue/dist/vue.js"></script>',
-        middle: '<body><div id="app">',
+        head: '<!DOCTYPE html><html><head>',
+        start: '<body><div id="app">',
         end: '</div></body></html>'
     }
 };
-const types         = new Types();
+const types = new Types();
 const defaultObject = new Defaults(options);
-const dataObject    = new DataObject(options, defaultObject, types.COMPONENT);
+const dataObject = new DataObject(options, defaultObject, types.COMPONENT);
 const dataObjectSub = new DataObject(options, defaultObject, types.SUBCOMPONENT);
 
 //Examples
 const exampleObject = {
     rootPath: options.rootPath,
     componentsPath: options.rootPath + '/' + options.componentsPath,
-    viewsPath:  options.rootPath + '/' + options.viewsPath,
+    viewsPath: options.rootPath + '/' + options.viewsPath,
     layout: {
-        start: '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><script src="https://unpkg.com/vue/dist/vue.js"></script>',
-        middle: '<body><div id="app">',
-        end: '</div></body></html>',
+        head: '<!DOCTYPE html><html><head>',
+        start: '<body><div id="app">',
+        end: '</div></body></html>'
     },
-    options:{
+    options: {
         rootPath: options.rootPath,
         componentsPath: 'vueFiles/components',
         viewsPath: 'vueFiles'

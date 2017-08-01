@@ -12,7 +12,11 @@ class Defaults {
     rootPath: string;
     componentsPath: string;
     viewsPath: string;
-    layout: {start: string, middle: string, end: string};
+    layout: {
+        head: string,
+        start: string,
+        end: string
+    };
     options: Object;
     cache: LRU;
     vue: Object;
@@ -20,7 +24,7 @@ class Defaults {
     constructor(options: Object = {}) {
         this.cache = lruCache;
         this.options = options;
-        
+
         if (options.rootPath) {
             this.rootPath = path.resolve(options.rootPath);
         }
@@ -31,12 +35,15 @@ class Defaults {
             this.viewsPath = path.resolve(this.rootPath, options.viewsPath);
         }
         if (options.layout) {
-            this.layout = options.layout;
+            this.layout = {};
+            this.layout.head = options.layout.head ? options.layout.head : '<!DOCTYPE html><html><head>';
+            this.layout.start = options.layout.start ? options.layout.start : '<body><div id="app">';
+            this.layout.end = options.layout.end ? options.layout.end : '</div></body>';
         } else {
             this.layout = {
-                start: '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><script src="https://unpkg.com/vue/dist/vue.js"></script>',
-                middle: '<body><div id="app">',
-                end: '</div></body></html>'
+                head: '<!DOCTYPE html><html><head>',
+                start: '<body><div id="app">',
+                end: '</div></body>'
             };
         }
         if (options.vue) {

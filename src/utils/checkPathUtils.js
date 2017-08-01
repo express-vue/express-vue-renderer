@@ -34,10 +34,10 @@ function getCorrectPathForFile(filePath: string, rootPath: string, type: string,
         if (cachedResolvedPath) {
             resolve(cachedResolvedPath);
         } else {
-            fs.access(resolvedPath, fs.constants.F_OK | fs.constants.R_OK, (error) => {
+            fs.access(resolvedPath, (fs.constants || fs).F_OK | (fs.constants || fs).R_OK, (error) => {
                 if (error) {
                     if (error.code === 'ENOENT') {
-                        fs.access(getParamCasePath(resolvedPath), fs.constants.F_OK | fs.constants.R_OK, (err) => {
+                        fs.access(getParamCasePath(resolvedPath), (fs.constants || fs).F_OK | (fs.constants || fs).R_OK, (err) => {
                             let paramCasePath = '';
                             if (err) {
                                 reject(new Error(`Could not find ${type} file at ${paramCasePath.length > 0 ? paramCasePath : resolvedPath}`));
