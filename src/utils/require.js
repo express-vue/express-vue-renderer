@@ -10,7 +10,7 @@ class Options {
     appendPaths: string[];
     prependPaths: string[];
     constructor(optsObj: Object) {
-        this.regex = /(require\(')([\w/.\d]*\.vue)('\))/igm;
+        this.regex = /(require\(')([\w/.-\d]*\.vue)('\))/igm;
         this.appendPaths = optsObj.appendPaths || [];
         this.prependPaths = optsObj.prependPaths || [];
     }
