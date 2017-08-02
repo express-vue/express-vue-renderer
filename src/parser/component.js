@@ -9,7 +9,7 @@ const scriptParser = require('./script');
 
 
 function componentParser(templatePath: string, defaults: Object, type: string): Promise < Object > {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         // try to get the component content from the cache
         const cachedComponentContentObject = defaults.cache.get(templatePath);
         if (cachedComponentContentObject) {
@@ -21,7 +21,7 @@ function componentParser(templatePath: string, defaults: Object, type: string): 
                 reject(error);
             });
         } else {
-            fs.readFile(templatePath, 'utf-8', function(err, content) {
+            fs.readFile(templatePath, 'utf-8', function (err, content) {
                 if (err) {
                     let error = `Could Not Find Component, I was expecting it to live here \n${templatePath} \nBut I couldn't find it there, ¯\\_(ツ)_/¯\n\n`;
                     reject(error);

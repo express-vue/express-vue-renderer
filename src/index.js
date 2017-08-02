@@ -34,28 +34,25 @@ class ExpressVueRenderer {
             if (vueOptions) {
                 this.GlobalOptions.mergeVueObject(vueOptions);
             }
-            Utils.setupComponentArray(componentPath, this.GlobalOptions)
-                .then(promiseArray => {
-                    Promise.all(promiseArray)
-                        .then((components) => {
-                            const rendered = Renderer.renderHtmlUtil(components, this.GlobalOptions.vue.router);
-                            if (!rendered) {
-                                reject(new Error('Renderer Error'));
-                            } else {
-                                const VueClass = rendered.app;
-                                const template = this.GlobalOptions.layout;
-                                const script = rendered.scriptString;
-                                const head = new Utils.HeadUtils(this.GlobalOptions.vue, rendered.layout.style);
+            Utils.setupComponent(componentPath, this.GlobalOptions)
+                .then((component) => {
 
-                                const app = new Models.AppClass(VueClass, template, script, head.toString());
-                                resolve(app);
-                            }
-                        }).catch((error) => {
-                            reject(error);
-                        });
-                }).catch(error => {
+                    const rendered = Renderer.renderHtmlUtil(component);
+                    if (!rendered) {
+                        reject(new Error('Renderer Error'));
+                    } else {
+                        const VueClass = rendered.app;
+                        const template = this.GlobalOptions.layout;
+                        const script = rendered.scriptString;
+                        const head = new Utils.HeadUtils(this.GlobalOptions.vue, rendered.layout.style);
+
+                        const app = new Models.AppClass(VueClass, template, script, head.toString());
+                        resolve(app);
+                    }
+                }).catch((error) => {
                     reject(error);
                 });
+
         });
     }
     /**
