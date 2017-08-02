@@ -39,19 +39,37 @@ function scriptParser(scriptObject: ScriptObjectType, defaults: Object, type: st
                 'presets': ['es2015']
             };
             // caching for babel script string so time spent in babel is reduced
-            let babelScript = '';
-            const cachedBabelScript = defaults.cache.get(stringHash(scriptObject.content));
+            const cacheKey = stringHash(scriptObject.content);
+            const cachedBabelScript = defaults.cache.get(cacheKey);
             if (cachedBabelScript) {
-                babelScript = cachedBabelScript;
+                let finalScript = dataMerge(cachedBabelScript, defaults, type);
+
+                //FUCK THIS _Ctor property fuck this fucking thing
+                //fuck you you fucking fuckstick i cant believe this
+                //is the offical vue-loader fix
+
+                if (finalScript.components) {
+                    for (var component in finalScript.components) {
+                        if (finalScript.components.hasOwnProperty(component)) {
+                            delete finalScript.components[component]._Ctor;
+                        }
+                    }
+                }
+                resolve(finalScript);
             } else {
-                babelScript = babel.transform(scriptObject.content, options);
-                // set the cache for the babel script string
-                defaults.cache.set(stringHash(scriptObject.content), babelScript);
+                const babelScript = babel.transform(scriptObject.content, options);
+
+                Utils.requireFromString(babelScript.code)
+                    .then(scriptFromString => {
+                        // set the cache for the babel script string
+                        defaults.cache.set(cacheKey, scriptFromString);
+
+                        let finalScript = dataMerge(scriptFromString, defaults, type);
+                        resolve(finalScript);
+                    })
+                    .catch(error => reject(error));
             }
 
-            let scriptFromString = Utils.requireFromString(babelScript.code).exports.default;
-            let finalScript = dataMerge(scriptFromString, defaults, type);
-            resolve(finalScript);
         }
     });
 }
