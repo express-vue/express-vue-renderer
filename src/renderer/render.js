@@ -63,7 +63,7 @@ function renderedScript(script, components, router) {
     if (process.env.VUE_DEV) {
         debugToolsString = 'Vue.config.devtools = true;';
     }
-    return `<script>\n(function () {'use strict';${componentsString}var createApp = function () {return new Vue(${scriptString})};if (typeof module !== 'undefined' && module.exports) {module.exports = createApp} else {this.app = createApp()}}).call(this);${debugToolsString}app.$mount('#app');\n</script>`;
+    return `<script>\n(function () {'use strict';${componentsString}${routerString}var createApp = function () {return new Vue(${scriptString})};if (typeof module !== 'undefined' && module.exports) {module.exports = createApp} else {this.app = createApp()}}).call(this);${debugToolsString}app.$mount('#app');\n</script>`;
 }
 
 type htmlUtilType = {
@@ -72,13 +72,9 @@ type htmlUtilType = {
     layout: Object
 };
 
-function renderHtmlUtil(components: Object[]): htmlUtilType {
-    let router: Object = null;
-    if (defaults.vue && defaults.vue.router) {
-        router = defaults.vue.router;
-    }
+function renderHtmlUtil(components: Object[], router: Object): htmlUtilType {
     const layout = layoutUtil(components);
-    const renderedScriptString = renderedScript(layout.script, components);
+    const renderedScriptString = renderedScript(layout.script, components, router);
     const app = createApp(layout.script);
 
     return {
