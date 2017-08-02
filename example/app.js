@@ -8,30 +8,38 @@ const expressVue = require('./expressVue');
 
 var exampleMixin = {
     methods: {
-        hello: function() {
+        hello: function () {
             console.log('Hello');
         }
     }
 };
 
 const options = {
-    rootPath: path.join(__dirname, '/../tests'),
+    rootPath: path.resolve(__dirname),
     viewsPath: 'vueFiles',
     componentsPath: 'vueFiles/components',
     layout: {
-        start: '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">',
-        middle: '<body><div id="app">',
-        end: '</div></body></html>'
+        start: '<body><div id="app">',
+        end: '</div></body>'
     },
     vue: {
         head: {
-            meta: [
-                { property: 'og:title', content: 'Page Title' },
-                { name: 'twitter:title', content: 'Page Title' },
-                { script: 'https://unpkg.com/vue@2.3.4/dist/vue.js' }
+            meta: [{
+                    property: 'og:title',
+                    content: 'Page Title'
+                },
+                {
+                    name: 'twitter:title',
+                    content: 'Page Title'
+                },
+                {
+                    script: 'https://unpkg.com/vue@2.3.4/dist/vue.js'
+                }, {
+                    name: 'viewport',
+                    content: 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no'
+                }
             ]
-        },
-        mixins: [exampleMixin]
+        }
     },
     data: {
         thing: true

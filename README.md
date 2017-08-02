@@ -43,6 +43,41 @@ ExpressVueRenderer.renderer(componentPath, data, [vueOptions])
     });
 ```
 
+## VueOptions
+
+```js
+{
+    rootPath: path.join(__dirname, '/../tests'),
+    viewsPath: 'vueFiles',
+    componentsPath: 'vueFiles/components',
+    layout: {
+        start: '<body><div id="app">',
+        end: '</div></body>'
+    },
+    vue: {
+        head: {
+            meta: [{
+                    property: 'og:title',
+                    content: 'Page Title'
+                },
+                {
+                    name: 'twitter:title',
+                    content: 'Page Title'
+                },
+                {
+                    script: 'https://unpkg.com/vue@2.3.4/dist/vue.js'
+                }, {
+                    name: 'viewport',
+                    content: 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no'
+                }
+            ]
+        }
+    },
+    data: {
+        thing: true
+    }
+```
+
 
 ## License
 

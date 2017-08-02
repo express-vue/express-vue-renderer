@@ -38,7 +38,7 @@ class ExpressVueRenderer {
                 .then(promiseArray => {
                     Promise.all(promiseArray)
                         .then((components) => {
-                            const rendered = Renderer.renderHtmlUtil(components, this.GlobalOptions);
+                            const rendered = Renderer.renderHtmlUtil(components, this.GlobalOptions.vue.router);
                             if (!rendered) {
                                 reject(new Error('Renderer Error'));
                             } else {
@@ -71,7 +71,7 @@ class ExpressVueRenderer {
                 .then(app => {
                     const vueStream = vueServerRenderer.renderToStream(app.VueClass);
                     let htmlStream;
-                    const htmlStringStart = app.template.start + app.head + app.template.middle;
+                    const htmlStringStart = app.template.head + app.head + app.template.start;
                     const htmlStringEnd = app.script + app.template.end;
 
                     htmlStream = new Utils.StreamUtils(htmlStringStart, htmlStringEnd);
