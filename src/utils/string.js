@@ -14,6 +14,7 @@ function routeComponentsToString(script: Object): string {
         string += member + ': __' + script[member] + ',';
     }
     return `{${string}}`;
+}
 
 function mixinsToString(mixins: Array < Object > ): string {
     var string = '';
@@ -40,7 +41,7 @@ function scriptToString(script: Object): string {
                     string += member + ': ' + xss(JSON.stringify(script[member])) + ',';
                 } else if (member === 'routes' || member === 'children') {
                     string += member + ': ' + routesToString(script[member]) + ',';
-                } else if (member === 'components' && script['routes'] !== undefined) { // Check if 'components' is from a router script.
+                } else if (member === 'components' && script['path'] !== undefined) { // Checks if 'components' is in a route object
                     string += member + ': ' + routeComponentsToString(script[member]) + ',';
                 } else if (member === 'mixins') {
                     string += member + ': [' + mixinsToString(script[member]) + '],';
@@ -51,7 +52,11 @@ function scriptToString(script: Object): string {
                 }
                 break;
             default:
-                string += member + ': ' + JSON.stringify(script[member]) + ',';
+                if (member === 'component' && script['path'] !== undefined) { // Checks if 'component' is in a route object
+                    string += member + ': __' + script[member] + ',';
+                } else {
+                    string += member + ': ' + JSON.stringify(script[member]) + ',';
+                }
                 break;
         }
     }
@@ -60,3 +65,5 @@ function scriptToString(script: Object): string {
 
 module.exports.scriptToString = scriptToString;
 module.exports.mixinsToString = mixinsToString;
+module.exports.routesToString = routesToString;
+module.exports.routeComponentsToString = routeComponentsToString;

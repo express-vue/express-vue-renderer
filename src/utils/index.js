@@ -7,6 +7,8 @@ const StreamUtils = require('./stream');
 
 module.exports.scriptToString = string.scriptToString;
 module.exports.mixinsToString = string.mixinsToString;
+module.exports.routesToString = string.routesToString;
+module.exports.routeComponentsToString = string.routeComponentsToString;
 module.exports.HeadUtils = HeadUtils;
 module.exports.setupComponentArray = setupComponentArray;
 module.exports.PathUtils = PathUtils;
