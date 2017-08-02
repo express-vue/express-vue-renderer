@@ -21,20 +21,15 @@ function getVueObject(componentPath: string, rootPath: string): Promise < Object
         viewsPath: rootPath
     });
     return new Promise((resolve, reject) => {
-        Utils.setupComponentArray(componentPath, GlobalOptions)
-            .then(promiseArray => {
-                Promise.all(promiseArray)
-                    .then((components) => {
-                        const rendered = Renderer.renderHtmlUtil(components);
-                        if (!rendered) {
-                            reject(new Error('Renderer Error'));
-                        } else {
-                            resolve(rendered);
-                        }
-                    }).catch((error) => {
-                        reject(error);
-                    });
-            }).catch(error => {
+        Utils.setupComponent(componentPath, GlobalOptions)
+            .then(component => {
+                const rendered = Renderer.renderHtmlUtil(component);
+                if (!rendered) {
+                    reject(new Error('Renderer Error'));
+                } else {
+                    resolve(rendered);
+                }
+            }).catch((error) => {
                 reject(error);
             });
     });
@@ -58,8 +53,9 @@ function requireFromString(code: string, filename: string = '', optsObj: Object 
             m._compile(code, filename);
             resolve(m.exports.default);
         } catch (error) {
-            if (error.message === 'Unexpected token <') {
+            if (error.message.includes('Unexpected token')) {
                 let vueComponentFileArray = options.regex.exec(code);
+
                 if (vueComponentFileArray && vueComponentFileArray.length > 0) {
                     //found a vue component
                     const vueComponentFile = vueComponentFileArray[2] ? vueComponentFileArray[2] : null;
@@ -71,11 +67,17 @@ function requireFromString(code: string, filename: string = '', optsObj: Object 
                                 resolve(m.exports.default);
                             })
                             .catch(error => reject(error));
+
+                    } else {
+                        reject(new Error('Couldnt require component from string: ' + error));
                     }
+                } else {
+                    reject(new Error('Couldnt require component from string: ' + error));
                 }
+            } else {
+                reject(new Error('Couldnt require component from string: ' + error));
             }
         }
-
     });
 }
 

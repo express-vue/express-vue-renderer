@@ -5,14 +5,18 @@ const PathUtils = require('./checkPathUtils');
 
 let types = new Models.Types();
 
-function setupComponentArray(componentPath: string, defaults: Models.Defaults) {
+function setupComponent(componentPath: string, defaults: Models.Defaults) {
     return new Promise((resolve, reject) => {
-        let array = [];
         const vueFile = componentPath.includes('.vue') ? componentPath : componentPath + '.vue';
         PathUtils.getCorrectPathForFile(vueFile, defaults.viewsPath, 'view', defaults)
             .then(path => {
-                array.push(Parser.componentParser(path.path, defaults, types.COMPONENT));
-                resolve(array);
+                Parser.componentParser(path.path, defaults, types.COMPONENT)
+                    .then(component => {
+                        resolve(component);
+                    })
+                    .catch(error => {
+                        reject(error);
+                    });
             })
             .catch(error => {
                 reject(error);
@@ -21,4 +25,4 @@ function setupComponentArray(componentPath: string, defaults: Models.Defaults) {
 
 }
 
-module.exports = setupComponentArray;
+module.exports = setupComponent;
