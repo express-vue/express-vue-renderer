@@ -43,23 +43,26 @@ function renderVueComponents(script: Object, components: Object[]) {
     let componentsString = '';
     for (const component of components) {
         if (component.type === types.SUBCOMPONENT) {
-            componentsString = componentsString + `Vue.component('${paramCase(component.name)}', ${Utils.scriptToString(component.script)});\n`;
+            componentsString = componentsString + `const __${component.name} = Vue.component('${paramCase(component.name)}', ${Utils.scriptToString(component.script)});\n`;
         }
     }
 
     return componentsString;
 }
 
-function renderedScript(script, components) {
-
+function renderedScript(script, components, router) {
     const componentsString = renderVueComponents(script, components);
-    const scriptString = Utils.scriptToString(script);
-    let debugToolsString = '';
+    const routerString     = router !== undefined ?  `const __router = new VueRouter(${Utils.scriptToString(router)});` : '';
+    let scriptString       = Utils.scriptToString(script);
+    let debugToolsString   = '';
 
+    if (router !== undefined) {
+        scriptString = scriptString.substr(0, 1) + 'router: __router,' + scriptString.substr(1);
+    }
     if (process.env.VUE_DEV) {
         debugToolsString = 'Vue.config.devtools = true;';
     }
-    return `<script>\n(function () {'use strict';${componentsString}var createApp = function () {return new Vue(${scriptString})};if (typeof module !== 'undefined' && module.exports) {module.exports = createApp} else {this.app = createApp()}}).call(this);${debugToolsString}app.$mount('#app');\n</script>`;
+    return `<script>\n(function () {'use strict';${componentsString}${routerString}var createApp = function () {return new Vue(${scriptString})};if (typeof module !== 'undefined' && module.exports) {module.exports = createApp} else {this.app = createApp()}}).call(this);${debugToolsString}app.$mount('#app');\n</script>`;
 }
 
 type htmlUtilType = {
@@ -68,9 +71,9 @@ type htmlUtilType = {
     layout: Object
 };
 
-function renderHtmlUtil(components: Object[]): htmlUtilType {
+function renderHtmlUtil(components: Object[], router: Object): htmlUtilType {
     const layout = layoutUtil(components);
-    const renderedScriptString = renderedScript(layout.script, components);
+    const renderedScriptString = renderedScript(layout.script, components, router);
     const app = createApp(layout.script);
 
     return {
@@ -79,7 +82,6 @@ function renderHtmlUtil(components: Object[]): htmlUtilType {
         layout: layout
     };
 }
-
 
 module.exports.layoutUtil = layoutUtil;
 module.exports.renderHtmlUtil = renderHtmlUtil;
