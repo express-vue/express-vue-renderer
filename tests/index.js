@@ -23,7 +23,13 @@ const vueOptions = {
 }
 
 const exampleHead = `<title>Page Title</title>\n</head>`;
-const exampleScript = '<script>\n(function () {\'use strict\';var createApp = function () {return new Vue({mixins: [{methods: {hello: function hello() {\n            console.log(\'Hello\');\n        },},},],data: function(){return {"title":"Express Vue","message":"Hello world","uuid":"farts"}},methods: {test: function test() {\n            console.error(\'test\');\n        },},components: {uuid: {props: ["uuid"],data: function(){return {}},template: "<div><h2>Uuid: {{uuid ? uuid : \'no uuid\'}}</h2></div>",},},template: "<div><h1>{{title}}</h1><p>Welcome to the {{title}} demo. Click a link:</p><input v-model=\\"message\\" placeholder=\\"edit me\\"><p>{{message}}</p><uuid :uuid=\\"uuid\\"></uuid><button type=\\"button\\" name=\\"button\\" v-on:click=\\"this.hello\\">Test mixin</button> <button type=\\"button\\" name=\\"button\\" v-on:click=\\"this.test\\">Test method</button></div>",})};if (typeof module !== \'undefined\' && module.exports) {module.exports = createApp} else {this.app = createApp()}}).call(this);app.$mount(\'#app\');\n</script>'
+const exampleScript = `<script>
+(function () {'use strict';var createApp = function () {return new Vue({mixins: [{methods: {hello: function hello() {
+            console.log('Hello');
+        },},},],data: function(){return {"title":"Express Vue","message":"Hello world","uuid":"farts"}},methods: {test: function test() {
+            console.error('test');
+        },},components: {uuid: {props: ["uuid"],data: function(){return {}},template: "<div><h2>Uuid: {{uuid ? uuid : 'no uuid'}}</h2></div>",},uuid2: {props: ["uuid"],data: function(){return {}},template: "<div><h2>Uuid: {{uuid ? uuid : 'no uuid'}}</h2></div>",},},template: "<div><h1>{{title}}</h1><p>Welcome to the {{title}} demo. Click a link:</p><input v-model=\\"message\\" placeholder=\\"edit me\\"><p>{{message}}</p><uuid :uuid=\\"uuid\\"></uuid><uuid2 :uuid=\\"uuid\\"></uuid2><button type=\\"button\\" name=\\"button\\" v-on:click=\\"this.hello\\">Test mixin</button> <button type=\\"button\\" name=\\"button\\" v-on:click=\\"this.test\\">Test method</button></div>",})};if (typeof module !== 'undefined' && module.exports) {module.exports = createApp} else {this.app = createApp()}}).call(this);app.$mount('#app');
+</script>`
 
 test('renders App object', t => {
     const renderer = new ExpressVueRenderer(options);
