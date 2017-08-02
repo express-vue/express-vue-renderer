@@ -12,6 +12,7 @@
 
 <script>
 import exampleMixin from '../example/vueFiles/mixins/exampleMixin';
+import uuid from '../example/vueFiles/components/uuid.vue';
 export default {
     mixins: [exampleMixin],
     data: function () {
@@ -22,6 +23,9 @@ export default {
         test: function () {
             console.error('test');
         }
+    },
+    components: {
+        uuid: uuid
     }
 }
 </script>

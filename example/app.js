@@ -33,7 +33,7 @@ const options = {
                     content: 'Page Title'
                 },
                 {
-                    script: 'https://unpkg.com/vue@2.3.4/dist/vue.js'
+                    script: 'https://unpkg.com/vue@2.4.2/dist/vue.js'
                 }, {
                     name: 'viewport',
                     content: 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no'
@@ -60,7 +60,6 @@ app.get('/', (req, res) => {
         uuid: uuidv4()
     };
     const vueOptions = {
-        components: ['uuid'],
         head: {
             title: 'Page Title',
 
