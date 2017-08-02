@@ -10,8 +10,8 @@ class Options {
     appendPaths: string[];
     prependPaths: string[];
     constructor(optsObj: Object) {
-        this.vueFileRegex = /([\w/.-_\d]*\.vue)/igm;
-        this.requireRegex = /(require\(')([\w/.-_\d]*\.vue)('\))/igm;
+        this.vueFileRegex = /([\w/.\-_\d]*\.vue)/igm;
+        this.requireRegex = /(require\(')([\w/.\-_\d]*\.vue)('\))/igm;
         this.appendPaths = optsObj.appendPaths || [];
         this.prependPaths = optsObj.prependPaths || [];
     }
