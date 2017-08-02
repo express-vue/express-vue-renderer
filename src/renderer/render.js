@@ -21,6 +21,9 @@ function renderedScript(script: Object): string {
     const scriptString = Utils.scriptToString(script);
     let debugToolsString = '';
 
+    if (router !== undefined) {
+        scriptString = scriptString.substr(0, 1) + 'router: __router,' + scriptString.substr(1);
+    }
     if (process.env.VUE_DEV) {
         debugToolsString = 'Vue.config.devtools = true;';
     }
@@ -46,7 +49,6 @@ function renderHtmlUtil(component: Object): htmlUtilType {
         scriptStringRaw: Utils.scriptToString(layout.script)
     };
 }
-
 
 module.exports.layoutUtil = layoutUtil;
 module.exports.renderHtmlUtil = renderHtmlUtil;
