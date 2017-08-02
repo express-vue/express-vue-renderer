@@ -11,7 +11,7 @@ class Options {
     prependPaths: string[];
     constructor(optsObj: Object) {
         this.vueFileRegex = /([\w/.-_\d]*\.vue)/igm;
-        this.requireRegex = /(require\(')([\w/.-\d]*\.vue)('\))/igm;
+        this.requireRegex = /(require\(')([\w/.-_\d]*\.vue)('\))/igm;
         this.appendPaths = optsObj.appendPaths || [];
         this.prependPaths = optsObj.prependPaths || [];
     }
