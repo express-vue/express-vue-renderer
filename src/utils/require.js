@@ -10,7 +10,8 @@ class Options {
     appendPaths: string[];
     prependPaths: string[];
     constructor(optsObj: Object) {
-        this.regex = /(require\(')([\w/.-\d]*\.vue)('\))/igm;
+        this.vueFileRegex = /([\w/.-_\d]*\.vue)/igm;
+        this.requireRegex = /(require\(')([\w/.-\d]*\.vue)('\))/igm;
         this.appendPaths = optsObj.appendPaths || [];
         this.prependPaths = optsObj.prependPaths || [];
     }
@@ -54,22 +55,19 @@ function requireFromString(code: string, filename: string = '', optsObj: Object 
             resolve(m.exports.default);
         } catch (error) {
             if (error.message.includes('Unexpected token')) {
-                let vueComponentFileArray = options.regex.exec(code);
+                let vueComponentFileArray = code.match(options.vueFileRegex);
 
                 if (vueComponentFileArray && vueComponentFileArray.length > 0) {
                     //found a vue component
-                    const vueComponentFile = vueComponentFileArray[2] ? vueComponentFileArray[2] : null;
-                    if (vueComponentFile) {
+                    for (var vueComponentFile of vueComponentFileArray) {
                         getVueObject(vueComponentFile, m.paths[0])
                             .then(rendered => {
-                                const newCode = code.replace(options.regex, rendered.scriptStringRaw);
+                                const newCode = code.replace(options.requireRegex, rendered.scriptStringRaw);
                                 m._compile(newCode, filename);
                                 resolve(m.exports.default);
                             })
                             .catch(error => reject(error));
 
-                    } else {
-                        reject(new Error('Couldnt require component from string: ' + error));
                     }
                 } else {
                     reject(new Error('Couldnt require component from string: ' + error));
