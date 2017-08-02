@@ -17,8 +17,9 @@ function layoutUtil(component: Object) {
 }
 
 
-function renderedScript(script: Object): string {
-    const scriptString = Utils.scriptToString(script);
+function renderedScript(script: Object, router): string {
+    const routerString = router !== undefined ? `const __router = new VueRouter(${Utils.scriptToString(router)});` : '';
+    let scriptString = Utils.scriptToString(script);
     let debugToolsString = '';
 
     if (router !== undefined) {
@@ -27,7 +28,7 @@ function renderedScript(script: Object): string {
     if (process.env.VUE_DEV) {
         debugToolsString = 'Vue.config.devtools = true;';
     }
-    return `<script>\n(function () {'use strict';var createApp = function () {return new Vue(${scriptString})};if (typeof module !== 'undefined' && module.exports) {module.exports = createApp} else {this.app = createApp()}}).call(this);${debugToolsString}app.$mount('#app');\n</script>`;
+    return `<script>\n(function () {'use strict';${routerString}var createApp = function () {return new Vue(${scriptString})};if (typeof module !== 'undefined' && module.exports) {module.exports = createApp} else {this.app = createApp()}}).call(this);${debugToolsString}app.$mount('#app');\n</script>`;
 }
 
 type htmlUtilType = {
