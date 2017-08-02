@@ -50,7 +50,6 @@ function renderVueComponents(script: Object, components: Object[]) {
     return componentsString;
 }
 
-
 function renderedScript(script, components, router) {
     const componentsString = renderVueComponents(script, components);
     const routerString     = router !== undefined ?  `const __router = new VueRouter(${Utils.scriptToString(router)});` : '';
@@ -83,7 +82,6 @@ function renderHtmlUtil(components: Object[], router: Object): htmlUtilType {
         layout: layout
     };
 }
-
 
 module.exports.layoutUtil = layoutUtil;
 module.exports.renderHtmlUtil = renderHtmlUtil;
