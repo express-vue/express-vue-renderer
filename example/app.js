@@ -57,7 +57,8 @@ app.get('/', (req, res) => {
     const data = {
         title: 'Express Vue',
         message: 'Hello world',
-        uuid: uuidv4()
+        uuid: uuidv4(),
+        uuid2: uuidv4()
     };
     const vueOptions = {
         head: {
