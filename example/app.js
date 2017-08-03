@@ -15,9 +15,7 @@ var exampleMixin = {
 };
 
 const options = {
-    rootPath: path.resolve(__dirname),
-    viewsPath: 'vueFiles',
-    componentsPath: 'vueFiles/components',
+    rootPath: path.join(__dirname, '/vueFiles'),
     layout: {
         start: '<body><div id="app">',
         end: '</div></body>'
@@ -45,6 +43,7 @@ const options = {
         thing: true
     }
 };
+
 
 renderer = expressVue.init(options);
 
