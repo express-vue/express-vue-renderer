@@ -16,8 +16,7 @@ let types = new Types();
 const component = __dirname + '/../../example/vueFiles/components/uuid.vue';
 const options = {
     rootPath: path.join(__dirname, 'tests'),
-    componentsPath: 'vueFiles/components',
-    viewsPath: 'vueFiles'
+    component: 'uuid.vue'
 };
 
 const defaultObject = new Defaults(options);

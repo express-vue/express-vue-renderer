@@ -6,20 +6,24 @@ const Renderer = require('../renderer');
 const Models = require('../models');
 
 class Options {
-    regex: RegExp;
+    vueFileRegex: RegExp;
+    requireRegex: RegExp;
     appendPaths: string[];
     prependPaths: string[];
+    rootPath: string;
     constructor(optsObj: Object) {
         this.vueFileRegex = /([\w/.\-_\d]*\.vue)/igm;
         this.requireRegex = /(require\(')([\w/.\-_\d]*\.vue)('\))/igm;
         this.appendPaths = optsObj.appendPaths || [];
         this.prependPaths = optsObj.prependPaths || [];
+        this.rootPath = optsObj.rootPath || '';
     }
 }
 
 function getVueObject(componentPath: string, rootPath: string, vueComponentFileMatch: string): Promise < Object > {
     const GlobalOptions = new Models.Defaults({
-        viewsPath: rootPath
+        rootPath: rootPath,
+        component: componentPath
     });
     return new Promise((resolve, reject) => {
         Utils.setupComponent(componentPath, GlobalOptions)
@@ -48,7 +52,7 @@ function requireFromString(code: string, filename: string = '', optsObj: Object 
             throw new Error('code must be a string, not ' + typeof code);
         }
 
-        var paths = Module._nodeModulePaths(path.dirname(filename));
+        let paths = Module._nodeModulePaths(path.dirname(filename));
 
         var m = new Module(filename, module.parent);
         m.filename = filename;
@@ -71,7 +75,7 @@ function requireFromString(code: string, filename: string = '', optsObj: Object 
                         //get the file out of the require string
                         //this is because its easier to do string replace later
                         const vueComponentFile = vueComponentFileMatch.match(options.vueFileRegex)[0];
-                        getVueObject(vueComponentFile, m.paths[0], vueComponentFileMatch)
+                        getVueObject(vueComponentFile, options.rootPath, vueComponentFileMatch)
                             .then(renderedItem => {
                                 const rawString = renderedItem.rendered.scriptStringRaw;
                                 newCode = newCode.replace(renderedItem.match, rawString);
@@ -89,7 +93,7 @@ function requireFromString(code: string, filename: string = '', optsObj: Object 
                     reject(new Error('Couldnt require component from string: ' + error));
                 }
             } else {
-                reject(new Error('Couldnt require component from string: ' + error));
+                reject(new Error('Couldnt require from string: ' + error));
             }
         }
     });
