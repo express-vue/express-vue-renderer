@@ -8,7 +8,7 @@ let types = new Models.Types();
 function setupComponent(componentPath: string, defaults: Models.Defaults) {
     return new Promise((resolve, reject) => {
         const vueFile = componentPath.includes('.vue') ? componentPath : componentPath + '.vue';
-        PathUtils.getCorrectPathForFile(vueFile, defaults.viewsPath, 'view', defaults)
+        PathUtils.getCorrectPathForFile(vueFile, defaults.rootPath, 'view', defaults)
             .then(path => {
                 Parser.componentParser(path.path, defaults, types.COMPONENT)
                     .then(component => {
