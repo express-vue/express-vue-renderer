@@ -10,8 +10,7 @@ const lruCache = LRU(options);
 
 class Defaults {
     rootPath: string;
-    componentsPath: string;
-    viewsPath: string;
+    component: string;
     layout: {
         head: string,
         start: string,
@@ -28,11 +27,8 @@ class Defaults {
         if (options.rootPath) {
             this.rootPath = path.resolve(options.rootPath);
         }
-        if (options.componentsPath) {
-            this.componentsPath = path.resolve(this.rootPath, options.componentsPath);
-        }
-        if (options.viewsPath) {
-            this.viewsPath = path.resolve(this.rootPath, options.viewsPath);
+        if (options.component) {
+            this.component = options.component;
         }
         if (options.layout) {
             this.layout = {};

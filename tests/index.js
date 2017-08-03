@@ -5,9 +5,7 @@ const Models = require('../src/models');
 const path = require('path');
 
 const options = {
-    rootPath: path.join(__dirname, '../example'),
-    componentsPath: 'vueFiles/components',
-    viewsPath: 'vueFiles'
+    rootPath: path.join(__dirname, '../example/vueFiles')
 };
 
 const data = {

@@ -12,9 +12,9 @@
 </template>
 
 <script>
-import exampleMixin from '../example/vueFiles/mixins/exampleMixin';
-import uuid from '../example/vueFiles/components/uuid.vue';
-import uuid2 from '../example/vueFiles/components/uuid2.vue';
+import exampleMixin from '../mixins/exampleMixin';
+import uuid from './components/uuid.vue';
+import uuid2 from './components/uuid2.vue';
 export default {
     mixins: [exampleMixin],
     data: function () {

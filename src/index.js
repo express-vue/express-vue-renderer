@@ -34,6 +34,7 @@ class ExpressVueRenderer {
             if (vueOptions) {
                 this.GlobalOptions.mergeVueObject(vueOptions);
             }
+            this.GlobalOptions.component = componentPath;
             Utils.setupComponent(componentPath, this.GlobalOptions)
                 .then((component) => {
 
