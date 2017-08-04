@@ -74,20 +74,22 @@ function requireFromString(code: string, filename: string = '', optsObj: Object 
                     for (const vueComponentFileMatch of vueComponentFileMatches) {
                         //get the file out of the require string
                         //this is because its easier to do string replace later
-                        const vueComponentFile = vueComponentFileMatch.match(options.vueFileRegex)[0];
-                        getVueObject(vueComponentFile, options.rootPath, vueComponentFileMatch)
-                            .then(renderedItem => {
-                                const rawString = renderedItem.rendered.scriptStringRaw;
-                                newCode = newCode.replace(renderedItem.match, rawString);
-                                //check if its the last element and then render
-                                if (vueComponentFileMatch === last_element) {
-                                    m._compile(newCode, filename);
-                                    resolve(m.exports.default);
-                                }
-                            })
-                            .catch(error => {
-                                reject(error);
-                            });
+                        const vueComponentFile = vueComponentFileMatch.match(options.vueFileRegex);
+                        if (vueComponentFile && vueComponentFile.length > 0) {
+                            getVueObject(vueComponentFile[0], options.rootPath, vueComponentFileMatch)
+                                .then(renderedItem => {
+                                    const rawString = renderedItem.rendered.scriptStringRaw;
+                                    newCode = newCode.replace(renderedItem.match, rawString);
+                                    //check if its the last element and then render
+                                    if (vueComponentFileMatch === last_element) {
+                                        m._compile(newCode, filename);
+                                        resolve(m.exports.default);
+                                    }
+                                })
+                                .catch(error => {
+                                    reject(error);
+                                });
+                        }
                     }
                 } else {
                     reject(new Error('Couldnt require component from string: ' + error));

@@ -43,7 +43,8 @@
             "src/models/index.js",
             "src/parser/index.js",
             "src/renderer/index.js",
-            "src/utils/index.js"
+            "src/utils/index.js",
+            "**/*.vue"
         ]
     },
     "scripts": {
