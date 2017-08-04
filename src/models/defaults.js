@@ -2,6 +2,7 @@
 const LRU = require('lru-cache');
 const path = require('path');
 const deepmerge = require('deepmerge');
+const Layout = require('./layout');
 const options = {
     max: 500,
     maxAge: 1000 * 60 * 60
@@ -11,11 +12,7 @@ const lruCache = LRU(options);
 class Defaults {
     rootPath: string;
     component: string;
-    layout: {
-        head: string,
-        start: string,
-        end: string
-    };
+    layout: Layout.Layout;
     options: Object;
     cache: LRU;
     vue: Object;
@@ -23,6 +20,7 @@ class Defaults {
     constructor(options: Object = {}) {
         this.cache = lruCache;
         this.options = options;
+        this.layout = new Layout.Layout(options.layout);
 
         if (options.rootPath) {
             this.rootPath = path.resolve(options.rootPath);
@@ -30,18 +28,7 @@ class Defaults {
         if (options.component) {
             this.component = options.component;
         }
-        if (options.layout) {
-            this.layout = {};
-            this.layout.head = options.layout.head ? options.layout.head : '<!DOCTYPE html><html>';
-            this.layout.start = options.layout.start ? options.layout.start : '<body><div id="app">';
-            this.layout.end = options.layout.end ? options.layout.end : '</div></body>';
-        } else {
-            this.layout = {
-                head: '<!DOCTYPE html><html>',
-                start: '<body><div id="app">',
-                end: '</div></body>'
-            };
-        }
+
         if (options.vue) {
             this.vue = options.vue;
         } else {
