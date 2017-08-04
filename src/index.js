@@ -69,8 +69,8 @@ class ExpressVueRenderer {
                 .then(app => {
                     const vueStream = vueServerRenderer.renderToStream(app.VueClass);
                     let htmlStream;
-                    const htmlStringStart = app.template.head + app.head + app.template.start;
-                    const htmlStringEnd = app.template.end + app.script + '</html>';
+                    const htmlStringStart = `${app.template.html.start}${app.head}${app.template.body.start}${app.template.template.start}`;
+                    const htmlStringEnd = `${app.template.template.end}${app.script}${app.template.body.end}${app.template.html.end}`;
 
                     htmlStream = new Utils.StreamUtils(htmlStringStart, htmlStringEnd);
                     htmlStream = vueStream.pipe(htmlStream);
