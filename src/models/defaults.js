@@ -32,12 +32,12 @@ class Defaults {
         }
         if (options.layout) {
             this.layout = {};
-            this.layout.head = options.layout.head ? options.layout.head : '<!DOCTYPE html><html><head>';
+            this.layout.head = options.layout.head ? options.layout.head : '<!DOCTYPE html><html>';
             this.layout.start = options.layout.start ? options.layout.start : '<body><div id="app">';
             this.layout.end = options.layout.end ? options.layout.end : '</div></body>';
         } else {
             this.layout = {
-                head: '<!DOCTYPE html><html><head>',
+                head: '<!DOCTYPE html><html>',
                 start: '<body><div id="app">',
                 end: '</div></body>'
             };

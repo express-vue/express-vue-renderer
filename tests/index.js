@@ -20,7 +20,7 @@ const vueOptions = {
     }
 }
 
-const exampleHead = `<title>Page Title</title>\n</head>`;
+const exampleHead = `<head>\n<title>Page Title</title>\n</head>`;
 const exampleScript = `<script>
 (function () {'use strict';var createApp = function () {return new Vue({mixins: [{methods: {hello: function hello() {
             console.log('Hello');
