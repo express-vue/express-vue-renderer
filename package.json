@@ -1,6 +1,6 @@
 {
     "name": "express-vue-renderer",
-    "version": "0.5.6",
+    "version": "0.5.7",
     "description": "Rendering Engine for turning Vue files into Javascript Objects",
     "homepage": "https://github.com/express-vue/express-vue-renderer",
     "author": {
@@ -43,7 +43,8 @@
             "src/models/index.js",
             "src/parser/index.js",
             "src/renderer/index.js",
-            "src/utils/index.js"
+            "src/utils/index.js",
+            "**/*.vue"
         ]
     },
     "scripts": {
