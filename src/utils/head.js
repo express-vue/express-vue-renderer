@@ -71,7 +71,7 @@ class HeadUtil {
         }
     }
     toString(): string {
-        return this.title + this.metaTags + this.structuredData + this.style + '</head>';
+        return '<head>\n' + this.title + this.metaTags + this.structuredData + this.style + '</head>';
     }
 }
 
