@@ -6,7 +6,6 @@ const {
 const Utils = require('../utils');
 const babel = require('babel-core');
 const stringHash = require('string-hash');
-const path = require('path');
 
 type ScriptObjectType = {
     type: 'string',
@@ -59,11 +58,11 @@ function scriptParser(scriptObject: ScriptObjectType, defaults: Object, type: st
                 resolve(finalScript);
             } else {
                 const babelScript = babel.transform(scriptObject.content, options);
-                const filename = path.join(defaults.rootPath, '/', defaults.component);
+                // const filename = path.join(defaults.rootPath, '/', defaults.component);
                 const requireFromStringOptions = {
                     rootPath: defaults.rootPath
                 };
-                Utils.requireFromString(babelScript.code, filename, requireFromStringOptions)
+                Utils.requireFromString(babelScript.code, defaults.component, requireFromStringOptions)
                     .then(scriptFromString => {
                         // set the cache for the babel script string
                         defaults.cache.set(cacheKey, scriptFromString);

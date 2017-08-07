@@ -61,7 +61,7 @@ app.get('/', (req, res) => {
 
         }
     }
-    res.renderVue('main.vue', data, vueOptions)
+    res.renderVue('main/main.vue', data, vueOptions)
 });
 
 app.listen(3000);
