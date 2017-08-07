@@ -43,6 +43,23 @@ function getVueObject(componentPath: string, rootPath: string, vueComponentFileM
     });
 }
 
+function replaceRelativePaths(code: string, rootPath: string): string {
+    const parentMatches = code.match(/(require\('\.\.\/)/gm);
+    const currentMatches = code.match(/(require\('\.\/)/gm);
+    if (parentMatches) {
+        for (const match of parentMatches) {
+            code = code.replace(match, `require('${rootPath}/../`);
+        }
+    }
+    if (currentMatches) {
+        for (const match of currentMatches) {
+            code = code.replace(match, `require('${rootPath}/./`);
+        }
+    }
+
+    return code;
+}
+
 
 function requireFromString(code: string, filename: string = '', optsObj: Object = {}): Promise < Object > {
     return new Promise((resolve, reject) => {
@@ -51,10 +68,9 @@ function requireFromString(code: string, filename: string = '', optsObj: Object 
         if (typeof code !== 'string') {
             throw new Error('code must be a string, not ' + typeof code);
         }
-
+        code = replaceRelativePaths(code, options.rootPath);
         let paths = Module._nodeModulePaths(path.dirname(filename));
-
-        var m = new Module(filename, module.parent);
+        var m = new Module(filename, options.rootPath);
         m.filename = filename;
         m.paths = [].concat(options.prependPaths).concat(paths).concat(options.appendPaths);
         try {

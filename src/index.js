@@ -1,6 +1,7 @@
 // @flow
 'use strict';
 const Models = require('./models');
+const path = require('path');
 const Utils = require('./utils');
 const Renderer = require('./renderer');
 const vueServerRenderer = require('vue-server-renderer').createRenderer();
@@ -35,7 +36,7 @@ class ExpressVueRenderer {
                 this.GlobalOptions.mergeVueObject(vueOptions);
             }
             this.GlobalOptions.component = componentPath;
-            Utils.setupComponent(componentPath, this.GlobalOptions)
+            Utils.setupComponent(path.join(this.GlobalOptions.rootPath, componentPath), this.GlobalOptions)
                 .then((component) => {
 
                     const rendered = Renderer.renderHtmlUtil(component);

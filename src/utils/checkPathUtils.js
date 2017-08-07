@@ -26,9 +26,9 @@ function getParamCasePath(path: string): string {
 }
 
 
-function getCorrectPathForFile(filePath: string, rootPath: string, type: string, defaults: Defaults) {
+function getCorrectPathForFile(filePath: string, type: string, defaults: Defaults) {
     return new Promise((resolve, reject) => {
-        const resolvedPath = path.join(rootPath, filePath);
+        const resolvedPath = path.join(filePath);
         const cacheKey = stringHash('resolvedPath-' + resolvedPath);
         const cachedResolvedPath = defaults.cache.get(cacheKey);
         if (cachedResolvedPath) {
