@@ -11,16 +11,18 @@ class Options {
     appendPaths: string[];
     prependPaths: string[];
     rootPath: string;
+    defaults: Models.Defaults;
     constructor(optsObj: Object) {
         this.vueFileRegex = /([\w/.\-_\d]*\.vue)/igm;
         this.requireRegex = /(require\(')([\w/.\-_\d]*\.vue)('\))/igm;
         this.appendPaths = optsObj.appendPaths || [];
         this.prependPaths = optsObj.prependPaths || [];
         this.rootPath = optsObj.rootPath || '';
+        this.defaults = optsObj.defaults || {};
     }
 }
 
-function getVueObject(componentPath: string, rootPath: string, vueComponentFileMatch: string): Promise < Object > {
+function getVueObject(componentPath: string, rootPath: string, vueComponentFileMatch: string): Promise < {rendered:Object, match: string} > {
     const GlobalOptions = new Models.Defaults({
         rootPath: rootPath,
         component: componentPath
@@ -79,15 +81,12 @@ function requireFromString(code: string, filename: string = '', optsObj: Object 
         } catch (error) {
             //Check if the error is because the file isn't javascript
             if (error.message.includes('Unexpected token')) {
-                //Copy the code for string manip
-                let newCode = code;
                 //find matches for the require paths
                 let vueComponentFileMatches = code.match(options.requireRegex);
                 if (vueComponentFileMatches && vueComponentFileMatches.length > 0) {
-                    //setup last element of the match
-                    const last_element = vueComponentFileMatches[vueComponentFileMatches.length - 1];
                     //iterate through the matches
-                    for (const vueComponentFileMatch of vueComponentFileMatches) {
+                    for (var index = 0; index < vueComponentFileMatches.length; index++) {
+                        var vueComponentFileMatch = vueComponentFileMatches[index];
                         //get the file out of the require string
                         //this is because its easier to do string replace later
                         const vueComponentFile = vueComponentFileMatch.match(options.vueFileRegex);
@@ -95,10 +94,11 @@ function requireFromString(code: string, filename: string = '', optsObj: Object 
                             getVueObject(vueComponentFile[0], options.rootPath, vueComponentFileMatch)
                                 .then(renderedItem => {
                                     const rawString = renderedItem.rendered.scriptStringRaw;
-                                    newCode = newCode.replace(renderedItem.match, rawString);
+                                    code = code.replace(renderedItem.match, rawString);
                                     //check if its the last element and then render
-                                    if (vueComponentFileMatch === last_element) {
-                                        m._compile(newCode, filename);
+                                    const last_element = code.match(options.requireRegex);
+                                    if (last_element === undefined || last_element === null) {
+                                        m._compile(code, filename);
                                         resolve(m.exports.default);
                                     }
                                 })

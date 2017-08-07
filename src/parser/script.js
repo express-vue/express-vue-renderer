@@ -27,7 +27,27 @@ function dataMerge(script: Object, defaults: Object, type: string): Object {
             }
         }
     }
+    //FUCK THIS _Ctor property fuck this fucking thing
+    //fuck you you fucking fuckstick i cant believe this
+    //is the offical vue-loader fix
+
+    if (finalScript.components) {
+        finalScript = deleteCtor(finalScript);
+    }
     return finalScript;
+}
+
+function deleteCtor(script: Object): Object {
+    for (let component in script.components) {
+        if (script.components.hasOwnProperty(component)) {
+            delete script.components[component]._Ctor;
+            if (script.components[component].components) {
+                script.components[component] = deleteCtor(script.components[component]);
+            }
+        }
+
+    }
+    return script;
 }
 
 function scriptParser(scriptObject: ScriptObjectType, defaults: Object, type: string): Promise < Object > {
@@ -42,32 +62,21 @@ function scriptParser(scriptObject: ScriptObjectType, defaults: Object, type: st
             const cacheKey = stringHash(scriptObject.content);
             const cachedBabelScript = defaults.cache.get(cacheKey);
             if (cachedBabelScript) {
-                let finalScript = dataMerge(cachedBabelScript, defaults, type);
-
-                //FUCK THIS _Ctor property fuck this fucking thing
-                //fuck you you fucking fuckstick i cant believe this
-                //is the offical vue-loader fix
-
-                if (finalScript.components) {
-                    for (var component in finalScript.components) {
-                        if (finalScript.components.hasOwnProperty(component)) {
-                            delete finalScript.components[component]._Ctor;
-                        }
-                    }
-                }
+                const finalScript = dataMerge(cachedBabelScript, defaults, type);
                 resolve(finalScript);
             } else {
                 const babelScript = babel.transform(scriptObject.content, options);
                 // const filename = path.join(defaults.rootPath, '/', defaults.component);
                 const requireFromStringOptions = {
-                    rootPath: defaults.rootPath
+                    rootPath: defaults.rootPath,
+                    defaults: defaults
                 };
                 Utils.requireFromString(babelScript.code, defaults.component, requireFromStringOptions)
                     .then(scriptFromString => {
                         // set the cache for the babel script string
                         defaults.cache.set(cacheKey, scriptFromString);
 
-                        let finalScript = dataMerge(scriptFromString, defaults, type);
+                        const finalScript = dataMerge(scriptFromString, defaults, type);
                         resolve(finalScript);
                     })
                     .catch(error => reject(error));
