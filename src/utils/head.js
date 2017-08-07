@@ -43,8 +43,15 @@ class HeadUtil {
                     this.metaTags += `<script src="${metaItem.script}" charset="${charset}"${async}></script>\n`;
                 } else if (metaItem.style) {
                     const type = metaItem.type || 'text/css';
-                    const rel = metaItem.rel || 'stylesheet';
+                    const rel = 'stylesheet';
                     this.metaTags += `<link rel="${rel}" type="${type}" href="${metaItem.style}">\n`;
+                } else if (metaItem.rel) {
+                    // <link rel="icon" type="image/png" href="/assets/favicons/favicon-32x32.png" sizes="32x32"/>
+                    const rel = metaItem.rel ? `rel="${metaItem.rel}" ` : '';
+                    const type = metaItem.type ? `type="${metaItem.type}" ` : '';
+                    const href = metaItem.href ? `href="${metaItem.href}" ` : '';
+                    const sizes = metaItem.sizes ? `sizes="${metaItem.sizes}" ` : '';
+                    this.metaTags += `<link ${rel}${type}${href}${sizes}>\n`;
                 }
             }
         }
