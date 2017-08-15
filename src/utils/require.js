@@ -13,8 +13,8 @@ class Options {
     rootPath: string;
     defaults: Models.Defaults;
     constructor(optsObj: Object) {
-        this.vueFileRegex = /([\w/.\-_\d]*\.vue)/igm;
-        this.requireRegex = /(require\(')([\w/.\-_\d]*\.vue)('\))/igm;
+        this.vueFileRegex = /([\w/.\-@_\d]*\.vue)/igm;
+        this.requireRegex = /(require\(')([\w/.\-@_\d]*\.vue)('\))/igm;
         this.appendPaths = optsObj.appendPaths || [];
         this.prependPaths = optsObj.prependPaths || [];
         this.rootPath = optsObj.rootPath || '';
