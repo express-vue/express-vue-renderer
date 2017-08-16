@@ -14,7 +14,7 @@ class Options {
     defaults: Models.Defaults;
     constructor(optsObj: Object) {
         this.vueFileRegex = /([\w/.\-@_\d]*\.vue)/igm;
-        this.requireRegex = /(require\(')([\w/.\-@_\d]*\.vue)('\))/igm;
+        this.requireRegex = /(require\(['"])([\w/.\-@_\d]*\.vue)(['"]\))/igm;
         this.appendPaths = optsObj.appendPaths || [];
         this.prependPaths = optsObj.prependPaths || [];
         this.rootPath = optsObj.rootPath || '';
@@ -46,16 +46,28 @@ function getVueObject(componentPath: string, rootPath: string, vueComponentFileM
 }
 
 function replaceRelativePaths(code: string, rootPath: string): string {
-    const parentMatches = code.match(/(require\('\.\.\/)/gm);
-    const currentMatches = code.match(/(require\('\.\/)/gm);
-    if (parentMatches) {
-        for (const match of parentMatches) {
+    const parentMatchesSingle = code.match(/(require\('\.\.\/)/gm);
+    const currentMatchesSingle = code.match(/(require\('\.\/)/gm);
+    const parentMatchesDouble = code.match(/(require\("\.\.\/)/gm);
+    const currentMatchesDouble = code.match(/(require\("\.\/)/gm);
+    if (parentMatchesSingle) {
+        for (const match of parentMatchesSingle) {
             code = code.replace(match, `require('${rootPath}/../`);
         }
     }
-    if (currentMatches) {
-        for (const match of currentMatches) {
+    if (parentMatchesDouble) {
+        for (const match of parentMatchesDouble) {
+            code = code.replace(match, `require("${rootPath}/../`);
+        }
+    }
+    if (currentMatchesSingle) {
+        for (const match of currentMatchesSingle) {
             code = code.replace(match, `require('${rootPath}/./`);
+        }
+    }
+    if (currentMatchesDouble) {
+        for (const match of currentMatchesDouble) {
+            code = code.replace(match, `require("${rootPath}/./`);
         }
     }
 
