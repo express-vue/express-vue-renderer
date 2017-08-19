@@ -21,9 +21,15 @@ function htmlParser(templateObject: TemplateObjectType, minify: boolean): Promis
                 parsedString = pug.compile(templateObject.content,{})({});
             }
             if (minify) {
-                parsedString = htmlMinify.minify(templateObject.content, {
-                    collapseWhitespace: true
-                });
+				if (parsedString === '') {
+                  parsedString = htmlMinify.minify(templateObject.content, {
+                      collapseWhitespace: true
+                  });
+				} else {
+                  parsedString = htmlMinify.minify(parsedString, {
+                      collapseWhitespace: true
+                  });
+				}
             }
             resolve(parsedString);
         }
