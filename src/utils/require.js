@@ -78,6 +78,7 @@ function replaceRelativePaths(code: string, rootPath: string): string {
 function requireFromString(code: string, filename: string = '', optsObj: Object = {}): Promise < Object > {
     return new Promise((resolve, reject) => {
         const options = new Options(optsObj);
+        let promiseArray = [];
 
         if (typeof code !== 'string') {
             throw new Error('code must be a string, not ' + typeof code);
@@ -87,44 +88,39 @@ function requireFromString(code: string, filename: string = '', optsObj: Object 
         var m = new Module(filename, options.rootPath);
         m.filename = filename;
         m.paths = [].concat(options.prependPaths).concat(paths).concat(options.appendPaths);
-        try {
+
+        //find matches for the require paths
+        let vueComponentFileMatches = code.match(options.requireRegex);
+        if (vueComponentFileMatches && vueComponentFileMatches.length > 0) {
+            //iterate through the matches
+            for (var index = 0; index < vueComponentFileMatches.length; index++) {
+                var vueComponentFileMatch = vueComponentFileMatches[index];
+                //get the file out of the require string
+                //this is because its easier to do string replace later
+                const vueComponentFile = vueComponentFileMatch.match(options.vueFileRegex);
+                if (vueComponentFile && vueComponentFile.length > 0) {
+                    promiseArray.push(getVueObject(vueComponentFile[0], options.rootPath, vueComponentFileMatch));
+                }
+            }
+            Promise.all(promiseArray)
+                .then(renderedItemArray => {
+                    for (var renderedItem of renderedItemArray) {
+                        const rawString = renderedItem.rendered.scriptStringRaw;
+                        code = code.replace(renderedItem.match, rawString);
+                    }
+                    //check if its the last element and then render
+                    const last_element = code.match(options.vueFileRegex);
+                    if (last_element === undefined || last_element === null) {
+                        m._compile(code, filename);
+                        resolve(m.exports.default);
+                    }
+                })
+                .catch(error => {
+                    reject(error);
+                });
+        } else {
             m._compile(code, filename);
             resolve(m.exports.default);
-        } catch (error) {
-            //Check if the error is because the file isn't javascript
-            if (error.message.includes('Unexpected token')) {
-                //find matches for the require paths
-                let vueComponentFileMatches = code.match(options.requireRegex);
-                if (vueComponentFileMatches && vueComponentFileMatches.length > 0) {
-                    //iterate through the matches
-                    for (var index = 0; index < vueComponentFileMatches.length; index++) {
-                        var vueComponentFileMatch = vueComponentFileMatches[index];
-                        //get the file out of the require string
-                        //this is because its easier to do string replace later
-                        const vueComponentFile = vueComponentFileMatch.match(options.vueFileRegex);
-                        if (vueComponentFile && vueComponentFile.length > 0) {
-                            getVueObject(vueComponentFile[0], options.rootPath, vueComponentFileMatch)
-                                .then(renderedItem => {
-                                    const rawString = renderedItem.rendered.scriptStringRaw;
-                                    code = code.replace(renderedItem.match, rawString);
-                                    //check if its the last element and then render
-                                    const last_element = code.match(options.requireRegex);
-                                    if (last_element === undefined || last_element === null) {
-                                        m._compile(code, filename);
-                                        resolve(m.exports.default);
-                                    }
-                                })
-                                .catch(error => {
-                                    reject(error);
-                                });
-                        }
-                    }
-                } else {
-                    reject(new Error('Couldnt require component from string: ' + error));
-                }
-            } else {
-                reject(new Error('Couldnt require from string: ' + error));
-            }
         }
     });
 }
