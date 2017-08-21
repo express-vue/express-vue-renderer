@@ -48,6 +48,7 @@
         ]
     },
     "scripts": {
+	"release": "generate-release",
         "flow": "flow",
         "debug": "npm run build && node --inspect example/app.js",
         "start": "npm run build && node example/app.js",
@@ -94,6 +95,7 @@
         "express": "^4.15.4",
         "flow-bin": "^0.53.0",
         "flow-remove-types": "^1.2.1",
+        "generate-release": "^0.13.1",
         "jest": "^20.0.4",
         "jest-cli": "^20.0.0",
         "nodemon": "^1.11.0",
