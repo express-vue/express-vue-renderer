@@ -48,7 +48,7 @@
         ]
     },
     "scripts": {
-	"release": "generate-release",
+        "release": "generate-release",
         "flow": "flow",
         "debug": "npm run build && node --inspect example/app.js",
         "start": "npm run build && node example/app.js",
