@@ -60,8 +60,7 @@
     "babel-flow": "babel src --out-dir lib --source-maps inline",
     "build": "npm run clean && npm run babel-flow && cp src/index.d.ts lib/index.d.ts && cp src/index.js.flow lib/index.js.flow",
     "preversion": "npm test",
-    "version": "npm run build && git add -A",
-    "postversion": "git push && git push --tags"
+    "version": "npm run build",
   },
   "repository": "express-vue/express-vue-renderer",
   "license": "Apache-2.0",
