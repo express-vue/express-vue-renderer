@@ -11,9 +11,9 @@ type StyleObjectType = {
  }
 
 function styleParser(styleObjectArray: StyleObjectType[]): Promise<string> {
-    return new Promise((resolve, reject) => {
-        if (!styleObjectArray && styleObjectArray.length === 0) {
-            reject(new Error('missing style section'));
+    return new Promise((resolve) => {
+        if (!styleObjectArray || styleObjectArray.length === 0) {
+            resolve('');
         } else {
             for (const styleObject of styleObjectArray) {
                 if(styleObject.lang === 'scss' || styleObject.lang === 'less') {
