@@ -69,6 +69,7 @@
     "babel-preset-es2015": "^6.24.1",
     "camel-case": "^3.0.0",
     "clean-css": "^4.1.7",
+    "dedupe": "^2.1.0",
     "deepmerge": "^1.5.1",
     "html-minifier": "^3.5.3",
     "lru-cache": "^4.1.1",
