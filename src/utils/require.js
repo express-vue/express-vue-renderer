@@ -18,7 +18,7 @@ class Options {
         this.appendPaths = optsObj.appendPaths || [];
         this.prependPaths = optsObj.prependPaths || [];
         this.rootPath = optsObj.rootPath || '';
-        this.defaults = optsObj.defaults || {};
+        this.defaults = optsObj.defaults;
     }
 }
 
@@ -30,7 +30,7 @@ function getVueObject(componentPath: string, rootPath: string, vueComponentFileM
     return new Promise((resolve, reject) => {
         Utils.setupComponent(componentPath, GlobalOptions)
             .then(component => {
-                const rendered = Renderer.renderHtmlUtil(component);
+                const rendered = Renderer.renderHtmlUtil(component, GlobalOptions.vue);
                 if (!rendered) {
                     reject(new Error('Renderer Error'));
                 } else {

@@ -1,8 +1,14 @@
 // @flow
 const Utils = require('../utils');
-const Vue = require('vue');
+var Vue = require('vue');
 
-function createApp(script) {
+function createApp(script: Object, plugins: Object[]) {
+    if (plugins && plugins.length > 0) {
+        for (const plugin of plugins) {
+            Vue.use(plugin);
+        }
+    }
+
     return new Vue(script);
 }
 
@@ -17,18 +23,26 @@ function layoutUtil(component: Object) {
 }
 
 
-function renderedScript(script: Object, router): string {
-    const routerString = router !== undefined ? `const __router = new VueRouter(${Utils.scriptToString(router)});` : '';
+function renderedScript(script: Object, vueOptions: Object): string {
+    const routerString = vueOptions.router !== undefined ? `const __router = new VueRouter(${Utils.scriptToString(vueOptions.router)});` : '';
+    let pluginString = '';
+    if (vueOptions.plugins) {
+        for (const plugin of vueOptions.plugins) {
+            pluginString += `Vue.use(${Utils.scriptToString(plugin)});`;
+        }
+    }
+
     let scriptString = Utils.scriptToString(script);
     let debugToolsString = '';
 
-    if (router !== undefined) {
+    if (vueOptions.router !== undefined) {
         scriptString = scriptString.substr(0, 1) + 'router: __router,' + scriptString.substr(1);
     }
+
     if (process.env.VUE_DEV) {
         debugToolsString = 'Vue.config.devtools = true;';
     }
-    return `<script>\n(function () {'use strict';${routerString}var createApp = function () {return new Vue(${scriptString})};if (typeof module !== 'undefined' && module.exports) {module.exports = createApp} else {this.app = createApp()}}).call(this);${debugToolsString}app.$mount('#app');\n</script>`;
+    return `<script>\n(function () {'use strict';${pluginString}${routerString}var createApp = function () {return new Vue(${scriptString})};if (typeof module !== 'undefined' && module.exports) {module.exports = createApp} else {this.app = createApp()}}).call(this);${debugToolsString}app.$mount('#app');\n</script>`;
 }
 
 type htmlUtilType = {
@@ -38,10 +52,10 @@ type htmlUtilType = {
     scriptStringRaw: string
 };
 
-function renderHtmlUtil(component: Object): htmlUtilType {
+function renderHtmlUtil(component: Object, vueOptions: Object): htmlUtilType {
     const layout = layoutUtil(component);
-    const renderedScriptString = renderedScript(layout.script);
-    const app = createApp(layout.script);
+    const renderedScriptString = renderedScript(layout.script, vueOptions);
+    const app = createApp(layout.script, vueOptions.plugins);
 
     return {
         app: app,

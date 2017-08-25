@@ -39,7 +39,7 @@ class ExpressVueRenderer {
             Utils.setupComponent(path.join(this.GlobalOptions.rootPath, componentPath), this.GlobalOptions)
                 .then((component) => {
 
-                    const rendered = Renderer.renderHtmlUtil(component);
+                    const rendered = Renderer.renderHtmlUtil(component, this.GlobalOptions.vue);
                     if (!rendered) {
                         reject(new Error('Renderer Error'));
                     } else {

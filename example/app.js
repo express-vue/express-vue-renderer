@@ -2,9 +2,11 @@
 const path = require('path');
 const express = require('express');
 const uuidv4 = require('uuid/v4');
+const VueTouch = require('vue-touch');
 
 const expressVueRenderer = require('../lib');
 const expressVue = require('./expressVue');
+
 
 var exampleMixin = {
     methods: {
@@ -33,7 +35,8 @@ const options = {
                     content: 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no'
                 }
             ]
-        }
+        },
+        plugins: [VueTouch]
     },
     data: {
         thing: true
