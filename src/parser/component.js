@@ -8,12 +8,12 @@ const htmlParser = require('./html');
 const scriptParser = require('./script');
 
 
-function componentParser(templatePath: string, defaults: Object, type: string): Promise < Object > {
+function componentParser(templatePath: string, defaults: Object, type: string, Cache: Object): Promise < Object > {
     return new Promise(function (resolve, reject) {
         // try to get the component content from the cache
-        const cachedComponentContentObject = defaults.cache.get(templatePath);
+        const cachedComponentContentObject = Cache.get(templatePath);
         if (cachedComponentContentObject) {
-            scriptParser(cachedComponentContentObject.parsedContent.script, defaults, type).then(parsedScriptObject => {
+            scriptParser(cachedComponentContentObject.parsedContent.script, defaults, type, Cache).then(parsedScriptObject => {
                 cachedComponentContentObject.script = parsedScriptObject;
                 cachedComponentContentObject.script.template = cachedComponentContentObject.template;
                 resolve(cachedComponentContentObject);
@@ -26,9 +26,9 @@ function componentParser(templatePath: string, defaults: Object, type: string): 
                     let error = `Could Not Find Component, I was expecting it to live here \n${templatePath} \nBut I couldn't find it there, ¯\\_(ツ)_/¯\n\n`;
                     reject(error);
                 } else {
-                    parseContent(content, templatePath, defaults, type).then(contentObject => {
+                    parseContent(content, templatePath, defaults, type, Cache).then(contentObject => {
                         // set the cache for the component
-                        defaults.cache.set(templatePath, contentObject);
+                        Cache.set(templatePath, contentObject);
                         resolve(contentObject);
                     }).catch(error => {
                         reject(error);
@@ -39,7 +39,7 @@ function componentParser(templatePath: string, defaults: Object, type: string): 
     });
 }
 
-function parseContent(content: string, templatePath: string, defaults: Object, type: string): Promise < Object > {
+function parseContent(content: string, templatePath: string, defaults: Object, type: string, Cache: Object): Promise < Object > {
     return new Promise((resolve, reject) => {
         const templateArray = templatePath.split('/');
         if (templateArray.length === 0) {
@@ -57,7 +57,7 @@ function parseContent(content: string, templatePath: string, defaults: Object, t
 
                 const promiseArray = [
                     htmlParser(parsedContent.template, true),
-                    scriptParser(parsedContent.script, defaults, type),
+                    scriptParser(parsedContent.script, defaults, type, Cache),
                     styleParser(parsedContent.styles)
                 ];
 
