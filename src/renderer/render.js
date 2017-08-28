@@ -36,7 +36,7 @@ function renderedScript(script: Object, router): string {
     const javaScriptString = `(function () {'use strict';${routerString}var createApp = function () {return new Vue(${scriptString})};if (typeof module !== 'undefined' && module.exports) {module.exports = createApp} else {this.app = createApp()}}).call(this);${debugToolsString}app.$mount('#app');`;
     const finalString = butternut.squash(javaScriptString, buttterNutOptions).code;
 
-    return `<script>\n${finalString}\n</script>`;
+    return `<script>${finalString}</script>`;
 }
 
 type htmlUtilType = {
