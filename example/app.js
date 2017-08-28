@@ -58,7 +58,12 @@ app.get('/', (req, res) => {
     const vueOptions = {
         head: {
             title: 'Page Title',
-
+            meta: [
+                {
+                    property: 'og:title2',
+                    content: 'Page Title2'
+                }
+            ]
         }
     }
     res.renderVue('main/main.vue', data, vueOptions)

@@ -29,7 +29,13 @@ const options = {
         foo: true
     },
     vue: {
-        title: 'bar'
+        head: {
+            title: 'bar',
+            meta: [
+                {foo: true}
+            ]
+        }
+
     }
 };
 
@@ -70,5 +76,17 @@ test('Defaults data', t => {
 })
 
 test('Defaults vue', t => {
-    t.is(defaultObject.vue.title, 'bar');
+    t.is(defaultObject.vue.head.title, 'bar');
+})
+
+test('Merges VueObject', t => {
+    const testVueObject = {
+        head: {
+            meta: [
+                {bar: false}
+            ]
+        }
+    }
+    defaultObject.mergeVueObject(testVueObject);
+    t.deepEqual(defaultObject.vue.head.meta, [{foo: true}, {bar: false}]);
 })
