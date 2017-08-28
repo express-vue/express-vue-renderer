@@ -87,6 +87,6 @@ test('Merges VueObject', t => {
             ]
         }
     }
-    defaultObject.mergeVueObject(testVueObject);
-    t.deepEqual(defaultObject.vue.head.meta, [{foo: true}, {bar: false}]);
+    const mergedObject = Defaults.mergeObjects(defaultObject.options.vue, testVueObject);
+    t.deepEqual(mergedObject.head.meta, [{foo: true}, {bar: false}]);
 })

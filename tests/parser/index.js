@@ -12,6 +12,13 @@ import {
 
 const compiler = require('vue-template-compiler');
 
+var LRU = require('lru-cache');
+var cacheOptions = {
+    max: 500,
+    maxAge: 1000 * 60 * 60
+};
+var lruCache = LRU(cacheOptions);
+
 let types = new Types();
 const component = __dirname + '/../../example/vueFiles/components/uuid.vue';
 const options = {
@@ -54,7 +61,7 @@ const parsedContentObject = {
 };
 
 test('it should parse components', t => {
-    return Parser.componentParser(component, defaultObject, types.COMPONENT)
+    return Parser.componentParser(component, defaultObject, types.COMPONENT, lruCache)
         .then(function (layout) {
             const exampleLayout = {
                 type: 'COMPONENT',
@@ -96,7 +103,7 @@ test('it should parse style', t => {
 });
 
 test('it should parse scripts', t => {
-    return Parser.scriptParser(parsedContentObject.script, defaultObject, types.SUBCOMPONENT)
+    return Parser.scriptParser(parsedContentObject.script, defaultObject, types.SUBCOMPONENT, lruCache)
         .then(script => {
             t.is(typeof script, 'object');
         })

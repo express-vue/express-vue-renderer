@@ -18,17 +18,17 @@ class Options {
         this.appendPaths = optsObj.appendPaths || [];
         this.prependPaths = optsObj.prependPaths || [];
         this.rootPath = optsObj.rootPath || '';
-        this.defaults = optsObj.defaults || {};
+        this.defaults = optsObj.defaults;
     }
 }
 
-function getVueObject(componentPath: string, rootPath: string, vueComponentFileMatch: string): Promise < {rendered:Object, match: string} > {
+function getVueObject(componentPath: string, rootPath: string, vueComponentFileMatch: string, Cache: Object): Promise < {rendered:Object, match: string} > {
     const GlobalOptions = new Models.Defaults({
         rootPath: rootPath,
         component: componentPath
     });
     return new Promise((resolve, reject) => {
-        Utils.setupComponent(componentPath, GlobalOptions)
+        Utils.setupComponent(componentPath, GlobalOptions, Cache)
             .then(component => {
                 const rendered = Renderer.renderHtmlUtil(component);
                 if (!rendered) {
@@ -75,7 +75,7 @@ function replaceRelativePaths(code: string, rootPath: string): string {
 }
 
 
-function requireFromString(code: string, filename: string = '', optsObj: Object = {}): Promise < Object > {
+function requireFromString(code: string, filename: string = '', optsObj: Object = {}, Cache: Object): Promise < Object > {
     return new Promise((resolve, reject) => {
         const options = new Options(optsObj);
         let promiseArray = [];
@@ -99,7 +99,7 @@ function requireFromString(code: string, filename: string = '', optsObj: Object 
                 //this is because its easier to do string replace later
                 const vueComponentFile = vueComponentFileMatch.match(options.vueFileRegex);
                 if (vueComponentFile && vueComponentFile.length > 0) {
-                    promiseArray.push(getVueObject(vueComponentFile[0], options.rootPath, vueComponentFileMatch));
+                    promiseArray.push(getVueObject(vueComponentFile[0], options.rootPath, vueComponentFileMatch, Cache));
                 }
             }
             Promise.all(promiseArray)

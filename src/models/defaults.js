@@ -1,19 +1,13 @@
 // @flow
-const LRU = require('lru-cache');
 const path = require('path');
 const deepmerge = require('deepmerge');
-const dedupe = require('dedupe');
 const Layout = require('./layout');
-const options = {
-    max: 500,
-    maxAge: 1000 * 60 * 60
-};
-const lruCache = LRU(options);
 
 function concatMerge(destinationArray, sourceArray) {
     let finalArray = destinationArray.concat(sourceArray);
     //Dedupes dupes... obviously... but theres a problem here
-    return dedupe(finalArray);
+    // return dedupe(finalArray);
+    return finalArray;
 }
 
 class Defaults {
@@ -21,11 +15,9 @@ class Defaults {
     component: string;
     layout: Layout.Layout;
     options: Object;
-    cache: LRU;
     vue: Object;
     data: Object;
     constructor(options: Object = {}) {
-        this.cache = lruCache;
         this.options = options;
         this.layout = new Layout.Layout(options.layout);
 
@@ -47,11 +39,9 @@ class Defaults {
             this.data = {};
         }
     }
-    mergeVueObject(newVueObject: Object): void {
-        this.vue = deepmerge(this.vue, newVueObject, { arrayMerge: concatMerge });
-    }
-    mergeDataObject(newDataObject: Object): void {
-        this.data = deepmerge(this.data, newDataObject, { arrayMerge: concatMerge });
+    static mergeObjects(globalObject: Object, newObject: Object): Object {
+        const mergedObject = deepmerge(globalObject, newObject, { arrayMerge: concatMerge });
+        return mergedObject;
     }
 }
 

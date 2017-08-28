@@ -26,11 +26,11 @@ function getParamCasePath(path: string): string {
 }
 
 
-function getCorrectPathForFile(filePath: string, type: string, defaults: Defaults) {
+function getCorrectPathForFile(filePath: string, type: string, defaults: Defaults, Cache: Object) {
     return new Promise((resolve, reject) => {
         const resolvedPath = path.join(filePath);
         const cacheKey = stringHash('resolvedPath-' + resolvedPath);
-        const cachedResolvedPath = defaults.cache.get(cacheKey);
+        const cachedResolvedPath = Cache.get(cacheKey);
         if (cachedResolvedPath) {
             resolve(cachedResolvedPath);
         } else {
@@ -49,7 +49,7 @@ function getCorrectPathForFile(filePath: string, type: string, defaults: Default
                     }
                 } else {
                     const pathObject = {path: resolvedPath, type: type};
-                    defaults.cache.set(cacheKey, pathObject);
+                    Cache.set(cacheKey, pathObject);
 
                     resolve(pathObject);
                 }

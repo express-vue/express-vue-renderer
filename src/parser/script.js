@@ -50,7 +50,7 @@ function deleteCtor(script: Object): Object {
     return script;
 }
 
-function scriptParser(scriptObject: ScriptObjectType, defaults: Object, type: string): Promise < Object > {
+function scriptParser(scriptObject: ScriptObjectType, defaults: Object, type: string, Cache: Object): Promise < Object > {
     return new Promise((resolve, reject) => {
         if (!scriptObject && !scriptObject.content) {
             reject(new Error('Missing Script block'));
@@ -60,7 +60,7 @@ function scriptParser(scriptObject: ScriptObjectType, defaults: Object, type: st
             };
             // caching for babel script string so time spent in babel is reduced
             const cacheKey = stringHash(scriptObject.content);
-            const cachedBabelScript = defaults.cache.get(cacheKey);
+            const cachedBabelScript = Cache.get(cacheKey);
             if (cachedBabelScript) {
                 const finalScript = dataMerge(cachedBabelScript, defaults, type);
                 resolve(finalScript);
@@ -71,10 +71,10 @@ function scriptParser(scriptObject: ScriptObjectType, defaults: Object, type: st
                     rootPath: defaults.rootPath,
                     defaults: defaults
                 };
-                Utils.requireFromString(babelScript.code, defaults.component, requireFromStringOptions)
+                Utils.requireFromString(babelScript.code, defaults.component, requireFromStringOptions, Cache)
                     .then(scriptFromString => {
                         // set the cache for the babel script string
-                        defaults.cache.set(cacheKey, scriptFromString);
+                        Cache.set(cacheKey, scriptFromString);
 
                         const finalScript = dataMerge(scriptFromString, defaults, type);
                         resolve(finalScript);
