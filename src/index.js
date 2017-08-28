@@ -1,10 +1,18 @@
 // @flow
 'use strict';
 const Models = require('./models');
+const LRU = require('lru-cache');
 const path = require('path');
 const Utils = require('./utils');
 const Renderer = require('./renderer');
 const vueServerRenderer = require('vue-server-renderer').createRenderer();
+
+const cacheOptions = {
+    max: 500,
+    maxAge: 1000 * 60 * 60
+};
+const lruCache = LRU(cacheOptions);
+
 
 /**
  * ExpressVueRenderer Class is the main init Class
@@ -14,6 +22,7 @@ const vueServerRenderer = require('vue-server-renderer').createRenderer();
  */
 class ExpressVueRenderer {
     GlobalOptions: Models.Defaults;
+    Cache: LRU;
     /**
      * ExpressVueRenderer constructor
      * @constructor
@@ -21,6 +30,7 @@ class ExpressVueRenderer {
      */
     constructor(options: Object) {
         this.GlobalOptions = new Models.Defaults(options);
+        this.Cache = lruCache;
     }
     /**
      * createAppObject is an internal function used by renderToStream
@@ -31,12 +41,15 @@ class ExpressVueRenderer {
      */
     createAppObject(componentPath: string, data: Object, vueOptions: ? Object): Promise < Models.AppClass > {
         return new Promise((resolve, reject) => {
-            this.GlobalOptions.mergeDataObject(data);
+            let Options = Object.create(this.GlobalOptions);
+            Options.data = Models.Defaults.mergeObjects(Options.data, data);
+            // Options.mergeDataObject(data);
             if (vueOptions) {
-                this.GlobalOptions.mergeVueObject(vueOptions);
+                Options.vue = Models.Defaults.mergeObjects(Options.vue, vueOptions);
             }
-            this.GlobalOptions.component = componentPath;
-            Utils.setupComponent(path.join(this.GlobalOptions.rootPath, componentPath), this.GlobalOptions)
+            Options.component = componentPath;
+
+            Utils.setupComponent(path.join(Options.rootPath, componentPath), Options, this.Cache)
                 .then((component) => {
 
                     const rendered = Renderer.renderHtmlUtil(component, this.GlobalOptions.vue);
@@ -44,9 +57,9 @@ class ExpressVueRenderer {
                         reject(new Error('Renderer Error'));
                     } else {
                         const VueClass = rendered.app;
-                        const template = this.GlobalOptions.layout;
+                        const template = Options.layout;
                         const script = rendered.scriptString;
-                        const head = new Utils.HeadUtils(this.GlobalOptions.vue, rendered.layout.style);
+                        const head = new Utils.HeadUtils(Options.vue, rendered.layout.style);
 
                         const app = new Models.AppClass(VueClass, template, script, head.toString());
                         resolve(app);

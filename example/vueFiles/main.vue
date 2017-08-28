@@ -8,11 +8,6 @@
         <uuid2 :uuid2="uuid2"></uuid2>
         <button type="button" name="button" v-on:click="this.hello">Test mixin</button>
         <button type="button" name="button" v-on:click="this.test">Test method</button>
-        <!-- Renders a div element by default -->
-        <v-touch v-on:swipeleft="onSwipeLeft">Swipe me!</v-touch>
-
-        <!-- Render as other elements with the 'tag' prop -->
-        <v-touch tag="a" v-on:tap="onTap">Tap me!</v-touch>
     </div>
 </template>
 

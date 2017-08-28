@@ -25,45 +25,45 @@ function mixinsToString(mixins: Array < Object > ): string {
 }
 
 function scriptToString(script: Object): string {
-    let string = '';
+    let rawString = '';
     for (let member in script) {
         switch (typeof script[member]) {
             case 'function':
                 if (member === 'data') {
                     const dataObj = xss(JSON.stringify(script[member]()));
-                    string += `${member}: function(){return ${dataObj}},`;
+                    rawString += `${member}: function(){return ${dataObj}},`;
                 } else {
-                    string += member + ': ' + String(script[member]) + ',';
+                    rawString += member + ': ' + String(script[member]) + ',';
                 }
                 break;
             case 'object':
                 if (member === 'data') {
-                    string += member + ': ' + xss(JSON.stringify(script[member])) + ',';
+                    rawString += member + ': ' + xss(JSON.stringify(script[member])) + ',';
                 } else if (member === 'routes' || member === 'children') {
-                    string += member + ': ' + routesToString(script[member]) + ',';
+                    rawString += member + ': ' + routesToString(script[member]) + ',';
                 } else if (member === 'components' && script['path'] !== undefined) { // Checks if 'components' is in a route object
-                    string += member + ': ' + routeComponentsToString(script[member]) + ',';
+                    rawString += member + ': ' + routeComponentsToString(script[member]) + ',';
                 } else if (member === 'mixins') {
-                    string += member + ': [' + mixinsToString(script[member]) + '],';
+                    rawString += member + ': [' + mixinsToString(script[member]) + '],';
                 } else if (script[member].constructor === Array) {
-                    string += member + ': ' + xss(JSON.stringify(script[member])) + ',';
+                    rawString += member + ': ' + xss(JSON.stringify(script[member])) + ',';
                 } else if (member === 'props') {
                     const propsArray = Object.keys(script[member]);
-                    string += member + ': ' + xss(JSON.stringify(propsArray)) + ',';
+                    rawString += member + ': ' + xss(JSON.stringify(propsArray)) + ',';
                 } else {
-                    string += member + ': ' + scriptToString(script[member]) + ',';
+                    rawString += member + ': ' + scriptToString(script[member]) + ',';
                 }
                 break;
             default:
                 if (member === 'component' && script['path'] !== undefined) { // Checks if 'component' is in a route object
-                    string += member + ': __' + script[member] + ',';
+                    rawString += member + ': __' + script[member] + ',';
                 } else {
-                    string += member + ': ' + JSON.stringify(script[member]) + ',';
+                    rawString += member + ': ' + JSON.stringify(script[member]) + ',';
                 }
                 break;
         }
     }
-    return `{${string}}`;
+    return `{${rawString}}`;
 }
 
 module.exports.scriptToString = scriptToString;
