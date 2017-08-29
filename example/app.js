@@ -2,6 +2,7 @@
 const path = require('path');
 const express = require('express');
 const uuidv4 = require('uuid/v4');
+const vueTouch = require('vue2-touch-events');
 
 const expressVueRenderer = require('../lib');
 const expressVue = require('./expressVue');
@@ -34,7 +35,8 @@ const options = {
                     content: 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no'
                 }
             ]
-        }
+        },
+        plugins: [vueTouch]
     },
     data: {
         thing: true

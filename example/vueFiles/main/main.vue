@@ -9,10 +9,10 @@
         <button type="button" name="button" v-on:click="this.hello">Test mixin</button>
         <button type="button" name="button" v-on:click="this.test">Test method</button>
         <!-- Renders a div element by default -->
-        <v-touch v-on:swipeleft="onSwipeLeft">Swipe me!</v-touch>
+        <div v-touch:swipe.left="onSwipeLeft">Swipe me!</div>
 
         <!-- Render as other elements with the 'tag' prop -->
-        <v-touch tag="a" v-on:tap="onTap">Tap me!</v-touch>
+        <div tag="a" v-touch:tap="onTap">Tap me!</div>
     </div>
 </template>
 
@@ -28,6 +28,12 @@ export default {
     methods: {
         test: function () {
             console.error('test');
+        },
+        onSwipeLeft: () => {
+            console.log('swipeLeft');
+        },
+        onTap: () => {
+            console.log('tap');
         }
     },
     components: {

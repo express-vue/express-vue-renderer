@@ -2,6 +2,11 @@
 const Utils = require('../utils');
 var Vue = require('vue');
 
+const butternut = require('butternut');
+const buttterNutOptions = {
+    sourceMap: false
+};
+
 function createApp(script: Object, plugins: Object[]) {
     if (plugins && plugins.length > 0) {
         for (const plugin of plugins) {
@@ -42,7 +47,24 @@ function renderedScript(script: Object, vueOptions: Object): string {
     if (process.env.VUE_DEV) {
         debugToolsString = 'Vue.config.devtools = true;';
     }
-    return `<script>\n(function () {'use strict';${pluginString}${routerString}var createApp = function () {return new Vue(${scriptString})};if (typeof module !== 'undefined' && module.exports) {module.exports = createApp} else {this.app = createApp()}}).call(this);${debugToolsString}app.$mount('#app');\n</script>`;
+    const javaScriptString = `(function () {
+        'use strict';
+        ${pluginString}
+        ${routerString}
+        var createApp = function () {
+            return new Vue(${scriptString})};
+            if (typeof module !== 'undefined' && module.exports) {
+                module.exports = createApp
+            } else {
+                this.app = createApp()
+            }
+        }).call(this);
+        ${debugToolsString}
+        app.$mount('#app');`;
+
+    const finalString = butternut.squash(javaScriptString, buttterNutOptions).code;
+
+    return `<script>${finalString}</script>`;
 }
 
 type htmlUtilType = {
