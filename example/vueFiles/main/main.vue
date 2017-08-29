@@ -8,11 +8,8 @@
         <uuid2 :uuid2="uuid2"></uuid2>
         <button type="button" name="button" v-on:click="this.hello">Test mixin</button>
         <button type="button" name="button" v-on:click="this.test">Test method</button>
-        <!-- Renders a div element by default -->
         <div v-touch:swipe.left="onSwipeLeft">Swipe me!</div>
-
-        <!-- Render as other elements with the 'tag' prop -->
-        <div tag="a" v-touch:tap="onTap">Tap me!</div>
+        <div v-touch:tap="onTap">Tap me!</div>
     </div>
 </template>
 
@@ -29,10 +26,10 @@ export default {
         test: function () {
             console.error('test');
         },
-        onSwipeLeft: () => {
+        onSwipeLeft: function() {
             console.log('swipeLeft');
         },
-        onTap: () => {
+        onTap: function() {
             console.log('tap');
         }
     },

@@ -29,14 +29,21 @@ const options = {
                     content: 'Page Title'
                 },
                 {
+                    script: '/scripts/hammer.min.js'
+                },
+                {
+                    script: '/scripts/hammer-time.min.js'
+                },
+                {
                     script: 'https://unpkg.com/vue@2.4.2/dist/vue.js'
-                }, {
+                },
+                {
                     name: 'viewport',
                     content: 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no'
                 }
             ]
         },
-        plugins: [vueTouch]
+        plugins: [{script: vueTouch}]
     },
     data: {
         thing: true
@@ -47,7 +54,7 @@ const options = {
 renderer = expressVue.init(options);
 
 const app = express();
-app.use(express.static('./dist'));
+app.use(express.static(__dirname + '/public'));
 
 app.use(renderer);
 

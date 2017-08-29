@@ -9,8 +9,13 @@ const buttterNutOptions = {
 
 function createApp(script: Object, plugins: Object[]) {
     if (plugins && plugins.length > 0) {
-        for (const plugin of plugins) {
-            Vue.use(plugin);
+        for (var index = 0; index < plugins.length; index++) {
+            var plugin = plugins[index];
+            if (plugin.options) {
+                Vue.use(plugin.script, plugin.options);
+            } else {
+                Vue.use(plugin.script);
+            }
         }
     }
 
@@ -32,8 +37,14 @@ function renderedScript(script: Object, vueOptions: Object): string {
     const routerString = vueOptions.router !== undefined ? `const __router = new VueRouter(${Utils.scriptToString(vueOptions.router)});` : '';
     let pluginString = '';
     if (vueOptions.plugins) {
-        for (const plugin of vueOptions.plugins) {
-            pluginString += `Vue.use(${Utils.scriptToString(plugin)});`;
+        for (var index = 0; index < vueOptions.plugins.length; index++) {
+            var plugin = vueOptions.plugins[index];
+            if (plugin.options) {
+                pluginString += `Vue.use(${Utils.scriptToString(plugin.script)}, ${Utils.scriptToString(plugin.options)});`;
+            } else {
+                pluginString += `Vue.use(${Utils.scriptToString(plugin.script)});`;
+            }
+
         }
     }
 
