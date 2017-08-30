@@ -1,7 +1,7 @@
 <template>
     <div>
         <inner></inner>
-        <h2>Uuid: {{uuid ? uuid : 'no uuid'}}</h2>
+        <h2 class="test">Uuid: {{uuid ? uuid : 'no uuid'}}</h2>
     </div>
 </template>
 

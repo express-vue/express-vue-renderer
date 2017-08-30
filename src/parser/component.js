@@ -16,6 +16,7 @@ function componentParser(templatePath: string, defaults: Object, type: string, C
             scriptParser(cachedComponentContentObject.parsedContent.script, defaults, type, Cache).then(parsedScriptObject => {
                 cachedComponentContentObject.script = parsedScriptObject;
                 cachedComponentContentObject.script.template = cachedComponentContentObject.template;
+                cachedComponentContentObject.styles = parsedScriptObject.styles;
                 resolve(cachedComponentContentObject);
             }).catch(error => {
                 reject(error);
@@ -64,7 +65,13 @@ function parseContent(content: string, templatePath: string, defaults: Object, t
                 Promise.all(promiseArray).then(resultsArray => {
                     const template = resultsArray[0];
                     const script = resultsArray[1];
-                    const style = resultsArray[2];
+                    // console.log(resultsArray[2]);
+                    let style = '';
+                    if (resultsArray[2]) {
+                        style = resultsArray[2];
+                    } else {
+                        style = resultsArray[1].styles ? resultsArray[1].styles : '';
+                    }
 
                     script.template = template;
 

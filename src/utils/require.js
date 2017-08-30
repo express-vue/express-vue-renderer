@@ -104,14 +104,17 @@ function requireFromString(code: string, filename: string = '', optsObj: Object 
             }
             Promise.all(promiseArray)
                 .then(renderedItemArray => {
+                    let styles = '';
                     for (var renderedItem of renderedItemArray) {
                         const rawString = renderedItem.rendered.scriptStringRaw;
                         code = code.replace(renderedItem.match, rawString);
+                        styles += renderedItem.rendered.layout.style;
                     }
                     //check if its the last element and then render
                     const last_element = code.match(options.vueFileRegex);
                     if (last_element === undefined || last_element === null) {
                         m._compile(code, filename);
+                        m.exports.default.styles = styles;
                         resolve(m.exports.default);
                     }
                 })
