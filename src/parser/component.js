@@ -64,11 +64,11 @@ function parseContent(content: string, templatePath: string, defaults: Object, t
 
                 Promise.all(promiseArray).then(resultsArray => {
                     const template = resultsArray[0];
-                    const script = resultsArray[1];
+                    const script = resultsArray[1].script;
                     let style = resultsArray[2];
 
                     //join the styles together from the ones found in the components
-                    style += script.style;
+                    style += resultsArray[1].style;
 
                     script.template = template;
 
@@ -78,7 +78,7 @@ function parseContent(content: string, templatePath: string, defaults: Object, t
                         type: type,
                         style: style,
                         name: camelCase(templateName),
-                        script: script.script
+                        script: script
                     };
                     resolve(componentObjectCTOR);
                 }).catch(error => {

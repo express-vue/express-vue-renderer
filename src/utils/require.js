@@ -108,7 +108,9 @@ function requireFromString(code: string, filename: string = '', optsObj: Object 
                     for (var renderedItem of renderedItemArray) {
                         const rawString = renderedItem.rendered.scriptStringRaw;
                         code = code.replace(renderedItem.match, rawString);
-                        style += renderedItem.rendered.style;
+                        if (renderedItem.rendered.style) {
+                            style += renderedItem.rendered.style;
+                        }
                     }
                     //check if its the last element and then render
                     const last_element = code.match(options.vueFileRegex);
