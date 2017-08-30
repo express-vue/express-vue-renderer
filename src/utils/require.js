@@ -78,7 +78,6 @@ function replaceRelativePaths(code: string, rootPath: string): string {
 function requireFromString(code: string, filename: string = '', optsObj: Object = {}, Cache: Object): Promise < Object > {
     return new Promise((resolve, reject) => {
         const options = new Options(optsObj);
-        let style = '';
         let promiseArray = [];
 
         if (typeof code !== 'string') {
@@ -126,11 +125,7 @@ function requireFromString(code: string, filename: string = '', optsObj: Object 
                 });
         } else {
             m._compile(code, filename);
-            const resolvedObject = {
-                code: m.exports.default,
-                style: style
-            };
-            resolve(resolvedObject);
+            resolve(m.exports.default);
         }
     });
 }
