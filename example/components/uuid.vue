@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import inner from '../components/inner.vue';
+import inner from './components/inner.vue';
 export default {
     props: ['uuid'],
     data: function () {

@@ -5,7 +5,7 @@ import {
 } from '../../src/utils';
 import Models from '../../src/models';
 
-const rootPath = path.join(__dirname, '../../example/vueFiles/');
+const rootPath = path.join(__dirname, '../../example/');
 const defaults = new Models.Defaults();
 var LRU = require('lru-cache');
 var cacheOptions = {
@@ -15,7 +15,7 @@ var cacheOptions = {
 var lruCache = LRU(cacheOptions);
 
 test('correctPath Path', t => {
-    const filePath = path.join(rootPath, '../../example/vueFiles/components/uuid.vue');
+    const filePath = path.join(rootPath, '../example/components/uuid.vue');
     const correctPath = rootPath + 'components/uuid.vue';
 
     return PathUtils.getCorrectPathForFile(filePath, 'view', defaults, lruCache)

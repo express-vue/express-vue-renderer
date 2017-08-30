@@ -3,6 +3,7 @@
 const fs = require('fs');
 const camelCase = require('camel-case');
 const compiler = require('vue-template-compiler');
+const CleanCSS = require('clean-css');
 const styleParser = require('./style');
 const htmlParser = require('./html');
 const scriptParser = require('./script');
@@ -69,7 +70,7 @@ function parseContent(content: string, templatePath: string, defaults: Object, t
                     if (resultsArray[2]) {
                         style = resultsArray[2];
                     } else {
-                        style = resultsArray[1].styles ? resultsArray[1].styles : '';
+                        style = new CleanCSS({}).minify(resultsArray[1].styles ? resultsArray[1].styles : '').styles;
                     }
 
                     script.template = template;
