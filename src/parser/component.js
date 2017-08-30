@@ -65,7 +65,6 @@ function parseContent(content: string, templatePath: string, defaults: Object, t
                 Promise.all(promiseArray).then(resultsArray => {
                     const template = resultsArray[0];
                     const script = resultsArray[1];
-                    // console.log(resultsArray[2]);
                     let style = '';
                     if (resultsArray[2]) {
                         style = resultsArray[2];
