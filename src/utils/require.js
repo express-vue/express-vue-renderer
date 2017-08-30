@@ -78,6 +78,7 @@ function replaceRelativePaths(code: string, rootPath: string): string {
 function requireFromString(code: string, filename: string = '', optsObj: Object = {}, Cache: Object): Promise < Object > {
     return new Promise((resolve, reject) => {
         const options = new Options(optsObj);
+        let style = '';
         let promiseArray = [];
 
         if (typeof code !== 'string') {
@@ -107,12 +108,17 @@ function requireFromString(code: string, filename: string = '', optsObj: Object 
                     for (var renderedItem of renderedItemArray) {
                         const rawString = renderedItem.rendered.scriptStringRaw;
                         code = code.replace(renderedItem.match, rawString);
+                        style += renderedItem.rendered.style;
                     }
                     //check if its the last element and then render
                     const last_element = code.match(options.vueFileRegex);
                     if (last_element === undefined || last_element === null) {
                         m._compile(code, filename);
-                        resolve(m.exports.default);
+                        const resolvedObject = {
+                            code: m.exports.default,
+                            style: style
+                        };
+                        resolve(resolvedObject);
                     }
                 })
                 .catch(error => {
@@ -120,7 +126,11 @@ function requireFromString(code: string, filename: string = '', optsObj: Object 
                 });
         } else {
             m._compile(code, filename);
-            resolve(m.exports.default);
+            const resolvedObject = {
+                code: m.exports.default,
+                style: style
+            };
+            resolve(resolvedObject);
         }
     });
 }

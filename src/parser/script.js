@@ -63,7 +63,11 @@ function scriptParser(scriptObject: ScriptObjectType, defaults: Object, type: st
             const cachedBabelScript = Cache.get(cacheKey);
             if (cachedBabelScript) {
                 const finalScript = dataMerge(cachedBabelScript, defaults, type);
-                resolve(finalScript);
+                const finalObject = {
+                    script: finalScript,
+                    style: cachedBabelScript.style
+                };
+                resolve(finalObject);
             } else {
                 const babelScript = babel.transform(scriptObject.content, options);
                 // const filename = path.join(defaults.rootPath, '/', defaults.component);
@@ -72,12 +76,16 @@ function scriptParser(scriptObject: ScriptObjectType, defaults: Object, type: st
                     defaults: defaults
                 };
                 Utils.requireFromString(babelScript.code, defaults.component, requireFromStringOptions, Cache)
-                    .then(scriptFromString => {
+                    .then(requiredObject => {
                         // set the cache for the babel script string
-                        Cache.set(cacheKey, scriptFromString);
+                        Cache.set(cacheKey, requiredObject);
 
-                        const finalScript = dataMerge(scriptFromString, defaults, type);
-                        resolve(finalScript);
+                        const finalScript = dataMerge(requiredObject.code, defaults, type);
+                        const finalObject = {
+                            script: finalScript,
+                            style: requiredObject.style
+                        };
+                        resolve(finalObject);
                     })
                     .catch(error => reject(error));
             }

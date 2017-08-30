@@ -13,13 +13,14 @@ function componentParser(templatePath: string, defaults: Object, type: string, C
         // try to get the component content from the cache
         const cachedComponentContentObject = Cache.get(templatePath);
         if (cachedComponentContentObject) {
-            scriptParser(cachedComponentContentObject.parsedContent.script, defaults, type, Cache).then(parsedScriptObject => {
-                cachedComponentContentObject.script = parsedScriptObject;
-                cachedComponentContentObject.script.template = cachedComponentContentObject.template;
-                resolve(cachedComponentContentObject);
-            }).catch(error => {
-                reject(error);
-            });
+            scriptParser(cachedComponentContentObject.parsedContent.script, defaults, type, Cache)
+                .then(parsedScriptObject => {
+                    cachedComponentContentObject.script = parsedScriptObject.script;
+                    cachedComponentContentObject.script.template = cachedComponentContentObject.template;
+                    resolve(cachedComponentContentObject);
+                }).catch(error => {
+                    reject(error);
+                });
         } else {
             fs.readFile(templatePath, 'utf-8', function (err, content) {
                 if (err) {
@@ -64,7 +65,10 @@ function parseContent(content: string, templatePath: string, defaults: Object, t
                 Promise.all(promiseArray).then(resultsArray => {
                     const template = resultsArray[0];
                     const script = resultsArray[1];
-                    const style = resultsArray[2];
+                    let style = resultsArray[2];
+
+                    //join the styles together from the ones found in the components
+                    style += script.style;
 
                     script.template = template;
 
@@ -74,7 +78,7 @@ function parseContent(content: string, templatePath: string, defaults: Object, t
                         type: type,
                         style: style,
                         name: camelCase(templateName),
-                        script: script
+                        script: script.script
                     };
                     resolve(componentObjectCTOR);
                 }).catch(error => {
