@@ -3,6 +3,7 @@
 const fs = require('fs');
 const camelCase = require('camel-case');
 const compiler = require('vue-template-compiler');
+const CleanCSS = require('clean-css');
 const styleParser = require('./style');
 const htmlParser = require('./html');
 const scriptParser = require('./script');
@@ -16,6 +17,7 @@ function componentParser(templatePath: string, defaults: Object, type: string, C
             scriptParser(cachedComponentContentObject.parsedContent.script, defaults, type, Cache).then(parsedScriptObject => {
                 cachedComponentContentObject.script = parsedScriptObject;
                 cachedComponentContentObject.script.template = cachedComponentContentObject.template;
+                cachedComponentContentObject.styles = parsedScriptObject.styles;
                 resolve(cachedComponentContentObject);
             }).catch(error => {
                 reject(error);
@@ -64,7 +66,12 @@ function parseContent(content: string, templatePath: string, defaults: Object, t
                 Promise.all(promiseArray).then(resultsArray => {
                     const template = resultsArray[0];
                     const script = resultsArray[1];
-                    const style = resultsArray[2];
+                    let style = '';
+                    if (resultsArray[2]) {
+                        style = resultsArray[2];
+                    } else {
+                        style = new CleanCSS({}).minify(resultsArray[1].styles ? resultsArray[1].styles : '').styles;
+                    }
 
                     script.template = template;
 

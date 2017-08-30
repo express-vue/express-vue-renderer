@@ -15,7 +15,7 @@ var exampleMixin = {
 };
 
 const options = {
-    rootPath: path.join(__dirname, '/vueFiles'),
+    rootPath: path.join(__dirname, ''),
     vue: {
         head: {
             meta: [{
@@ -66,7 +66,7 @@ app.get('/', (req, res) => {
             ]
         }
     }
-    res.renderVue('main/main.vue', data, vueOptions)
+    res.renderVue('main.vue', data, vueOptions)
 });
 
 app.listen(3000);
