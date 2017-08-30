@@ -12,16 +12,17 @@ type StyleObjectType = {
 
 function styleParser(styleObjectArray: StyleObjectType[]): Promise<string> {
     return new Promise((resolve) => {
+        let output = '';
         if (!styleObjectArray || styleObjectArray.length === 0) {
-            resolve('');
+            resolve(output);
         } else {
             for (const styleObject of styleObjectArray) {
                 if(styleObject.lang === 'scss' || styleObject.lang === 'less') {
                     console.error('Sorry please only use plain CSS in your files for now');
                 }
-                const output = new CleanCSS({}).minify(styleObject.content);
-                resolve(output.styles);
+                output += new CleanCSS({}).minify(styleObject.content).styles;
             }
+            resolve(output);
         }
     });
 }
