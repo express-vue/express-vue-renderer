@@ -1,12 +1,11 @@
 <template>
     <div>
-        <h2>Uuid: {{uuid ? uuid : 'no uuid'}}</h2>
+        <p>Inner Text</p>
     </div>
 </template>
 
 <script>
 export default {
-    props: ['uuid'],
     data: function () {
         return {}
     }
@@ -14,7 +13,4 @@ export default {
 </script>
 
 <style lang="css">
-.test {
-    color: blue;
-}
 </style>
