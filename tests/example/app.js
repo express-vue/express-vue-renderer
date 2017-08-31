@@ -3,7 +3,7 @@ const path = require('path');
 const express = require('express');
 const uuidv4 = require('uuid/v4');
 
-const expressVueRenderer = require('../lib');
+const expressVueRenderer = require('../../lib');
 const expressVue = require('./expressVue');
 
 var exampleMixin = {
