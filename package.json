@@ -21,7 +21,8 @@
   ],
   "ava": {
     "files": [
-      "tests/**/*.js"
+      "tests/**/*.js",
+      "!tests/example/**/*.js"
     ],
     "source": [
       "src/**/*.js",
@@ -50,8 +51,8 @@
   "scripts": {
     "release": "generate-release",
     "flow": "flow",
-    "debug": "npm run build && node --inspect example/app.js",
-    "start": "npm run build && node example/app.js",
+    "debug": "npm run build && node --inspect tests/example/app.js",
+    "start": "npm run build && node tests/example/app.js",
     "prepublish": "npm run build && nsp check",
     "pretest": "eslint . --fix",
     "test": "eslint src && nyc ava",

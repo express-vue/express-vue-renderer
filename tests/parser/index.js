@@ -20,9 +20,9 @@ var cacheOptions = {
 var lruCache = LRU(cacheOptions);
 
 let types = new Types();
-const component = __dirname + '/../../example/components/uuid.vue';
+const component = path.join(__dirname, '../example/components/uuid.vue');
 const options = {
-    rootPath: path.join(__dirname, '../../example'),
+    rootPath: path.join(__dirname, '../example/vueFiles'),
     component: 'uuid.vue'
 };
 
