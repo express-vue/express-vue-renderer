@@ -1,4 +1,4 @@
-const ExpressVueRenderer = require('../lib');
+const ExpressVueRenderer = require('../../lib');
 
 //This is the Middlewarein express-vue this wont be in the file
 function init(options) {
