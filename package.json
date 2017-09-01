@@ -1,6 +1,6 @@
 {
   "name": "express-vue-renderer",
-  "version": "0.6.9",
+  "version": "0.6.10",
   "description": "Rendering Engine for turning Vue files into Javascript Objects",
   "homepage": "https://github.com/express-vue/express-vue-renderer",
   "author": {
@@ -95,7 +95,7 @@
     "eslint-config-xo-space": "^0.16.0",
     "eslint-plugin-flowtype": "^2.35.0",
     "express": "^4.15.4",
-    "flow-bin": "^0.53.0",
+    "flow-bin": "^0.54.0",
     "flow-remove-types": "^1.2.1",
     "generate-release": "^0.13.1",
     "jest": "^20.0.4",
