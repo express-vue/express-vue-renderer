@@ -65,7 +65,7 @@ test('it should parse components', t => {
         .then(function (layout) {
             const exampleLayout = {
                 type: 'COMPONENT',
-                style: '.test{color:#00f}',
+                style: '.pink{color:pink;text-decoration:underline}.test{color:#00f}',
                 name: 'component',
                 script: {
                     data() {

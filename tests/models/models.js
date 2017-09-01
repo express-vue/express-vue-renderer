@@ -35,8 +35,8 @@ const options = {
                 {foo: true}
             ]
         }
-
-    }
+    },
+    style: '.fart{color:brown}'
 };
 
 const layout = new Layout.Layout(customLayout);
@@ -55,7 +55,8 @@ const exampleObject = {
     cache: {
         max: 500,
         maxAge: 3600000
-    }
+    },
+    style: '.fart{color:brown}'
 };
 
 test('Root Path', t => {
