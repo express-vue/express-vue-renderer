@@ -17,9 +17,14 @@ class Defaults {
     options: Object;
     vue: Object;
     data: Object;
+    style: string;
     constructor(options: Object = {}) {
         this.options = options;
         this.layout = new Layout.Layout(options.layout);
+
+        if (options.style) {
+            this.style = options.style;
+        }
 
         if (options.rootPath) {
             this.rootPath = path.resolve(options.rootPath);
