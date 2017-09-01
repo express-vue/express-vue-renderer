@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h3>Uuid2: {{uuid2 ? uuid2 : 'no uuid'}}</h3>
+        <h3 class="red">Uuid2: {{uuid2 ? uuid2 : 'no uuid'}}</h3>
     </div>
 </template>
 
@@ -14,7 +14,7 @@ export default {
 </script>
 
 <style lang="css">
-.test {
-    color: blue;
+.red {
+    color: yellowgreen;
 }
 </style>

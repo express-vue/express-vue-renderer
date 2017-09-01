@@ -1,6 +1,6 @@
 {
   "name": "express-vue-renderer",
-  "version": "0.6.8",
+  "version": "0.6.10",
   "description": "Rendering Engine for turning Vue files into Javascript Objects",
   "homepage": "https://github.com/express-vue/express-vue-renderer",
   "author": {
@@ -21,7 +21,8 @@
   ],
   "ava": {
     "files": [
-      "tests/**/*.js"
+      "tests/**/*.js",
+      "!tests/example/**/*.js"
     ],
     "source": [
       "src/**/*.js",
@@ -50,8 +51,8 @@
   "scripts": {
     "release": "generate-release",
     "flow": "flow",
-    "debug": "npm run build && node --inspect example/app.js",
-    "start": "npm run build && node example/app.js",
+    "debug": "npm run build && node --inspect tests/example/app.js",
+    "start": "npm run build && node tests/example/app.js",
     "prepublish": "npm run build && nsp check",
     "pretest": "eslint . --fix",
     "test": "eslint src && nyc ava",
@@ -81,7 +82,7 @@
     "vue-server-renderer": "^2.4.2",
     "vue-template-compiler": "^2.4.2",
     "vue2-touch-events": "^0.2.1",
-    "xss": "^0.3.3"
+    "xss": "^0.3.4"
   },
   "devDependencies": {
     "ava": "^0.22.0",
@@ -95,7 +96,7 @@
     "eslint-config-xo-space": "^0.16.0",
     "eslint-plugin-flowtype": "^2.35.0",
     "express": "^4.15.4",
-    "flow-bin": "^0.53.0",
+    "flow-bin": "^0.54.0",
     "flow-remove-types": "^1.2.1",
     "generate-release": "^0.13.1",
     "jest": "^20.0.4",

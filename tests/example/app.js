@@ -4,7 +4,7 @@ const express = require('express');
 const uuidv4 = require('uuid/v4');
 const vueTouch = require('vue2-touch-events');
 
-const expressVueRenderer = require('../lib');
+const expressVueRenderer = require('../../lib');
 const expressVue = require('./expressVue');
 
 
@@ -17,7 +17,7 @@ var exampleMixin = {
 };
 
 const options = {
-    rootPath: path.join(__dirname, '/vueFiles'),
+    rootPath: path.join(__dirname, 'vueFiles'),
     vue: {
         head: {
             meta: [{
@@ -76,7 +76,7 @@ app.get('/', (req, res) => {
             ]
         }
     }
-    res.renderVue('main/main.vue', data, vueOptions)
+    res.renderVue('main.vue', data, vueOptions)
 });
 
 app.listen(3000);

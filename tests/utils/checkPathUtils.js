@@ -5,7 +5,7 @@ import {
 } from '../../src/utils';
 import Models from '../../src/models';
 
-const rootPath = path.join(__dirname, '../../example/vueFiles/');
+const rootPath = path.join(__dirname, '../example/vueFiles');
 const defaults = new Models.Defaults();
 var LRU = require('lru-cache');
 var cacheOptions = {
@@ -15,8 +15,8 @@ var cacheOptions = {
 var lruCache = LRU(cacheOptions);
 
 test('correctPath Path', t => {
-    const filePath = path.join(rootPath, '../../example/vueFiles/components/uuid.vue');
-    const correctPath = rootPath + 'components/uuid.vue';
+    const filePath = path.join(rootPath, '/../components/uuid.vue');
+    const correctPath = path.join(rootPath + '/../components/uuid.vue');
 
     return PathUtils.getCorrectPathForFile(filePath, 'view', defaults, lruCache)
         .then(returnedPath => {
@@ -29,7 +29,7 @@ test('correctPath Path', t => {
 test('shows error for fake test Path ', t => {
 
     const filePath = path.join(rootPath, 'componentDoesntExist.vue');
-    const errMessage = `Could not find test file at ${rootPath}componentDoesntExist.vue`
+    const errMessage = `Could not find test file at ${rootPath}/componentDoesntExist.vue`
 
     return PathUtils.getCorrectPathForFile(filePath, 'test', defaults, lruCache)
         .catch(error => {
