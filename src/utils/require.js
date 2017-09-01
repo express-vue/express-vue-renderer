@@ -22,10 +22,11 @@ class Options {
     }
 }
 
-function getVueObject(componentPath: string, rootPath: string, vueComponentFileMatch: string, Cache: Object): Promise < {rendered:Object, match: string} > {
+function getVueObject(componentPath: string, rootPath: string, vueComponentFileMatch: string, Cache: Object, Options: Options): Promise < {rendered:Object, match: string} > {
     const GlobalOptions = new Models.Defaults({
         rootPath: rootPath,
-        component: componentPath
+        component: componentPath,
+        style: Options.defaults.style || ''
     });
     return new Promise((resolve, reject) => {
         Utils.setupComponent(componentPath, GlobalOptions, Cache)
@@ -34,6 +35,12 @@ function getVueObject(componentPath: string, rootPath: string, vueComponentFileM
                 if (!rendered) {
                     reject(new Error('Renderer Error'));
                 } else {
+                    if (Options.defaults.style) {
+                        Options.defaults.style += rendered.layout.style;
+                    } else {
+                        Options.defaults.style = rendered.layout.style;
+                    }
+
                     resolve({
                         rendered: rendered,
                         match: vueComponentFileMatch
@@ -99,7 +106,7 @@ function requireFromString(code: string, filename: string = '', optsObj: Object 
                 //this is because its easier to do string replace later
                 const vueComponentFile = vueComponentFileMatch.match(options.vueFileRegex);
                 if (vueComponentFile && vueComponentFile.length > 0) {
-                    promiseArray.push(getVueObject(vueComponentFile[0], options.rootPath, vueComponentFileMatch, Cache));
+                    promiseArray.push(getVueObject(vueComponentFile[0], options.rootPath, vueComponentFileMatch, Cache, options));
                 }
             }
             Promise.all(promiseArray)

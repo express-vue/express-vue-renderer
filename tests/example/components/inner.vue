@@ -1,6 +1,6 @@
 <template>
     <div>
-        <p>Inner Text</p>
+        <p class="pink">Inner Text</p>
     </div>
 </template>
 
@@ -13,4 +13,8 @@ export default {
 </script>
 
 <style lang="css">
+.pink {
+    color: pink;
+    text-decoration: underline;
+}
 </style>

@@ -3,7 +3,6 @@
 const fs = require('fs');
 const camelCase = require('camel-case');
 const compiler = require('vue-template-compiler');
-const CleanCSS = require('clean-css');
 const styleParser = require('./style');
 const htmlParser = require('./html');
 const scriptParser = require('./script');
@@ -28,13 +27,14 @@ function componentParser(templatePath: string, defaults: Object, type: string, C
                     let error = `Could Not Find Component, I was expecting it to live here \n${templatePath} \nBut I couldn't find it there, ¯\\_(ツ)_/¯\n\n`;
                     reject(error);
                 } else {
-                    parseContent(content, templatePath, defaults, type, Cache).then(contentObject => {
+                    parseContent(content, templatePath, defaults, type, Cache)
+                        .then(contentObject => {
                         // set the cache for the component
-                        Cache.set(templatePath, contentObject);
-                        resolve(contentObject);
-                    }).catch(error => {
-                        reject(error);
-                    });
+                            Cache.set(templatePath, contentObject);
+                            resolve(contentObject);
+                        }).catch(error => {
+                            reject(error);
+                        });
                 }
             });
         }
@@ -66,11 +66,10 @@ function parseContent(content: string, templatePath: string, defaults: Object, t
                 Promise.all(promiseArray).then(resultsArray => {
                     const template = resultsArray[0];
                     const script = resultsArray[1];
-                    let style = '';
-                    if (resultsArray[2]) {
-                        style = resultsArray[2];
+                    if (defaults.style === undefined) {
+                        defaults.style = resultsArray[2];
                     } else {
-                        style = new CleanCSS({}).minify(resultsArray[1].styles ? resultsArray[1].styles : '').styles;
+                        defaults.style += resultsArray[2];
                     }
 
                     script.template = template;
@@ -79,7 +78,7 @@ function parseContent(content: string, templatePath: string, defaults: Object, t
                         template: template,
                         parsedContent: parsedContent,
                         type: type,
-                        style: style,
+                        style: defaults.style,
                         name: camelCase(templateName),
                         script: script
                     };
