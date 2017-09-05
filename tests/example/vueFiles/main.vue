@@ -8,8 +8,7 @@
         <uuid2 :uuid2="uuid2"></uuid2>
         <button type="button" name="button" v-on:click="this.hello">Test mixin</button>
         <button type="button" name="button" v-on:click="this.test">Test method</button>
-        <div v-touch:swipe.left="onSwipeLeft">Swipe me!</div>
-        <div v-touch:tap="onTap">Tap me!</div>
+        <button type="button" name="button" v-on:click="this.testPlugin">Test plugin</button>
     </div>
 </template>
 
@@ -20,17 +19,16 @@ import uuid2 from '../components/uuid2.vue';
 export default {
     mixins: [exampleMixin],
     data: function () {
-        return {}
+        return {
+            dogs: []
+        }
     },
     methods: {
         test: function () {
             console.error('test');
         },
-        onSwipeLeft: function() {
-            console.log('swipeLeft');
-        },
-        onTap: function() {
-            console.log('tap');
+        testPlugin: function() {
+            VueNotifications.error({message: 'Some Error'})
         }
     },
     components: {

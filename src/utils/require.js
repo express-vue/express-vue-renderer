@@ -57,24 +57,26 @@ function replaceRelativePaths(code: string, rootPath: string): string {
     const currentMatchesSingle = code.match(/(require\('\.\/)/gm);
     const parentMatchesDouble = code.match(/(require\("\.\.\/)/gm);
     const currentMatchesDouble = code.match(/(require\("\.\/)/gm);
+    const modulePathDouble = path.join(rootPath, '/../');
+    const modulePathSingle = path.join(rootPath, './');
     if (parentMatchesSingle) {
         for (const match of parentMatchesSingle) {
-            code = code.replace(match, `require('${rootPath}/../`);
+            code = code.replace(match, `require("${modulePath}")`);
         }
     }
     if (parentMatchesDouble) {
         for (const match of parentMatchesDouble) {
-            code = code.replace(match, `require("${rootPath}/../`);
+            code = code.replace(match, `require("${path.join(rootPath, '../")}`);
         }
     }
     if (currentMatchesSingle) {
         for (const match of currentMatchesSingle) {
-            code = code.replace(match, `require('${rootPath}/./`);
+            code = code.replace(match, `require("${path.join(rootPath, './")}`);
         }
     }
     if (currentMatchesDouble) {
         for (const match of currentMatchesDouble) {
-            code = code.replace(match, `require("${rootPath}/./`);
+            code = code.replace(match, `require("${path.join(rootPath, './")}`);
         }
     }
 

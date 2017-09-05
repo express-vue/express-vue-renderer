@@ -2,7 +2,28 @@
 const path = require('path');
 const express = require('express');
 const uuidv4 = require('uuid/v4');
-const vueTouch = require('vue2-touch-events');
+const vueNotify = require('vue-notifications');
+const miniToastr = require('mini-toastr');
+
+const toastTypes = {
+    success: 'success',
+    error: 'error',
+    info: 'info',
+    warn: 'warn'
+};
+
+miniToastr.init({types: toastTypes})
+
+function toast ({title, message, type, timeout, cb}) {
+    return miniToastr[type](message, title, timeout, cb)
+}
+
+const toastOptions = {
+    success: toast,
+    error: toast,
+    info: toast,
+    warn: toast
+  }
 
 const expressVueRenderer = require('../../lib');
 const expressVue = require('./expressVue');
@@ -29,12 +50,6 @@ const options = {
                     content: 'Page Title'
                 },
                 {
-                    script: '/scripts/hammer.min.js'
-                },
-                {
-                    script: '/scripts/hammer-time.min.js'
-                },
-                {
                     script: 'https://unpkg.com/vue@2.4.2/dist/vue.js'
                 },
                 {
@@ -43,7 +58,7 @@ const options = {
                 }
             ]
         },
-        plugins: [{script: vueTouch}]
+        plugins: [{script: vueNotify, options: toastOptions}]
     },
     data: {
         thing: true

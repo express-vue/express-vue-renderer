@@ -11,10 +11,12 @@ function createApp(script: Object, plugins: Object[]) {
     if (plugins && plugins.length > 0) {
         for (var index = 0; index < plugins.length; index++) {
             var plugin = plugins[index];
-            if (plugin.options) {
-                Vue.use(plugin.script, plugin.options);
-            } else {
-                Vue.use(plugin.script);
+            if (!plugin.clientOnly) {
+                if (plugin.options) {
+                    Vue.use(plugin.script, plugin.options);
+                } else {
+                    Vue.use(plugin.script);
+                }
             }
         }
     }
