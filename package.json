@@ -90,7 +90,7 @@
     "babel-preset-env": "^1.6.0",
     "babel-preset-flow": "^6.23.0",
     "codecov": "^2.3.0",
-    "coveralls": "^2.13.1",
+    "coveralls": "^3.0.0",
     "eslint": "^4.5.0",
     "eslint-config-xo-space": "^0.16.0",
     "eslint-plugin-flowtype": "^2.35.0",
