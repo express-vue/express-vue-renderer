@@ -145,7 +145,7 @@ const components = {
 
 const componentsString = routeComponentsToString(components);
 test('Route components', (t) => {
-    t.is(componentsString.includes(`{myview0: __mycomponent0,myview1: __mycomponent1,myview3: __mycomponent2,}`), true);
+    t.is(componentsString.includes(`{myview0: __mycomponent0,myview1: __mycomponent1,myview3: __mycomponent2}`), true);
 });
 
 // Test scriptToString() using properties named 'component' and 'components'
