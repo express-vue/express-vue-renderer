@@ -8,7 +8,13 @@
 <script>
 import inner from '../components/inner.vue';
 export default {
-    props: ['uuid'],
+    props: {
+        uuid: {
+            type: String,
+            default: 'missing',
+            required: true
+        }
+    },
     data: function () {
         return {}
     },
