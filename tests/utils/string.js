@@ -39,23 +39,24 @@ const exampleMixin = {
     }
 };
 
-const string = scriptToString(object);
+const testString = scriptToString(object);
+const testString2 = scriptToString(object2);
 const mixins = mixinsToString([exampleMixin]);
 
 //Tests
-const hasString = string.includes(`string: "foo"`);
-const hasNumber = string.includes(`number: 42`);
-const hasArray = string.includes(`array: ["one","two","three"]`);
-const hasObject = string.includes(`object: {dog: true,cat: false,}`);
-const hasBoolean = string.includes(`boolean: true`);
-const hasFunction = string.includes(`function: function _function() {
+const hasString = testString.includes(`string: "foo"`);
+const hasNumber = testString.includes(`number: 42`);
+const hasArray = testString.includes(`array: ["one","two","three"]`);
+const hasObject = testString.includes(`object: {dog: true,cat: false}`);
+const hasBoolean = testString.includes(`boolean: true`);
+const hasFunction = testString.includes(`function: function _function() {
         return 'baz';
     }`);
-const hasDataFunc = string.includes(`data: function(){return {"foo":"bar"}}`);
-const hasDataObj = scriptToString(object2).includes(`data: {"foo":"bar"}`);
-const hasFinal = string === `{string: "foo",function: function _function() {
+const hasDataFunc = testString.includes(`data: function(){return {"foo":"bar"}}`);
+const hasDataObj = testString2.includes(`data: {"foo":"bar"}`);
+const hasFinal = testString === `{string: "foo",function: function _function() {
         return 'baz';
-    },data: function(){return {"foo":"bar"}},array: ["one","two","three"],object: {dog: true,cat: false,},number: 42,boolean: true,}`;
+    },data: function(){return {"foo":"bar"}},array: ["one","two","three"],object: {dog: true,cat: false},number: 42,boolean: true}`;
 
 test('Has a String', t => {
     t.is(hasString, true);
@@ -96,7 +97,7 @@ test('Has a Fully formed String', t => {
 test('Mixins', t => {
     t.is(mixins, `{methods: {hello: function hello() {
             console.log('Hello');
-        },},},`);
+        }}},`);
 });
 
 // Test routesToString()
@@ -110,7 +111,7 @@ const routes = [
             { name: 'child2', path: 'child2', components: { childview: 'mychildcomponent2', }, },
         ],
     },
-    { 
+    {
         path: '/route3', component: 'mycomponent3',
         beforeEnter: function (to, from, next) {
             console.log(to, from);
@@ -122,12 +123,12 @@ const routes = [
 const routesString = routesToString(routes);
 const hasComponent = routesString.includes(`component: __mycomponent3`);
 const hasChildComponent = routesString.includes(`component: __mychildcomponent1`);
-const hasNamedViewsComponents = routesString.includes(`components: {mainview: __mycomponent1,}`); 
-const hasNamedViewsChildComponents = routesString.includes(`components: {childview: __mychildcomponent2,}`);
-const expectedRoutesString = `[{name: "route1",path: "/route1",alias: ["asd","bsd","csd"],meta: {something: "another",},components: {mainview: __mycomponent1,},},{path: "/route2",components: {mainview: __mycomponent2,},children: [{name: "child1",path: "child1",component: __mychildcomponent1,alias: ["xsd","ysd","zsd"],},{name: "child2",path: "child2",components: {childview: __mychildcomponent2,},},],},{path: "/route3",component: __mycomponent3,beforeEnter: function beforeEnter(to, from, next) {
+const hasNamedViewsComponents = routesString.includes(`components: {mainview: __mycomponent1}`);
+const hasNamedViewsChildComponents = routesString.includes(`components: {childview: __mychildcomponent2}`);
+const expectedRoutesString = `[{name: "route1",path: "/route1",alias: ["asd","bsd","csd"],meta: {something: "another"},components: {mainview: __mycomponent1}},{path: "/route2",components: {mainview: __mycomponent2},children: [{name: "child1",path: "child1",component: __mychildcomponent1,alias: ["xsd","ysd","zsd"]},{name: "child2",path: "child2",components: {childview: __mychildcomponent2}}]},{path: "/route3",component: __mycomponent3,beforeEnter: function beforeEnter(to, from, next) {
         console.log(to, from);
         next();
-    },},]`;
+    }}]`;
 
 test('Has component', t => t.is(hasComponent, true));
 test('Has child component', t => t.is(hasChildComponent, true));
@@ -159,5 +160,5 @@ const regularScript = {
 
 const regularScriptString = scriptToString(regularScript);
 test('Regular script components', (t) => {
-    t.is(regularScriptString.includes(`{component: "component",components: {prop0: "prop0",prop1: "prop1",prop2: "prop2",},}`), true);
+    t.is(regularScriptString.includes(`{component: "component",components: {prop0: "prop0",prop1: "prop1",prop2: "prop2"}}`), true);
 });
