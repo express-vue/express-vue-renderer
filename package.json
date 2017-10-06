@@ -1,6 +1,6 @@
 {
   "name": "express-vue-renderer",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "Rendering Engine for turning Vue files into Javascript Objects",
   "homepage": "https://github.com/express-vue/express-vue-renderer",
   "author": {
