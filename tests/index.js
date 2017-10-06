@@ -34,3 +34,36 @@ test('renders App object', t => {
             t.fail(error.stack);
         });
 });
+
+
+test('renders App object with custom layout', t => {
+    const vueOptionsWithLayout = {
+        layout: {
+            html: {
+                start: 'html-start',
+                end: 'html-end',
+            },
+            body: {
+                start: 'body-start',
+                end: 'body-end'
+            },
+            template: {
+                start: "template-start",
+                end: "template-end"
+            },
+        }
+    };
+    const renderer = new ExpressVueRenderer(options);
+    return renderer.createAppObject('main', data, vueOptionsWithLayout)
+        .then(app => {
+            t.is(app.template.html.start, "html-start");
+            t.is(app.template.html.end, "html-end");
+            t.is(app.template.body.start, "body-start");
+            t.is(app.template.body.end, "body-end");
+            t.is(app.template.template.start, "template-start");
+            t.is(app.template.template.end, "template-end");
+        })
+        .catch(error => {
+            t.fail(error.stack);
+        });
+});
