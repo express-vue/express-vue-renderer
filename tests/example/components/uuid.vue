@@ -12,7 +12,7 @@ export default {
         uuid: {
             type: String,
             default: 'missing',
-            required: false
+            required: true
         }
     },
     data: function () {
