@@ -1,6 +1,7 @@
 // @flow
 const Module = require('module');
 const path = require('path');
+const slash = require('slash');
 const Utils = require('./index');
 const Renderer = require('../renderer');
 const Models = require('../models');
@@ -59,25 +60,24 @@ function replaceRelativePaths(code: string, rootPath: string): string {
     const currentMatchesDouble = code.match(/(require\("\.\/)/gm);
     if (parentMatchesSingle) {
         for (const match of parentMatchesSingle) {
-            code = code.replace(match, `require('${rootPath}/../`);
+            code = code.replace(match, slash(`require('${rootPath}/../`));
         }
     }
     if (parentMatchesDouble) {
         for (const match of parentMatchesDouble) {
-            code = code.replace(match, `require("${rootPath}/../`);
+            code = code.replace(match, slash(`require("${rootPath}/../`));
         }
     }
     if (currentMatchesSingle) {
         for (const match of currentMatchesSingle) {
-            code = code.replace(match, `require('${rootPath}/./`);
+            code = code.replace(match, slash(`require('${rootPath}/./`));
         }
     }
     if (currentMatchesDouble) {
         for (const match of currentMatchesDouble) {
-            code = code.replace(match, `require("${rootPath}/./`);
+            code = code.replace(match, slash(`require("${rootPath}/./`));
         }
     }
-
     return code;
 }
 
@@ -131,6 +131,7 @@ function requireFromString(code: string, filename: string = '', optsObj: Object 
                     reject(error);
                 });
         } else {
+            console.log(code)
             m._compile(code, filename);
             resolve(m.exports.default);
         }
