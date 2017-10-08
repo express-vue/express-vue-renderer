@@ -2,6 +2,7 @@
 const path = require('path');
 const express = require('express');
 const uuidv4 = require('uuid/v4');
+const slash = require('slash');
 
 const expressVueRenderer = require('../../lib');
 const expressVue = require('./expressVue');
@@ -15,7 +16,7 @@ var exampleMixin = {
 };
 
 const options = {
-    rootPath: path.join(__dirname, 'vueFiles'),
+    rootPath: slash(path.join(__dirname, 'vueFiles')),
     vue: {
         head: {
             meta: [{
