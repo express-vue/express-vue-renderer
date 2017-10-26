@@ -102,7 +102,7 @@
     "eslint-config-xo-space": "^0.16.0",
     "eslint-plugin-flowtype": "^2.36.0",
     "express": "^4.16.0",
-    "flow-bin": "^0.56.0",
+    "flow-bin": "^0.57.1",
     "flow-remove-types": "^1.2.1",
     "generate-release": "^0.14.0",
     "nodemon": "^1.12.1",
