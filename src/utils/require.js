@@ -15,7 +15,7 @@ class Options {
     defaults: Models.Defaults;
     constructor(optsObj: Object) {
         this.vueFileRegex = /([\w/.\-@_\d]*\.vue)/igm;
-        this.requireRegex = /(require\(['"])([\w/.\-@_\d]*\.vue)(['"]\))/igm;
+        this.requireRegex = /(require\(['"])([\w:/.\-@_\d]*\.vue)(['"]\))/igm;
         this.appendPaths = optsObj.appendPaths || [];
         this.prependPaths = optsObj.prependPaths || [];
         this.rootPath = optsObj.rootPath || '';
@@ -131,7 +131,6 @@ function requireFromString(code: string, filename: string = '', optsObj: Object 
                     reject(error);
                 });
         } else {
-            console.log(code)
             m._compile(code, filename);
             resolve(m.exports.default);
         }
