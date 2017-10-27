@@ -46,6 +46,9 @@ class ExpressVueRenderer {
             // Options.mergeDataObject(data);
             if (vueOptions) {
                 Options.vue = Models.Defaults.mergeObjects(Options.vue, vueOptions);
+                if (vueOptions.layout) {
+                    Options.layout = Models.Defaults.mergeObjects(Options.layout, vueOptions.layout);
+                }
             }
             Options.component = componentPath;
 

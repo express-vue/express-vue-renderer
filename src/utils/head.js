@@ -52,6 +52,8 @@ class HeadUtil {
                     const href = metaItem.href ? `href="${metaItem.href}" ` : '';
                     const sizes = metaItem.sizes ? `sizes="${metaItem.sizes}" ` : '';
                     this.metaTags += `<link ${rel}${type}${href}${sizes}>\n`;
+                } else if (metaItem.srcContents) {
+                    this.metaTags += `${metaItem.srcContents}\n`;
                 }
             }
         }

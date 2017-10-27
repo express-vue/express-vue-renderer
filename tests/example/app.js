@@ -50,9 +50,8 @@ const options = {
                     content: 'Page Title'
                 },
                 {
-                    script: 'https://unpkg.com/vue@2.4.2/dist/vue.js'
-                },
-                {
+                    script: 'https://unpkg.com/vue@2.4.4/dist/vue.js'
+                }, {
                     name: 'viewport',
                     content: 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no'
                 }
@@ -64,7 +63,6 @@ const options = {
         thing: true
     }
 };
-
 
 renderer = expressVue.init(options);
 
