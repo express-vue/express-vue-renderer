@@ -40,7 +40,6 @@ const options = {
     }
 };
 
-
 renderer = expressVue.init(options);
 
 const app = express();

@@ -1,6 +1,7 @@
 // @flow
 const Module = require('module');
 const path = require('path');
+const slash = require('slash');
 const Utils = require('./index');
 const Renderer = require('../renderer');
 const Models = require('../models');
@@ -14,7 +15,7 @@ class Options {
     defaults: Models.Defaults;
     constructor(optsObj: Object) {
         this.vueFileRegex = /([\w/.\-@_\d]*\.vue)/igm;
-        this.requireRegex = /(require\(['"])([\w/.\-@_\d]*\.vue)(['"]\))/igm;
+        this.requireRegex = /(require\(['"])([\w:/.\-@_\d]*\.vue)(['"]\))/igm;
         this.appendPaths = optsObj.appendPaths || [];
         this.prependPaths = optsObj.prependPaths || [];
         this.rootPath = optsObj.rootPath || '';
@@ -59,25 +60,24 @@ function replaceRelativePaths(code: string, rootPath: string): string {
     const currentMatchesDouble = code.match(/(require\("\.\/)/gm);
     if (parentMatchesSingle) {
         for (const match of parentMatchesSingle) {
-            code = code.replace(match, `require('${rootPath}/../`);
+            code = code.replace(match, slash(`require('${rootPath}/../`));
         }
     }
     if (parentMatchesDouble) {
         for (const match of parentMatchesDouble) {
-            code = code.replace(match, `require("${rootPath}/../`);
+            code = code.replace(match, slash(`require("${rootPath}/../`));
         }
     }
     if (currentMatchesSingle) {
         for (const match of currentMatchesSingle) {
-            code = code.replace(match, `require('${rootPath}/./`);
+            code = code.replace(match, slash(`require('${rootPath}/./`));
         }
     }
     if (currentMatchesDouble) {
         for (const match of currentMatchesDouble) {
-            code = code.replace(match, `require("${rootPath}/./`);
+            code = code.replace(match, slash(`require("${rootPath}/./`));
         }
     }
-
     return code;
 }
 
