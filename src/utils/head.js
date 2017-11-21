@@ -33,7 +33,9 @@ class HeadUtil {
         }
         if (vueObject.head && vueObject.head.meta) {
             for (let metaItem of vueObject.head.meta) {
-                if (metaItem.name) {
+                if (metaItem.value) {
+                    this.metaTags += `<meta name="${metaItem.name}" value="${metaItem.value}"/>\n`;
+                } else if (metaItem.name) {
                     this.metaTags += `<meta name="${metaItem.name}" content="${metaItem.content}"/>\n`;
                 } else if (metaItem.property) {
                     this.metaTags += `<meta property="${metaItem.property}" content="${metaItem.content}"/>\n`;
@@ -41,6 +43,8 @@ class HeadUtil {
                     const charset = metaItem.charset || 'utf-8';
                     const async = metaItem.async ? ' async=true' : '';
                     this.metaTags += `<script src="${metaItem.script}" charset="${charset}"${async}></script>\n`;
+                } else if (metaItem.charset) {
+                    this.metaTags += `<meta charset="${metaItem.charset}"/>\n`;
                 } else if (metaItem.style) {
                     const type = metaItem.type || 'text/css';
                     const rel = 'stylesheet';
@@ -51,7 +55,10 @@ class HeadUtil {
                     const type = metaItem.type ? `type="${metaItem.type}" ` : '';
                     const href = metaItem.href ? `href="${metaItem.href}" ` : '';
                     const sizes = metaItem.sizes ? `sizes="${metaItem.sizes}" ` : '';
-                    this.metaTags += `<link ${rel}${type}${href}${sizes}>\n`;
+                    const itemprop = metaItem.itemprop ? `itemprop="${metaItem.itemprop}" ` : '';
+                    const hreflang = metaItem.hreflang ? `hreflang="${metaItem.hreflang}" ` : '';
+                    const crossorigin = metaItem.crossorigin ? `crossorigin="${metaItem.crossorigin}"` : '';
+                    this.metaTags += `<link ${rel}${type}${href}${sizes}${itemprop}${hreflang}${crossorigin}>\n`;
                 } else if (metaItem.srcContents) {
                     this.metaTags += `${metaItem.srcContents}\n`;
                 }
