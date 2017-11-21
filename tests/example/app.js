@@ -31,6 +31,20 @@ const options = {
                 }, {
                     name: 'viewport',
                     content: 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no'
+                },
+                {
+                    rel: 'preconnect',
+                    href: 'http://www.example.com',
+                    itemprop: 'url',
+                    hreflang: 'en',
+                    crossorigin: 'anonymous'
+                },
+                {
+                    name: 'google',
+                    value: 'notranslate'
+                },
+                {
+                    charset: 'UTF-8'
                 }
             ]
         }
