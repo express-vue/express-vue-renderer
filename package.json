@@ -105,7 +105,7 @@
     "express": "^4.16.0",
     "flow-bin": "^0.58.0",
     "flow-remove-types": "^1.2.1",
-    "generate-release": "^0.14.0",
+    "generate-release": "^1.0.1",
     "nodemon": "^1.12.1",
     "nsp": "^3.0.0",
     "nyc": "^11.2.1",
