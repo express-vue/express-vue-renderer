@@ -88,7 +88,7 @@
     "vue": "^2.4.4",
     "vue-server-renderer": "^2.4.4",
     "vue-template-compiler": "^2.4.4",
-    "xss": "^0.3.4"
+    "xss": "^1.0.0"
   },
   "devDependencies": {
     "ava": "^0.23.0",
