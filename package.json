@@ -79,7 +79,7 @@
     "dedupe": "^2.1.0",
     "deepmerge": "^2.0.0",
     "html-minifier": "^3.5.5",
-    "lru-cache": "^4.1.1",
+    "lru-cache": "^5.1.0",
     "no-case": "^2.3.2",
     "pug": "^2.0.0-rc.4",
     "require-from-string": "^2.0.1",
