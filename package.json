@@ -85,7 +85,7 @@
     "require-from-string": "^2.0.1",
     "slash": "^1.0.0",
     "string-hash": "^1.1.3",
-    "vue": "^2.4.4",
+    "vue": "^2.5.18",
     "vue-server-renderer": "^2.4.4",
     "vue-template-compiler": "^2.4.4",
     "xss": "^0.3.4"
