@@ -75,7 +75,7 @@
     "butternut": "^0.4.6",
     "camel-case": "^3.0.0",
     "clean-css": "^4.1.9",
-    "debug": "^2.6.9",
+    "debug": "^4.1.1",
     "dedupe": "^2.1.0",
     "deepmerge": "^2.0.0",
     "html-minifier": "^3.5.5",
