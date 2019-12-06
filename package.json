@@ -73,7 +73,7 @@
     "babel-core": "^6.26.0",
     "babel-preset-es2015": "^6.24.1",
     "butternut": "^0.4.6",
-    "camel-case": "^3.0.0",
+    "camel-case": "^4.1.0",
     "clean-css": "^4.1.9",
     "debug": "^2.6.9",
     "dedupe": "^2.1.0",
