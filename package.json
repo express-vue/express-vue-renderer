@@ -91,7 +91,7 @@
     "xss": "^0.3.4"
   },
   "devDependencies": {
-    "ava": "^0.23.0",
+    "ava": "^3.5.2",
     "babel-cli": "^6.26.0",
     "babel-eslint": "^8.0.0",
     "babel-plugin-transform-flow-strip-types": "^6.22.0",
