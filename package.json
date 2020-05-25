@@ -81,7 +81,7 @@
     "html-minifier": "^3.5.5",
     "lru-cache": "^4.1.1",
     "no-case": "^2.3.2",
-    "pug": "^2.0.0-rc.4",
+    "pug": "^3.0.0",
     "require-from-string": "^2.0.1",
     "slash": "^1.0.0",
     "string-hash": "^1.1.3",
